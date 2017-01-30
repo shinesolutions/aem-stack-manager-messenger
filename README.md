@@ -34,19 +34,29 @@ Use the send-message make targets, passing in parameters for each message and th
 
 
 ```
-make promote-author stack_prefix=stack1 topic_config_file=inventory/group_vars/all.yaml message_config_file=inventory/group_vars/promote-author.yaml
+make promote-author \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/promote-author.yaml
 
 ```
 
+```
+make deploy-artifacts \
+    stack_prefix=stack1 \
+    descriptor_file=abc \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/deploy-artifacts.yaml
 
 ```
-make deploy-artifacts stack_prefix=stack1 descriptor_file=abc topic_config_file=inventory/group_vars/all.yaml message_config_file=inventory/group_vars/deploy-artifacts.yaml
 
 ```
-
-
-```
-make deploy-artifact stack_prefix=stack1 component=author artifact=xyz topic_config_file=inventory/group_vars/all.yaml message_config_file=inventory/group_vars/deploy-artifact.yaml
+make deploy-artifact \
+    stack_prefix=stack1 \
+    component=author \
+    artifact=xyz \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/deploy-artifact.yaml
 ```
 
 
