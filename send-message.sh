@@ -13,10 +13,12 @@ extra_vars+=(--extra-vars "component=$component")
 extra_vars+=(--extra-vars "artifact=$artifact")
 
 
+# shellcheck disable=SC2154
 if [ ! -z "$message_config_file" ]; then
   extra_vars+=(--extra-vars "@$message_config_file")
 fi
 
+# shellcheck disable=SC2154
 if [ ! -z "$topic_config_file" ]; then
   extra_vars+=(--extra-vars "@$topic_config_file")
 fi
