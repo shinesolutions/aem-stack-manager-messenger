@@ -1,0 +1,8 @@
+{
+  "type": "deploy_artifact",
+  "params": {
+    "stack_prefix": stack_prefix,
+    "component": component,
+    "artifact": artifact
+  }
+}

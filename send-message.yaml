@@ -1,0 +1,19 @@
+---
+- name: SNS Message Sender
+  hosts: all
+  gather_facts: no
+  connection: local
+
+  vars:
+    message_file:
+    message: "{{ lookup('file', message_file) }}"
+
+  tasks:
+
+    - name: Send message to SNS Topic
+      sns:
+        msg: "{{ message }}"
+        subject: "{{ subject }}"
+        topic: "{{ sns_topic }}"
+        region: "{{ aws_region }}"
+      delegate_to: localhost

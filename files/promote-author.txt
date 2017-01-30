@@ -1,0 +1,6 @@
+{
+  "type": "promote_author",
+  "params": {
+    "stack_prefix": stack_prefix
+  }
+}
