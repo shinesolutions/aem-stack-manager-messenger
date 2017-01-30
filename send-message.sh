@@ -7,20 +7,17 @@ log_path=logs/$run_id-send-message.log
 
 # Construct Ansible extra_vars flags.
 # If CONFIG_FILE is set, values will be added.
+
 extra_vars=(--extra-vars "stack_prefix=$stack_prefix")
-extra_vars+=(--extra-vars "descriptor_file=$descriptor_file")
-extra_vars+=(--extra-vars "component=$component")
-extra_vars+=(--extra-vars "artifact=$artifact")
-
 
 # shellcheck disable=SC2154
-if [ ! -z "$message_config_file" ]; then
-  extra_vars+=(--extra-vars "@$message_config_file")
-fi
+extra_vars+=(--extra-vars "@$topic_config_file")
 
 # shellcheck disable=SC2154
-if [ ! -z "$topic_config_file" ]; then
-  extra_vars+=(--extra-vars "@$topic_config_file")
+extra_vars+=(--extra-vars "@$message_config_file")
+
+if [ ! -z "$4" ]; then
+    extra_vars+=(--extra-vars "$4")
 fi
 
 mkdir -p logs

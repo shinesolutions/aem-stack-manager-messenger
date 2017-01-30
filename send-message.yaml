@@ -6,6 +6,8 @@
 
   vars:
     message_file:
+# files are in .txt as they need to replace the variables e.g. 'stack_prefix' (un-quoted) which breaks the json validation.
+# if the variables were in double quotes, they would not be replaced with the value.
     message: "{{ lookup('file', message_file) }}"
 
   tasks:

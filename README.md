@@ -44,19 +44,19 @@ make promote-author \
 ```
 make deploy-artifacts \
     stack_prefix=stack1 \
-    descriptor_file=abc \
     topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/deploy-artifacts.yaml
+    message_config_file=inventory/group_vars/deploy-artifacts.yaml \
+    descriptor_file=abc
 
 ```
 
 ```
 make deploy-artifact \
     stack_prefix=stack1 \
-    component=author \
-    artifact=xyz \
     topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/deploy-artifact.yaml
+    message_config_file=inventory/group_vars/deploy-artifact.yaml \
+    component=author \
+    artifact=xyz
 ```
 
 
