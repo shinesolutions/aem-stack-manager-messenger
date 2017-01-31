@@ -1,3 +1,7 @@
+node {
+    currentBuild.displayName = "#${env.BUILD_NUMBER}: ${Type}-${StackPrefix} "
+}
+
 stage ('Checkout') {
 
     node {
