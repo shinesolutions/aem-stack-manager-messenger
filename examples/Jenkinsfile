@@ -1,5 +1,5 @@
 node {
-    currentBuild.displayName = "#${env.BUILD_NUMBER}: ${Type}-${StackPrefix} "
+    currentBuild.displayName = "#${env.BUILD_NUMBER}: ${Task}-${StackPrefix} "
 }
 
 stage ('Checkout') {
