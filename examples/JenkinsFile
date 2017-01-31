@@ -1,0 +1,104 @@
+stage ('Checkout') {
+
+    node {
+        echo "Checkout Started"
+
+        //TODO: specify a release version instead of master including the downloaded puppet modules.
+        git url: 'https://github.com/shinesolutions/aem-stack-manager-messenger.git', branch: 'master'
+
+        echo 'Checkout Complete'
+    }
+
+}
+
+stage ('Configuration') {
+
+    node {
+        echo "Configuration Started"
+
+        sh 'echo "---\naws_region: ${AwsRegion}\nsns_topic: ${SnsTopic}\n" > topic-config.yaml'
+
+        echo 'Configuration Complete'
+    }
+
+}
+
+stage ('Dependencies') {
+
+    node {
+        echo "Dependencies Started"
+
+        sh 'make clean deps'
+
+        echo 'Dependencies Complete'
+    }
+}
+
+stage ('Execute') {
+
+    node {
+        echo "Execute ${Task} Started"
+
+
+        switch ("${Task}") {
+
+            case 'promote-author':
+
+                sh '''
+                    make promote-author \
+                      stack_prefix=${StackPrefix} \
+                      topic_config_file=topic-config.yaml \
+                      message_config_file=inventory/group_vars/promote-author.yaml
+
+                '''
+
+                break
+
+            case 'deploy-artifacts':
+
+                sh '''
+                    make deploy-artifacts \
+                      stack_prefix=${StackPrefix} \
+                      topic_config_file=topic-config.yaml \
+                      message_config_file=inventory/group_vars/deploy-artifacts.yaml \
+                      descriptor_file=${DescriptorFile}
+
+                '''
+
+                break
+
+            case 'deploy-artifact':
+
+                sh '''
+                    make deploy-artifact \
+                        stack_prefix=${StackPrefix} \
+                        topic_config_file=topic-config.yaml \
+                        message_config_file=inventory/group_vars/deploy-artifact.yaml \
+                        component=${Component} \
+                        artifact=${Artifact}
+
+                '''
+
+                break
+
+            default:
+                break
+
+        }
+
+        echo 'Execute Complete'
+    }
+
+}
+
+stage ('Verification') {
+
+    node {
+        echo "Verification Started"
+
+        //TODO: Implement verification step. Configure your SNS Topic to Send Message containing build details to CloudWatch. Then Verify Message is in CloudWatch
+
+        echo 'Verification Complete'
+    }
+
+}
