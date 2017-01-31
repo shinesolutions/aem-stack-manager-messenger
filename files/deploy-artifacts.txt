@@ -1,5 +1,5 @@
 {
-  "type": "deploy_artifacts",
+  "task": "deploy-artifacts",
   "params": {
     "stack_prefix": stack_prefix,
     "descriptor_file": descriptor_file

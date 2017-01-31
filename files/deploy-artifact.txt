@@ -1,5 +1,5 @@
 {
-  "type": "deploy_artifact",
+  "task": "deploy-artifact",
   "params": {
     "stack_prefix": stack_prefix,
     "component": component,
