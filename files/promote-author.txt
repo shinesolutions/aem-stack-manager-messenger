@@ -1,6 +1,4 @@
 {
   "task": "promote-author",
-  "params": {
-    "stack_prefix": stack_prefix
-  }
+  "stack_prefix": stack_prefix
 }
