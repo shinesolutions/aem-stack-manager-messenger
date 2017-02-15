@@ -22,6 +22,10 @@ stage ('Configuration') {
 
         sh 'echo "---\naws_region: ${AwsRegion}\nsns_topic: ${SnsTopic}\n" > topic-config.yaml'
 
+        sh 'ansible --version'
+
+        sh 'echo $https_proxy'
+
         echo 'Configuration Complete'
     }
 
