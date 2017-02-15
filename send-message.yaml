@@ -12,6 +12,9 @@
 
   tasks:
 
+    - debug:
+        msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
+
     - name: Send message to SNS Topic
       sns:
         msg: "{{ message }}"
