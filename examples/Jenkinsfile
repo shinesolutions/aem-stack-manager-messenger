@@ -1,10 +1,8 @@
 node {
     currentBuild.displayName = "#${env.BUILD_NUMBER}: ${Task}-${StackPrefix} "
-}
 
-stage ('Checkout') {
+    stage ('Checkout') {
 
-    node {
         echo "Checkout Started"
 
         //TODO: specify a release version instead of master
@@ -13,11 +11,9 @@ stage ('Checkout') {
         echo 'Checkout Complete'
     }
 
-}
 
-stage ('Configuration') {
+    stage ('Configuration') {
 
-    node {
         echo "Configuration Started"
 
         sh 'echo "---\naws_region: ${AwsRegion}\nsns_topic: ${SnsTopic}\n" > topic-config.yaml'
@@ -29,24 +25,18 @@ stage ('Configuration') {
         echo 'Configuration Complete'
     }
 
-}
+    stage ('Dependencies') {
 
-stage ('Dependencies') {
-
-    node {
         echo "Dependencies Started"
 
         sh 'make clean deps'
 
         echo 'Dependencies Complete'
     }
-}
 
-stage ('Execute') {
+    stage ('Execute') {
 
-    node {
         echo "Execute ${Task} Started"
-
 
         switch ("${Task}") {
 
@@ -131,11 +121,8 @@ stage ('Execute') {
         echo 'Execute Complete'
     }
 
-}
+    stage ('Verification') {
 
-stage ('Verification') {
-
-    node {
         echo "Verification Started"
 
         //TODO: Implement verification step. Configure your SNS Topic to Send Message containing build details to CloudWatch. Then Verify Message is in CloudWatch
