@@ -2,14 +2,14 @@ version ?= 0.9.0
 
 # development targets
 
-ci: clean deps lint
+ci: clean deps lint package
 
 clean:
 	rm -rf logs
 	rm -f *.retry
 
 deps:
-	pip install -r requirements.txt
+	pip install -r requirements.txt --user
 
 lint:
 	shellcheck send-message.sh

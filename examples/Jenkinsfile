@@ -7,7 +7,7 @@ stage ('Checkout') {
     node {
         echo "Checkout Started"
 
-        //TODO: specify a release version instead of master including the downloaded puppet modules.
+        //TODO: specify a release version instead of master
         git url: 'https://github.com/shinesolutions/aem-stack-manager-messenger.git', branch: 'master'
 
         echo 'Checkout Complete'
