@@ -1,3 +1,4 @@
+version ?= 0.9.0
 
 # development targets
 
@@ -36,5 +37,21 @@ export-package:
 import-package:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) package_group=$(package_group) package_name=$(package_name) package_datestamp=$(package_datestamp)"
 
+package:
+	rm -rf stage
+	mkdir -p stage
+	tar \
+	    --exclude='.git*' \
+	    --exclude='.tmp*' \
+	    --exclude='stage*' \
+	    --exclude='.idea*' \
+	    --exclude='.DS_Store*' \
+	    --exclude='logs*' \
+	    --exclude='*.retry' \
+	    --exclude='*.iml' \
+	    -cvf \
+	    stage/aem-stack-manager-messenger-$(version).tar ./
+	gzip stage/aem-stack-manager-messenger-$(version).tar
 
-.PHONY: promote-author deploy-artifacts deploy-artifact ci clean deps lint
+
+.PHONY: promote-author deploy-artifacts deploy-artifact ci clean deps lint export-package import-package package
