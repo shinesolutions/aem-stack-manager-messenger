@@ -9,7 +9,7 @@ clean:
 	rm -f *.retry
 
 deps:
-	pip install -r requirements.txt --user
+	pip install -r requirements.txt
 
 lint:
 	shellcheck send-message.sh
