@@ -31,6 +31,7 @@ deploy-artifact:
 
 
 export-package:
+	echo package_filter=$(package_filter)
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) package_group=$(package_group) package_name=$(package_name) package_filter=$(package_filter)"
 
 
