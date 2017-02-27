@@ -1,0 +1,10 @@
+{
+  "task": "export-package",
+  "stack_prefix": stack_prefix,
+  "details": {
+    "component": component,
+    "package_group": package_group,
+    "package_name": package_name,
+    "package_filter": package_filter
+  }
+}

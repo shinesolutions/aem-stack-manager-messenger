@@ -55,10 +55,34 @@ make deploy-artifact \
     stack_prefix=stack1 \
     topic_config_file=inventory/group_vars/all.yaml \
     message_config_file=inventory/group_vars/deploy-artifact.yaml \
-    component=author \
+    component=author-primary \
     artifact=xyz
 ```
 
+
+
+```
+make export-package \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/export-package.yaml \
+    component=author-primary \
+    package_group=somegroup \
+    package_name=somepackage \
+    package_filter='[{"root":"/apps/geometrixx","rules":[]},{"root":"/apps/geometrixx-common","rules":[]}]'
+```
+
+
+```
+make import-package \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/import-package.yaml \
+    component=author-primary \
+    package_group=somegroup \
+    package_name=somepackage \
+    package_datestamp=201702
+```
 
 
 ## Development
