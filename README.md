@@ -84,6 +84,13 @@ make import-package \
     package_datestamp=201702
 ```
 
+```
+make offline-snapshot \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/offline-snapshot.yaml
+
+```
 
 ## Development
 

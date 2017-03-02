@@ -112,6 +112,17 @@ node {
 
                 break
 
+            case 'offline-snapshot':
+
+                sh '''
+                    make offline-snapshot \
+                      stack_prefix=${StackPrefix} \
+                      topic_config_file=topic-config.yaml \
+                      message_config_file=inventory/group_vars/offline-snapshot.yaml
+
+                '''
+
+                break
 
             default:
                 break
