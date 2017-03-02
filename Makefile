@@ -38,6 +38,11 @@ export-package:
 import-package:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) package_group=$(package_group) package_name=$(package_name) package_datestamp=$(package_datestamp)"
 
+
+offline-snapshot:
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
+
+
 package:
 	rm -rf stage
 	mkdir -p stage
@@ -55,4 +60,4 @@ package:
 	gzip stage/aem-stack-manager-messenger-$(version).tar
 
 
-.PHONY: promote-author deploy-artifacts deploy-artifact ci clean deps lint export-package import-package package
+.PHONY: promote-author offline-snapshot deploy-artifacts deploy-artifact ci clean deps lint export-package import-package package
