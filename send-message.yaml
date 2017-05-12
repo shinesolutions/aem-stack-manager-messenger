@@ -15,10 +15,20 @@
     - debug:
         msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
 
-    - name: Send message to SNS Topic
+    - name: Send message to SNS Topic {{ sns_topic }}
       sns:
         msg: "{{ message }}"
         subject: "{{ subject }}"
         topic: "{{ sns_topic }}"
         region: "{{ aws_region }}"
+      when: message.task != 'offline-snapshot'
+      delegate_to: localhost
+
+    - name: Send message to SNS Topic {{ backup_sns_topic | default(sns_topic) }}
+      sns:
+        msg: "{{ message }}"
+        subject: "{{ subject }}"
+        topic: "{{ backup_sns_topic | default(sns_topic) }}"
+        region: "{{ aws_region }}"
+      when: "message.task == 'offline-snapshot'"
       delegate_to: localhost
