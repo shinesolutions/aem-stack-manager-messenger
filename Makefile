@@ -27,8 +27,9 @@ deploy-artifacts:
 
 
 deploy-artifact:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) artifact=$(artifact)"
-
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) \
+										 package_source=$(package_source) package_group=$(package_group) package_name=$(package_name) \
+										 package_version=$(package_version) replicate=$(replicate) activate=$(activate) force=$(force)"
 
 export-package:
 	echo package_filter=$(package_filter)

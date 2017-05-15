@@ -3,6 +3,12 @@
   "stack_prefix": stack_prefix,
   "details": {
     "component": component,
-    "artifact": artifact
+    "source": package_source,
+    "group": package_group,
+    "name": package_name,
+    "version": package_version,
+    "replicate": replicate,
+    "activate": activate,
+    "force": force
   }
 }
