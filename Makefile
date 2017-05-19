@@ -1,4 +1,4 @@
-version ?= 0.9.0
+version ?= 1.0.1-SNAPSHOT
 
 # development targets
 
@@ -36,7 +36,7 @@ export-package:
 
 
 import-package:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) package_group=$(package_group) package_name=$(package_name) package_datestamp=$(package_datestamp)"
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) "source_stack_prefix=$(source_stack_prefix)" package_group=$(package_group) package_name=$(package_name) package_datestamp=$(package_datestamp)"
 
 
 offline-snapshot:

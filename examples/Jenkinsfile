@@ -1,58 +1,67 @@
 node {
-    currentBuild.displayName = "#${env.BUILD_NUMBER}: ${Task}-${StackPrefix} "
+    
+    currentBuild.displayName = "#${env.BUILD_NUMBER} ${StackPrefix}"
 
+    currentBuild.description = "${Task}"
+    
     stage ('Checkout') {
-
+    
         echo "Checkout Started"
 
         //TODO: specify a release version instead of master
         git url: 'https://github.com/shinesolutions/aem-stack-manager-messenger.git', branch: 'master'
 
         echo 'Checkout Complete'
+    
     }
-
-
+    
     stage ('Configuration') {
-
+    
         echo "Configuration Started"
-
+    
         sh '''
             echo "---\naws_region: ${AwsRegion}\nsns_topic: ${SnsTopic}\n" > topic-config.yaml
             ansible --version
             echo $https_proxy
         '''
-
+    
         echo 'Configuration Complete'
+    
     }
-
+    
     stage ('Dependencies') {
-
+    
         echo "Dependencies Started"
 
         sh 'make clean deps'
 
         echo 'Dependencies Complete'
+    
+        
     }
-
+    
     stage ('Execute') {
-
+    
         echo "Execute ${Task} Started"
-
+    
+    
         switch ("${Task}") {
-
+    
             case 'promote-author':
-
+    
                 sh '''
                     make promote-author \
                       stack_prefix=${StackPrefix} \
                       topic_config_file=topic-config.yaml \
                       message_config_file=inventory/group_vars/promote-author.yaml
-
+    
                 '''
-
+    
                 break
-
+    
             case 'deploy-artifacts':
+
+                currentBuild.description = "${Task} ${DescriptorFileName}-${DescriptorFileVersion}"
 
                 sh '''
                     make deploy-artifacts \
@@ -80,7 +89,7 @@ node {
                 break
 
             case 'export-package':
-
+    
                 sh '''
                     make export-package \
                         stack_prefix=${StackPrefix} \
@@ -92,22 +101,23 @@ node {
                         package_filter=${PackageFilter}
 
                 '''
-
+    
                 break
-
-
+    
+    
             case 'import-package':
-
+    
                 sh '''
                     make import-package \
                         stack_prefix=${StackPrefix} \
                         topic_config_file=topic-config.yaml \
                         message_config_file=inventory/group_vars/import-package.yaml \
                         component=${Component} \
+                        source_stack_prefix=${SourceStackPrefix} \
                         package_group=${PackageGroup} \
                         package_name=${PackageName} \
                         package_datestamp=${PackageDatestamp}
-
+    
                 '''
 
                 break
@@ -123,22 +133,22 @@ node {
                 '''
 
                 break
-
+    
+    
             default:
                 break
-
+    
         }
 
         echo 'Execute Complete'
     }
-
+    
     stage ('Verification') {
-
+    
         echo "Verification Started"
-
+    
         //TODO: Implement verification step. Configure your SNS Topic to Send Message containing build details to CloudWatch. Then Verify Message is in CloudWatch
-
-        echo 'Verification Complete'
+    
+        echo 'Verification Complete'    
     }
-
 }
