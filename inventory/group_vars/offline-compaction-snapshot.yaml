@@ -1,0 +1,3 @@
+---
+subject: "{{stack_prefix}} - Offline Compaction Snapshot"
+message_file: files/offline-compaction-snapshot.txt

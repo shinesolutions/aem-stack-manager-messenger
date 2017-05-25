@@ -93,6 +93,14 @@ make offline-snapshot \
 
 ```
 
+```
+make offline-compaction-snapshot \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/offline-compaction-snapshot.yaml
+
+```
+
 ## Development
 
 Requirements:
