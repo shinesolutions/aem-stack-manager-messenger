@@ -1,0 +1,10 @@
+{
+  "component": "author-primary",
+  "package_source": "s3://",
+  "package_group": "shinesolutions",
+  "package_name": "aem-helloworld-content",
+  "package_version": "0.0.1",
+  "replicate": true,
+  "activate": true,
+  "force": "true"
+}

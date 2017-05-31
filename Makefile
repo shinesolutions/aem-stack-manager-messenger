@@ -23,23 +23,18 @@ promote-author:
 
 
 deploy-artifacts:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "descriptor_file=$(descriptor_file)"
-
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "$(details)"
 
 deploy-artifact:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) \
-										 package_source=$(package_source) package_group=$(package_group) package_name=$(package_name) \
-										 package_version=$(package_version) replicate=$(replicate) activate=$(activate) force=$(force)"
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "$(details)"
 
 export-package:
 	echo package_filter=$(package_filter)
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) package_group=$(package_group) package_name=$(package_name) package_filter=$(package_filter)"
-
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "$(details)"
 
 import-package:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) package_group=$(package_group) package_name=$(package_name) package_datestamp=$(package_datestamp)"
-
-
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "$(details)"
+	
 offline-snapshot:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
 

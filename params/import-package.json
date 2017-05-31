@@ -1,0 +1,7 @@
+{
+  "source_stack_prefix": "aem62test",
+  "component": "publish",
+  "package_group": "shinesolutions",
+  "package_name": "aem-helloworld-content",
+  "package_datestamp": "2017"
+}

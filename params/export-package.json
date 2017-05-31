@@ -1,0 +1,14 @@
+{ "component": "author-primary",
+  "package_group": "shinesolutions",
+  "package_name": "aem-helloworld-content",
+  "package_filter": [{
+    "root": "/apps/helloworld",
+    "rules": []
+  }, {
+    "root": "/content/helloworld",
+    "rules": []
+  }, {
+    "root": "/etc/designs/helloworld",
+    "rules": []
+  }]
+}

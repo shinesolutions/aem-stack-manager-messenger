@@ -3,6 +3,7 @@
   "stack_prefix": stack_prefix,
   "details": {
     "component": component,
+    "source_stack_prefix": source_stack_prefix,
     "package_group": package_group,
     "package_name": package_name,
     "package_datestamp": package_datestamp

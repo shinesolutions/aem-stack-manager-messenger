@@ -16,9 +16,11 @@ extra_vars+=(--extra-vars "@$topic_config_file")
 # shellcheck disable=SC2154
 extra_vars+=(--extra-vars "@$message_config_file")
 
+# make extra arguments to be in a descriptor file
 if [ ! -z "$4" ]; then
-    extra_vars+=(--extra-vars "$4")
+    extra_vars+=(--extra-vars "@$4")
 fi
+
 
 mkdir -p logs
 echo "Sending Message SNS Topic"
