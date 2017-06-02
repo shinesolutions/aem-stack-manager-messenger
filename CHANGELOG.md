@@ -1,4 +1,4 @@
-### 1.0.1
+### 1.1.0
 * add source_stack_prefix to the import packages message
 * new offline-compaction-snapshot message
 
