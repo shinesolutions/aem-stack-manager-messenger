@@ -79,6 +79,7 @@ make import-package \
     topic_config_file=inventory/group_vars/all.yaml \
     message_config_file=inventory/group_vars/import-package.yaml \
     component=author-primary \
+    source_stack_prefix=stack2 \
     package_group=somegroup \
     package_name=somepackage \
     package_datestamp=201702
@@ -89,6 +90,14 @@ make offline-snapshot \
     stack_prefix=stack1 \
     topic_config_file=inventory/group_vars/all.yaml \
     message_config_file=inventory/group_vars/offline-snapshot.yaml
+
+```
+
+```
+make offline-compaction-snapshot \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/offline-compaction-snapshot.yaml
 
 ```
 

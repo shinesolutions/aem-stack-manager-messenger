@@ -1,0 +1,47 @@
+---
+
+- name: test playbook
+  hosts: all
+  gather_facts: no
+  connection: local
+
+  vars:
+    message_file:
+# files are in .txt as they need to replace the variables e.g. 'stack_prefix' (un-quoted) which breaks the json validation.
+# if the variables were in double quotes, they would not be replaced with the value.
+    message: "{{ lookup('file', message_file) }}"
+
+
+
+  tasks:
+    # - debug:
+    #     msg: "Send message: {{ package_filter}}"
+    #
+    # - debug:
+    #     msg: "Filters {{package_filter}}"
+    #   when: package_filter is defined
+#        msg: "{{ message |combine({'externalId': lookup('ENV','job_id')})}}"
+
+    - debug:
+        msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
+
+    - name: try to combine
+      debug:
+        msg: "{{message|combine({'externalId': externalId})}}"
+      when: externalId is defined
+      register: message
+
+    - name: display message
+      debug:
+       msg: " Send message: {{message}} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
+      when: exeternalId is not defined
+
+    #
+    # - name: Send message to SNS Topic {{ sns_topic }}
+    #   sns:
+    #     msg: "{{ message |combine({'externalId': externalId})}}"
+    #     subject: "{{ subject }}"
+    #     topic: "test"
+    #     region: "{{ aws_region }}"
+    #   delegate_to: localhost
+    #   when: externalId is not defined

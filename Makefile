@@ -1,4 +1,4 @@
-version ?= 0.9.0
+version ?= 1.1.0
 
 # development targets
 
@@ -34,8 +34,12 @@ export-package:
 
 import-package:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "$(details)"
-	
+
 offline-snapshot:
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
+
+
+offline-compaction-snapshot:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
 
 
@@ -55,5 +59,9 @@ package:
 	    stage/aem-stack-manager-messenger-$(version).tar ./
 	gzip stage/aem-stack-manager-messenger-$(version).tar
 
+git-archive:
+	rm -rf stage
+	mkdir -p stage
+	git archive --format=tar.gz --prefix=aem-stack-manager-messenger-$(version)/ HEAD -o stage/aem-stack-manager-messenger-$(version).tar.gz
 
-.PHONY: promote-author offline-snapshot deploy-artifacts deploy-artifact ci clean deps lint export-package import-package package
+.PHONY: promote-author offline-snapshot deploy-artifacts deploy-artifact ci clean deps lint export-package import-package package git-archive offline-compaction-snapshot

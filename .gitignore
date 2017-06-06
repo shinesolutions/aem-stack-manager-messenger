@@ -3,3 +3,5 @@ aem-stack-manager-messenger.iml
 logs/
 send-message.retry
 stage/
+.DS_Store
+
