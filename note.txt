@@ -1,2 +1,0 @@
-1. It seems SNS topic message will be a string.
-2. Stack manager will translate that into a string of json format, and turn that into a json.
