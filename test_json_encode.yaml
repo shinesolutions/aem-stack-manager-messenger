@@ -10,6 +10,11 @@
 # files are in .txt as they need to replace the variables e.g. 'stack_prefix' (un-quoted) which breaks the json validation.
 # if the variables were in double quotes, they would not be replaced with the value.
     message: "{{ lookup('file', message_file) }}"
+    subject: "Test external Id"
+    sns_topic: "test_topic"
+    stack_prefix: aem62test
+    descriptor_file: helloworld
+    externalId: "{{ lookup('env', 'externalId') }}"
 
 
 
@@ -23,18 +28,15 @@
 #        msg: "{{ message |combine({'externalId': lookup('ENV','job_id')})}}"
 
     - debug:
-        msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
+        msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }}: {{externalId}} "
+
+    - debug:
+        msg: message="{{ message|combine({'externalId': externalId}) }}"
+      when: externalId is defined
 
     - name: try to combine
       debug:
-        msg: "{{message|combine({'externalId': externalId})}}"
-      when: externalId is defined
-      register: message
-
-    - name: display message
-      debug:
-       msg: " Send message: {{message}} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
-      when: exeternalId is not defined
+        msg: "{{ message }}"
 
     #
     # - name: Send message to SNS Topic {{ sns_topic }}

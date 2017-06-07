@@ -9,11 +9,16 @@
 # files are in .txt as they need to replace the variables e.g. 'stack_prefix' (un-quoted) which breaks the json validation.
 # if the variables were in double quotes, they would not be replaced with the value.
     message: "{{ lookup('file', message_file) }}"
+    externalId: "{{ lookup('env','externalId')}}"
 
   tasks:
-
     - debug:
         msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
+
+    - name: Merge externalId if provided
+      set_fact:
+        message: "{{ message|combine({'externalId': externalId})}}"
+      when: "externalId|trim|length != 0"
 
     - name: Send message to SNS Topic {{ sns_topic }}
       sns:
@@ -21,7 +26,7 @@
         subject: "{{ subject }}"
         topic: "{{ sns_topic }}"
         region: "{{ aws_region }}"
-      when: message.task != 'offline-snapshot'
+      when: message.task not in ['offline-snapshot', 'offline-compaction-snapshot']
       delegate_to: localhost
 
     - name: Send message to SNS Topic {{ backup_sns_topic | default(sns_topic) }}
@@ -30,5 +35,5 @@
         subject: "{{ subject }}"
         topic: "{{ backup_sns_topic | default(sns_topic) }}"
         region: "{{ aws_region }}"
-      when: "message.task == 'offline-snapshot'"
+      when: message.task in ['offline-snapshot', 'offline-compaction-snapshot']
       delegate_to: localhost
