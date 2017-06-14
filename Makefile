@@ -38,10 +38,11 @@ import-package:
 offline-snapshot:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
 
-
 offline-compaction-snapshot:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
 
+enable-crxde:
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "$(details)"
 
 package:
 	rm -rf stage

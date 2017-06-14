@@ -1,0 +1,7 @@
+{
+  "task": "enable-crxde",
+  "stack_prefix": stack_prefix,
+  "details": {
+    "component": component
+  }
+}
