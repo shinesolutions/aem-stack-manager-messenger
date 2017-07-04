@@ -1,0 +1,3 @@
+---
+subject: "{{stack_prefix}} - Run Adhoc Puppet Code"
+message_file: files/run-adhoc-puppet.txt

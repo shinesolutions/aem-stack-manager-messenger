@@ -1,0 +1,8 @@
+{
+  "task": "run-adhoc-puppet",
+  "stack_prefix": stack_prefix,
+  "details": {
+    "component": component,
+    "puppet_tar_file": puppet_tar_file
+  }
+}

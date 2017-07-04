@@ -44,6 +44,9 @@ offline-compaction-snapshot:
 enable-crxde:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "$(details)"
 
+run-adhoc-puppet:
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "$(details)"
+
 package:
 	rm -rf stage
 	mkdir -p stage
