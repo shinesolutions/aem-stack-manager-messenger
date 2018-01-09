@@ -59,7 +59,13 @@ make deploy-artifact \
     artifact=xyz
 ```
 
-
+```
+make enable-crxde \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/enable-crxde.yaml \
+    component=publish-dispatcher \
+```
 
 ```
 make export-package \

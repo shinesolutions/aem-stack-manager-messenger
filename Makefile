@@ -34,6 +34,8 @@ export-package:
 	echo package_filter=$(package_filter)
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) package_group=$(package_group) package_name=$(package_name) package_filter=$(package_filter)"
 
+enable-crxde:
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
 
 import-package:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) "source_stack_prefix=$(source_stack_prefix)" package_group=$(package_group) package_name=$(package_name) package_datestamp=$(package_datestamp)"
