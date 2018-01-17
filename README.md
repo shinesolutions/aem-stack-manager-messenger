@@ -87,7 +87,6 @@ make export-packages \
     descriptor_file=descriptor_file.txt \   
 ```
 
-
 ```
 make live-snapshot \
     stack_prefix=stack1 \
@@ -95,7 +94,6 @@ make live-snapshot \
     message_config_file=inventory/group_vars/import-package.yaml \
     component=author-primary \
 ```
-
 
 ```
 make import-package \
