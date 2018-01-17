@@ -1,0 +1,3 @@
+---
+subject: "{{stack_prefix}} - Live Snapshot"
+message_file: files/live-snapshot.txt

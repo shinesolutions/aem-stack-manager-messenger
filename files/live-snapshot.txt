@@ -1,0 +1,7 @@
+{
+  "task": "live-snapshot",
+  "stack_prefix": stack_prefix,
+  "details": {
+    "component": component,
+  }
+}
