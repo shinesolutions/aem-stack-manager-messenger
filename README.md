@@ -74,6 +74,16 @@ make export-package \
 
 
 ```
+make export-packages \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/export-package.yaml \
+    component=author-primary \
+    descriptor_file=descriptor_file.txt \   
+```
+
+
+```
 make import-package \
     stack_prefix=stack1 \
     topic_config_file=inventory/group_vars/all.yaml \
@@ -83,6 +93,14 @@ make import-package \
     package_group=somegroup \
     package_name=somepackage \
     package_datestamp=201702
+```
+
+```
+make live-snapshot \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/import-package.yaml \
+    component=author-primary \
 ```
 
 ```
