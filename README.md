@@ -59,7 +59,13 @@ make deploy-artifact \
     artifact=xyz
 ```
 
-
+```
+make enable-crxde \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/enable-crxde.yaml \
+    component=publish-dispatcher \
+```
 
 ```
 make export-package \
@@ -70,6 +76,23 @@ make export-package \
     package_group=somegroup \
     package_name=somepackage \
     package_filter='[{"root":"/apps/geometrixx","rules":[]},{"root":"/apps/geometrixx-common","rules":[]}]'
+```
+
+```
+make export-packages \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/export-package.yaml \
+    component=author-primary \
+    descriptor_file=descriptor_file.txt \   
+```
+
+```
+make live-snapshot \
+    stack_prefix=stack1 \
+    topic_config_file=inventory/group_vars/all.yaml \
+    message_config_file=inventory/group_vars/import-package.yaml \
+    component=author-primary \
 ```
 
 ```
