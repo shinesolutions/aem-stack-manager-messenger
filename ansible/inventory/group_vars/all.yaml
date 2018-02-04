@@ -1,0 +1,3 @@
+---
+aws_region: ap-southeast-2
+sns_topic: arn:aws:sns:ap-southeast-2:918473058104:michaelb-aem63-AemStackManager
