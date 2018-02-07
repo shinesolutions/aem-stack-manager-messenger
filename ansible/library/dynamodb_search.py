@@ -133,18 +133,15 @@ def scan(client_connection, resource_connection, module):
                     }
                 },
             )
-            changed = False
+            result = response['Items']
         else:
             module.fail_json("Error: Table not found")
 
-        if get_attribute == 'command_id':
-            result = 'command_id\': ' + response['Items'][0]['command_id']['S']
-        else:
-            result = response
     except Exception as e:
         module.fail_json(msg="Error: " + str(e), exception=traceback.format_exc(e))
     else:
-        module.exit_json(changed=changed, msg={result})
+        return result
+
 
 def query(client_connection, resource_connection, module):
     table_name = module.params.get('table_name')
@@ -174,20 +171,14 @@ def query(client_connection, resource_connection, module):
                     }
                 },
             )
-            changed = False
             result = response['Items']
         else:
             module.fail_json("Error: Table not found")
 
-        if get_attribute == 'message_id':
-            result = 'message_id\': ' + result[0]['message_id']['S']
-        elif get_attribute == 'state':
-            result = 'state\': ' + result[0]['state']['S']
-
     except Exception as e:
         module.fail_json(msg="Error: Can't execute query - " + str(e), exception=traceback.format_exc(e))
     else:
-        module.exit_json(changed=changed, msg={result})
+        return result
 
 def main():
     argument_spec = ec2_argument_spec()
@@ -226,11 +217,13 @@ def main():
     state = module.params.get("state")
 
     if state == 'scan':
-        scan(client_connection, resource_connection, module)
+        result = scan(client_connection, resource_connection, module)
     elif state == 'query':
-        query(client_connection, resource_connection, module)
+        result = query(client_connection, resource_connection, module)
     else:
         module.fail_json(msg='Error: unsupported state. Supported states are scan and query')
+        
+    module.exit_json(item=result)
 
 if __name__ == '__main__':
     main()
