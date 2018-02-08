@@ -57,7 +57,6 @@ class log_analyse:
             for files in log_files:
                 file_exist = os.path.exists(files)
                 if file_exist == True:
-                    i = i + 1
                     file_split = files.split('/')
                     instance_id = file_split[len(file_split) - instance_id_array]
                     instance_id.startswith('i-')
