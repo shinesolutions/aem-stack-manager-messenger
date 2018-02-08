@@ -99,5 +99,4 @@
 
     - log_output:
         type: file
-        state: info
         log_files: "{{ stderr_files.files | map(attribute='path')|list }}"
