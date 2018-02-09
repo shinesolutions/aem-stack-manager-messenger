@@ -23,40 +23,6 @@
         region: "{{ aws_region }}"
       register: publish_message
 
-    - name: Scan if message was send out by Lambda
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: message_id
-        attribute_value: "{{ publish_message.item.PublishResponse.PublishResult.MessageId }}"
-        get_attribute: command_id
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: scan
-      register: dbscan
-      until: dbscan.item != []
-      retries: 120
-      delay: 5
-
-    - set_fact:
-        cmd_id: "{{ item.command_id.S }}"
-      with_items:
-        "{{ dbscan.item }}"
-
-    - name: Query state
-      dynamodb_search:
-        table_name: michaelb-aem63-AemStackManagerTable
-        attribute: command_id
-        attribute_value: "{{ cmd_id }}"
-        get_attribute: state
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: query
-      register: dbquery
-      until: dbquery.item[0].state.S != "Pending"
-      # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
-      retries: 120
-      delay: 5
-
     - name: Get path to output files
       aws_s3:
         mode: list
