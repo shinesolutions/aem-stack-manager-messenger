@@ -1,7 +1,0 @@
-{
-  "task": "export-package",
-  "stack_prefix": stack_prefix,
-  "details": {
-    "descriptor_file: descriptor_file
-  }
-}

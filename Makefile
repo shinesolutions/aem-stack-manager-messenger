@@ -21,14 +21,11 @@ lint:
 promote-author:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
 
-
 deploy-artifacts:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "descriptor_file=$(descriptor_file)"
 
-
 deploy-artifact:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) artifact=$(artifact)"
-
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) source=$(source) group=$(group) name=$(name) version=$(version) replicate=$(replicate) activate=$(activate) force=$(force)"
 
 export-package:
 	echo package_filter=$(package_filter)
@@ -41,16 +38,17 @@ export-packages:
 enable-crxde:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
 
+disable-crxde:
+		./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
+
 live-snapshot:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
 
 import-package:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) "source_stack_prefix=$(source_stack_prefix)" package_group=$(package_group) package_name=$(package_name) package_datestamp=$(package_datestamp)"
-
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) source_stack_prefix=$(source_stack_prefix) package_group=$(package_group) package_name=$(package_name) package_datestamp=$(package_datestamp)"
 
 offline-snapshot:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
-
 
 offline-compaction-snapshot:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"

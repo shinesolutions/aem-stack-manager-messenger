@@ -1,4 +1,4 @@
 ---
 aws_region: ap-southeast-2
-sns_topic: arn:aws:sns:REGION:ACCOUNTID:Sack-Prefix-AemStackManager
-dynamodb_tablename: Stack-Prefix-AemStackManagerTable
+sns_topic: arn:aws:sns:ap-southeast-2:918473058104:michaelb-aem63-AemStackManager
+dynamodb_tablename: michaelb-aem63-AemStackManagerTable

@@ -1,3 +1,3 @@
 ---
 subject: "{{stack_prefix}} - Export Packages"
-message_file: files/export-packages.txt
+message_file: files/export-packages.json
