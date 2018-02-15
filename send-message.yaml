@@ -44,7 +44,7 @@
 
     - name: Query state
       dynamodb_search:
-        table_name: michaelb-aem63-AemStackManagerTable
+        table_name: "{{ dynamodb_tablename }}"
         attribute: command_id
         attribute_value: "{{ cmd_id }}"
         get_attribute: state
