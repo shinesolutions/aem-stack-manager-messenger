@@ -61,13 +61,13 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
       register: output_files
 
     - name: Set facts for getting command output
       set_fact:
         log_path: "{{ playbook_dir }}/logs/"
-        dl_path: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
+        dl_path: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
         s3_files: "{{ output_files.s3_keys }}"
 
     - debug: msg="{{ s3_files }}"
