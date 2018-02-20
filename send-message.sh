@@ -25,6 +25,7 @@ echo "Sending Message SNS Topic"
 ANSIBLE_LOG_PATH=$log_path \
   ansible-playbook send-message.yaml \
   -v \
-  -i inventory/hosts \
+  -i ansible/inventory/hosts \
+  --module-path ansible/library/ \
   "${extra_vars[@]}"
 echo "Finished Sending Message to SNS Topic"
