@@ -32,20 +32,11 @@ sns_topic: aem-stack-manager-topic
 
 Use the send-message make targets, passing in parameters for each message and the configuration files.
 
-
-```
-make promote-author \
-    stack_prefix=stack1 \
-    topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/promote-author.yaml
-
-```
-
 ```
 make deploy-artifacts \
     stack_prefix=stack1 \
-    topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/deploy-artifacts.yaml \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/deploy-artifacts.yaml \
     descriptor_file=abc
 
 ```
@@ -53,25 +44,38 @@ make deploy-artifacts \
 ```
 make deploy-artifact \
     stack_prefix=stack1 \
-    topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/deploy-artifact.yaml \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/deploy-artifact.yaml \
     component=author-primary \
-    artifact=xyz
+    source=s3://s3bucket/path/aem-helloworld-content-0.0.1-SNAPSHOT.zip \
+    group=shinesolutions \
+    name=aem-helloworld-content \
+    replicate=true \
+    activate=false \
+    force=true
+```
+
+```
+make disable-crxde \
+    stack_prefix=stack1 \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/disable-crxde.yaml \
+    component=author-primary \
 ```
 
 ```
 make enable-crxde \
     stack_prefix=stack1 \
-    topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/enable-crxde.yaml \
-    component=publish-dispatcher \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/enable-crxde.yaml \
+    component=author-primary \
 ```
 
 ```
 make export-package \
     stack_prefix=stack1 \
-    topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/export-package.yaml \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/export-package.yaml \
     component=author-primary \
     package_group=somegroup \
     package_name=somepackage \
@@ -81,25 +85,25 @@ make export-package \
 ```
 make export-packages \
     stack_prefix=stack1 \
-    topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/export-package.yaml \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/export-packages.yaml \
     component=author-primary \
-    descriptor_file=descriptor_file.txt \   
+    descriptor_file=descriptor_file.json \   
 ```
 
 ```
 make live-snapshot \
     stack_prefix=stack1 \
-    topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/import-package.yaml \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/live-snapshot.yaml \
     component=author-primary \
 ```
 
 ```
 make import-package \
     stack_prefix=stack1 \
-    topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/import-package.yaml \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/import-package.yaml \
     component=author-primary \
     source_stack_prefix=stack2 \
     package_group=somegroup \
@@ -108,18 +112,26 @@ make import-package \
 ```
 
 ```
+make promote-author \
+    stack_prefix=stack1 \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/promote-author.yaml
+
+```
+
+```
 make offline-snapshot \
     stack_prefix=stack1 \
-    topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/offline-snapshot.yaml
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/offline-snapshot.yaml
 
 ```
 
 ```
 make offline-compaction-snapshot \
     stack_prefix=stack1 \
-    topic_config_file=inventory/group_vars/all.yaml \
-    message_config_file=inventory/group_vars/offline-compaction-snapshot.yaml
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/offline-compaction-snapshot.yaml
 
 ```
 

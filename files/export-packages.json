@@ -1,8 +1,8 @@
 {
-  "task": "deploy-artifact",
+  "task": "export-packages",
   "stack_prefix": stack_prefix,
   "details": {
     "component": component,
-    "artifact": artifact
+    "descriptor_file": descriptor_file,
   }
 }
