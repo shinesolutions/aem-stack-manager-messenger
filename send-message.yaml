@@ -52,7 +52,7 @@
         comparisonoperator: EQ
         state: query
       register: dbquery
-      until: dbquery.item[0].state.S != "Pending"
+      until:  dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
       # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
       retries: 120
       delay: 5
