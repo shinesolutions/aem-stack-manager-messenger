@@ -1,7 +1,4 @@
 ---
 aws_region: ap-southeast-2
 sns_topic: arn_region
-stack_prefix: StackManager-stack_prefix
-s3:
-  bucket: aem-stack-builder
 dynamodb_tablename: DynamoDB-AemStackManagerTable
