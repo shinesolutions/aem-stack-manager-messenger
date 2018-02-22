@@ -82,7 +82,7 @@
     - name: "Save command output to {{log_path }}{{ dl_path }}"
       aws_s3:
         mode: get
-        bucket: aem-stack-builder
+        bucket: "{{ s3.bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
