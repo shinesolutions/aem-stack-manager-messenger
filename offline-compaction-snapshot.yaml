@@ -1,0 +1,309 @@
+---
+- name: SNS Message Sender
+  hosts: all
+  gather_facts: no
+  connection: local
+
+  vars:
+    message_file:
+# files are in .txt as they need to replace the variables e.g. 'stack_prefix' (un-quoted) which breaks the json validation.
+# if the variables were in double quotes, they would not be replaced with the value.
+    message: "{{ lookup('file', message_file) }}"
+
+  tasks:
+
+    - debug:
+        msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
+
+    - name: Send message to SNS Topic
+      sns:
+        msg: "{{ message }}"
+        subject: "{{ subject }}"
+        topic: "{{ sns_topic }}"
+        region: "{{ aws_region }}"
+      register: publish_message
+
+    - name: Scan if author standby instance is stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: message_id
+        attribute_value: "{{ publish_message.item.PublishResponse.PublishResult.MessageId }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_stop_author_standby
+      until: cmd_stop_author_standby.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_stop_author_standby.item }}"
+
+    - name: Scan if author primary instance is stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_stop_author_primary
+      until: cmd_stop_author_primary.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_stop_author_primary.item }}"
+
+    - name: Scan if publish instance is stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_stop_publish
+      until: cmd_stop_publish.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_stop_publish.item }}"
+
+    - name: Scan if offline-compaction finished
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_offline_compaction
+      until: cmd_offline_compaction.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_offline_compaction.item }}"
+
+    - name: Scan if offline-backup is executed
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_offline_backup
+      until: cmd_offline_backup.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_offline_backup.item }}"
+
+    - name: Scan if author primary instance is started
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_start_author_primary
+      until: cmd_start_author_primary.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_start_author_primary.item }}"
+
+    - name: Scan if author standby instance is started
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_start_author_standby
+      until: cmd_start_author_standby.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_start_author_standby.item }}"
+
+    - name: Scan if publish instance is started
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_start_publish
+      until: cmd_start_publish.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_start_publish.item }}"
+
+    - name: Scan if job compact_remaining_publish is finished
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_remaining_compact_jobs
+      until: cmd_remaining_compact_jobs.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_remaining_compact_jobs.item }}"
+
+    - name: Scan if remaining publish instances are stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_stop_publish
+      until: cmd_stop_publish.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_stop_publish.item }}"
+
+    - name: Scan if remaining publish instances are compacted
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_compact_publish
+      until: cmd_compact_publish.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_compact_publish.item }}"
+
+    - name: Scan if remaining publish instances are started
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_start_publish
+      until: cmd_start_publish.item != []
+      retries: 120
+      delay: 5
+
+    - set_fact:
+        cmd_id: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_start_publish.item }}"
+
+    - name: Query if offline-compaction-snapshot was successful
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+      register: dbquery
+      until: dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
+      # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
+      retries: 120
+      delay: 5
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
+      register: output_files
+
+    - name: Set facts for getting command output
+      set_fact:
+        log_path: "{{ playbook_dir }}/logs/"
+        dl_path: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
+        s3_files: "{{ output_files.s3_keys }}"
+
+    - name: "Create Download directory in {{log_path }}{{ dl_path }}"
+      file:
+        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
+        state: directory
+      with_items:
+        - "{{ s3_files }}"
+
+    - name: "Save command output to {{log_path }}{{ dl_path }}"
+      aws_s3:
+        mode: get
+        bucket: "{{ s3.bucket }}"
+        object: "{{ item }}"
+        dest: "{{ log_path }}{{ item }}"
+      with_items:
+        - "{{ s3_files }}"
+      register: saved_files
+
+    - name: "Find error log files in {{log_path }}{{ dl_path }}"
+      find:
+        paths: "{{log_path }}{{ dl_path }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_files
+
+    - log_output:
+        type: file
+        log_files: "{{ stderr_files.files | map(attribute='path')|list }}"
