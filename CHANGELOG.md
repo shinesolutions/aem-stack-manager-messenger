@@ -4,6 +4,7 @@
  * add command export-packages
  * add polling state of the sent command
  * add ansible module to output the log of the sent command to stdout
+ * add new command flush-dispatcher-cache
 
 
 ### 1.1.0
@@ -12,4 +13,3 @@
 
 ### 1.0.0
 * Initial version
-
