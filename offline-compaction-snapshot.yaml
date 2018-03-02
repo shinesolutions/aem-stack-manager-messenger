@@ -1,0 +1,531 @@
+---
+- name: SNS Message Sender
+  hosts: all
+  gather_facts: no
+  connection: local
+
+  vars:
+    message_file:
+# files are in .txt as they need to replace the variables e.g. 'stack_prefix' (un-quoted) which breaks the json validation.
+# if the variables were in double quotes, they would not be replaced with the value.
+    message: "{{ lookup('file', message_file) }}"
+
+  tasks:
+
+    - debug:
+        msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
+
+    - name: Send message to SNS Topic
+      sns:
+        msg: "{{ message }}"
+        subject: "{{ subject }}"
+        topic: "{{ sns_topic }}"
+        region: "{{ aws_region }}"
+      register: publish_message
+
+    - name: Scan if author standby instance is stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: message_id
+        attribute_value: "{{ publish_message.item.PublishResponse.PublishResult.MessageId }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_stop_author_standby
+      until: cmd_stop_author_standby.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_stop_author_standby: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_stop_author_standby.item }}"
+
+    - name: Scan if author primary instance is stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_stop_author_standby }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_stop_author_primary
+      until: cmd_stop_author_primary.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_stop_author_primary: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_stop_author_primary.item }}"
+
+    - name: Scan if publish instance is stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_stop_author_primary }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_stop_publish
+      until: cmd_stop_publish.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_stop_publish: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_stop_publish.item }}"
+
+    - name: Scan if offline-compaction finished
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_stop_publish }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_offline_compaction
+      until: cmd_offline_compaction.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_offline_compaction: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_offline_compaction.item }}"
+
+    - name: Scan if offline-backup is executed
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_offline_compaction }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_offline_backup
+      until: cmd_offline_backup.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_offline_backup: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_offline_backup.item }}"
+
+    - name: Scan if author primary instance is started
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_offline_backup }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_start_author_primary
+      until: cmd_start_author_primary.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_start_author_primary: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_start_author_primary.item }}"
+
+    - name: Scan if author standby instance is started
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_start_author_primary }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_start_author_standby
+      until: cmd_start_author_standby.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_start_author_standby: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_start_author_standby.item }}"
+
+    - name: Scan if publish instance is started
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_start_author_standby }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_start_publish
+      until: cmd_start_publish.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_start_publish: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_start_publish.item }}"
+
+    - name: Scan if job remaining compact jobs are finished
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_start_publish }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_remain_compact_jobs
+      until: cmd_remain_compact_jobs.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_remain_compact_jobs: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_remain_compact_jobs.item }}"
+
+    - name: Scan if remaining publish instances are stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_remain_compact_jobs }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_stop_remain_publish
+      until: cmd_stop_remain_publish.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_stop_remain_publish: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_stop_remain_publish.item }}"
+
+    - name: Scan if remaining publish instances are compacted
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_stop_remain_publish }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_compact_publish
+      until: cmd_compact_publish.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_compact_publish: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_compact_publish.item }}"
+
+    - name: Scan if remaining publish instances are started
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_compact_publish }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+      register: cmd_start_remain_publish
+      until: cmd_start_remain_publish.item != []
+      retries:  720
+      delay: 5
+
+    - set_fact:
+        cmd_id_start_remain_publish: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_start_remain_publish.item }}"
+
+    - name: Query if offline-compaction-snapshot was successful
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id_start_remain_publish }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+      register: dbquery
+      until: dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
+      retries:  720
+      delay: 5
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
+      register: output_files_stop_author_standby
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
+      register: output_files_stop_author_primary
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
+      register: output_files_stop_publish
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_compaction }}"
+      register: output_files_offline_compaction
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
+      register: output_files_offline_backup
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
+      register: output_files_start_author_primary
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
+      register: output_files_start_author_standby
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
+      register: output_files_start_publish
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_remain_compact_jobs }}"
+      register: output_files_remain_compact_jobs
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_remain_publish }}"
+      register: output_files_stop_remain_publish
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_compact_publish }}"
+      register: output_files_compact_publish
+
+    - name: Get path to output files
+      aws_s3:
+        mode: list
+        bucket: "{{ s3.bucket }}"
+        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_remain_publish }}"
+      register: output_files_start_remain_publish
+
+    - name: Set facts for getting command output
+      set_fact:
+        log_path: "{{ playbook_dir }}/logs/"
+        dl_path_stop_author_standby: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
+        dl_path_stop_author_primary: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
+        dl_path_stop_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
+        dl_path_offline_compaction: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{cmd_id_offline_compaction}}"
+        dl_path_offline_backup: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
+        dl_path_start_author_primary: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
+        dl_path_start_author_standby: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
+        dl_path_start_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
+        dl_path_remain_compact_jobs: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{cmd_id_remain_compact_jobs}}"
+        dl_path_stop_remain_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{cmd_id_stop_remain_publish}}"
+        dl_path_compact_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{cmd_id_compact_publish}}"
+        dl_path_start_remain_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{cmd_id_start_remain_publish}}"
+        s3_files_stop_author_standby: "{{ output_files_stop_author_standby.s3_keys }}"
+        s3_files_stop_author_primary: "{{ output_files_stop_author_primary.s3_keys }}"
+        s3_files_stop_publish: "{{ output_files_stop_publish.s3_keys }}"
+        s3_files_offline_compaction: "{{ output_files_offline_compaction.s3_keys }}"
+        s3_files_offline_backup: "{{ output_files_offline_backup.s3_keys }}"
+        s3_files_start_author_primary: "{{ output_files_start_author_primary.s3_keys }}"
+        s3_files_start_author_standby: "{{ output_files_start_author_standby.s3_keys }}"
+        s3_files_start_publish: "{{ output_files_start_publish.s3_keys }}"
+        s3_files_remain_compact_jobs: "{{ output_files_remain_compact_jobs.s3_keys }}"
+        s3_files_stop_remain_publish: "{{ output_files_stop_remain_publish.s3_keys }}"
+        s3_files_compact_publish: "{{ output_files_compact_publish.s3_keys }}"
+        s3_files_start_remain_publish: "{{ output_files_start_remain_publish.s3_keys }}"
+
+    - name: "Create Download directory"
+      file:
+        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
+        state: directory
+      with_items:
+        - "{{ s3_files_stop_author_standby }}"
+        - "{{ s3_files_stop_author_primary }}"
+        - "{{ s3_files_stop_author_standby }}"
+        - "{{ s3_files_stop_publish }}"
+        - "{{ s3_files_offline_compaction }}"
+        - "{{ s3_files_offline_backup }}"
+        - "{{ s3_files_start_author_primary }}"
+        - "{{ s3_files_start_author_standby }}"
+        - "{{ s3_files_start_publish }}"
+        - "{{ s3_files_remain_compact_jobs }}"
+        - "{{ s3_files_stop_remain_publish }}"
+        - "{{ s3_files_compact_publish }}"
+        - "{{ s3_files_start_remain_publish }}"
+
+    - name: "Save command output to {{log_path }}"
+      aws_s3:
+        mode: get
+        bucket: "{{ s3.bucket }}"
+        object: "{{ item }}"
+        dest: "{{ log_path }}{{ item }}"
+      with_items:
+        - "{{ s3_files_stop_author_standby }}"
+        - "{{ s3_files_stop_author_primary }}"
+        - "{{ s3_files_stop_author_standby }}"
+        - "{{ s3_files_stop_publish }}"
+        - "{{ s3_files_offline_compaction }}"
+        - "{{ s3_files_offline_backup }}"
+        - "{{ s3_files_start_author_primary }}"
+        - "{{ s3_files_start_author_standby }}"
+        - "{{ s3_files_start_publish }}"
+        - "{{ s3_files_remain_compact_jobs }}"
+        - "{{ s3_files_stop_remain_publish }}"
+        - "{{ s3_files_compact_publish }}"
+        - "{{ s3_files_start_remain_publish }}"
+
+    - name: "Find error log files in {{log_path }}{{dl_path_stop_author_standby}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_stop_author_standby }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_stop_author_standby
+
+    - name: "Find error log files in {{log_path }}{{dl_path_stop_author_primary}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_stop_author_primary }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_stop_author_primary
+
+    - name: "Find error log files in {{log_path }}{{dl_path_stop_publish}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_stop_publish }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_stop_publish
+
+    - name: "Find error log files in {{log_path }}{{dl_path_offline_compaction}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_offline_compaction }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_offline_compaction
+
+    - name: "Find error log files in {{log_path }}{{dl_path_offline_backup}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_offline_backup }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_offline_backup
+
+    - name: "Find error log files in {{log_path }}{{dl_path_start_author_primary}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_start_author_primary }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_start_author_primary
+
+    - name: "Find error log files in {{log_path }}{{dl_path_start_author_standby}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_start_author_standby }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_start_author_standby
+
+    - name: "Find error log files in {{log_path }}{{dl_path_start_publish}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_start_publish }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_path_start_publish
+
+    - name: "Find error log files in {{log_path }}{{dl_path_remain_compact_jobs}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_remain_compact_jobs }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_path_remain_compact_jobs
+
+    - name: "Find error log files in {{log_path }}{{dl_path_stop_remain_publish}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_stop_remain_publish }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_path_stop_remain_publish
+
+    - name: "Find error log files in {{log_path }}{{dl_path_compact_publish}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_compact_publish }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_path_compact_publish
+
+    - name: "Find error log files in {{log_path }}{{dl_path_start_remain_publish}}"
+      find:
+        paths: "{{log_path }}{{ dl_path_start_remain_publish }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_path_start_remain_publish
+
+    - log_output:
+        type: file
+        log_files: "{{ item.files | map(attribute='path')|list }}"
+      with_items:
+        - "{{stderr_stop_author_standby}}"
+        - "{{stderr_stop_author_primary}}"
+        - "{{stderr_stop_publish}}"
+        - "{{stderr_offline_compaction}}"
+        - "{{stderr_offline_backup}}"
+        - "{{stderr_start_author_primary}}"
+        - "{{stderr_start_author_standby}}"
+        - "{{stderr_path_start_publish}}"
+        - "{{stderr_path_remain_compact_jobs}}"
+        - "{{stderr_path_stop_remain_publish}}"
+        - "{{stderr_path_compact_publish}}"
+        - "{{stderr_path_start_remain_publish}}"
