@@ -2,9 +2,7 @@
 
 ANSIBLE_METADATA = {'metadata_version': '1.1'}
 
-
 DOCUMENTATION = """
----
 module: dynamodb_search
 short_description: Scan and query DB Table
 version_added: "1.0"
@@ -57,33 +55,41 @@ extends_documentation_fragment:
     - ec2
 """
 
-EXAMPLES = '''
+EXAMPLES = """
 # Scan dynamo table for attribute message_id and only return attribute command_id
 - dynamodb_search:
     table_name: "michaelb-aem63-AemStackManagerTable"
     attribute: "message_id"
     attribute_value: "123"
+    comparisonoperator: "EQ"
     get_attribute: "command_id"
     select: "SPECIFIC_ATTRIBUTES"
-    comparisonoperator: "EQ"
     state: scan
 
+# Scan dynamodb table for attribute message_id and return all attributes
+- dynamodb_search:
+    table_name: "michaelb-aem63-AemStackManagerTable"
+    attribute: "message_id"
+    attribute_value: "123"
+    comparisonoperator: "EQ"
+    select: "ALL_ATTRIBUTES"
+    state: scan
 
 # Query dynamo table for KeyConditions command_id and only return attribute state
 - dynamodb_search:
     table_name: "michaelb-aem63-AemStackManagerTable"
     attribute: "command_id"
     attribute_value: "456"
+    comparisonoperator: "EQ"
     get_attribute: "state"
     select: "SPECIFIC_ATTRIBUTES"
-    comparisonoperator: "EQ"
     state: query
-'''
+"""
 
-RETURN = '''
+RETURN = """
 msg:
     get_attribute: Value.
-'''
+"""
 
 import traceback
 
@@ -97,6 +103,48 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.ec2 import AnsibleAWSError, connect_to_aws, ec2_argument_spec, get_aws_connection_info
 
+def scan_filter(module):
+    table = module.params.get('table_name')
+    get_attribute = module.params.get('get_attribute')
+    scan_limit = module.params.get('scan_limit')
+    select = module.params.get('select')
+    attribute = module.params.get('attribute')
+    attribute_value = module.params.get('attribute_value')
+    comparisonoperator = module.params.get('comparisonoperator')
+
+    if select == 'ALL_ATTRIBUTES':
+        filter = {
+                    'TableName': table,
+                    'Limit': scan_limit,
+                    'Select': select,
+                    'ScanFilter':{
+                        attribute: {
+                            'AttributeValueList': [
+                            {'S': attribute_value,}
+                            ],
+                            'ComparisonOperator': comparisonoperator
+                        }
+                    },
+                }
+    else:
+        filter = {
+                    'TableName': table,
+                    'AttributesToGet': [
+                        get_attribute,
+                    ],
+                    'Limit': scan_limit,
+                    'Select': select,
+                    'ScanFilter':{
+                        attribute: {
+                            'AttributeValueList': [
+                            {'S': attribute_value,}
+                            ],
+                            'ComparisonOperator': comparisonoperator
+                        }
+                    },
+                }
+
+    return filter
 
 def dynamo_table_exists(table, module):
     try:
@@ -107,32 +155,11 @@ def dynamo_table_exists(table, module):
 
 def scan(client_connection, resource_connection, module):
     table_name = module.params.get('table_name')
-    get_attribute = module.params.get('get_attribute')
-    scan_limit = module.params.get('scan_limit')
-    select = module.params.get('select')
-    attribute = module.params.get('attribute')
-    attribute_value = module.params.get('attribute_value')
-    comparisonoperator = module.params.get('comparisonoperator')
 
     try:
         table = resource_connection.Table(table_name)
         if dynamo_table_exists(table, module):
-            response = client_connection.scan(
-                TableName = table_name,
-                AttributesToGet = [
-                    get_attribute,
-                ],
-                Limit = scan_limit,
-                Select = select,
-                ScanFilter={
-                    attribute: {
-                        'AttributeValueList': [
-                        {'S': attribute_value,}
-                        ],
-                        'ComparisonOperator': comparisonoperator
-                    }
-                },
-            )
+            response = client_connection.scan(**scan_filter(module))
             result = response['Items']
         else:
             module.fail_json("Error: Table not found")
@@ -141,7 +168,6 @@ def scan(client_connection, resource_connection, module):
         module.fail_json(msg="Error: " + str(e), exception=traceback.format_exc(e))
     else:
         return result
-
 
 def query(client_connection, resource_connection, module):
     table_name = module.params.get('table_name')
@@ -222,7 +248,7 @@ def main():
         result = query(client_connection, resource_connection, module)
     else:
         module.fail_json(msg='Error: unsupported state. Supported states are scan and query')
-        
+
     module.exit_json(item=result)
 
 if __name__ == '__main__':
