@@ -50,6 +50,7 @@ make deploy-artifact \
     source=s3://s3bucket/path/aem-helloworld-content-0.0.1-SNAPSHOT.zip \
     group=shinesolutions \
     name=aem-helloworld-content \
+    version=0.0.1 \
     replicate=true \
     activate=false \
     force=true
