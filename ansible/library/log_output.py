@@ -105,7 +105,7 @@ def main():
 
     result = log.analyse()
 
-    module.exit_json(changed=True, item=result)
+    module.exit_json(changed=True, msg=result)
 
 if __name__ == '__main__':
     main()
