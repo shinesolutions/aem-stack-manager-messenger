@@ -42,6 +42,23 @@
       with_items:
         "{{ cmd_stop_author_standby.item }}"
 
+    - name: Query if Author Standby Service successfully stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id_stop_author_standby }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+      register: dbquery_state_stop_author_standby
+
+    - name: Check for error when stopping Author Standby Service
+      set_fact:
+        error_stop_author_standby: 1
+        module_error: 1
+      when: dbquery_state_stop_author_standby.item[0].state.S == "Failed"
+
     - name: Scan if author primary instance is stopped
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
@@ -60,6 +77,23 @@
         cmd_id_stop_author_primary: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_stop_author_primary.item }}"
+
+    - name: Query if Author Primary Service successfully stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id_stop_author_primary }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+      register: dbquery_state_stop_author_primary
+
+    - name: Check for error when stopping Author Primary Service
+      set_fact:
+        error_stop_author_primary: 1
+        module_error: 1
+      when: dbquery_state_stop_author_primary.item[0].state.S == "Failed"
 
     - name: Scan if publish instance is stopped
       dynamodb_search:
@@ -80,6 +114,23 @@
       with_items:
         "{{ cmd_stop_publish.item }}"
 
+    - name: Query if Publish Services are successfully stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id_stop_publish }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+      register: dbquery_state_stop_publish
+
+    - name: Check for error when stopping Publish Service
+      set_fact:
+        error_stop_publish: 1
+        module_error: 1
+      when: dbquery_state_stop_publish.item[0].state.S == "Failed"
+
     - name: Scan if offline-backup is executed
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
@@ -98,6 +149,23 @@
         cmd_id_offline_backup: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_offline_backup.item }}"
+
+    - name: Query Offline-Snapshot was successful
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id_offline_backup }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+      register: dbquery_state_offline_snapshot
+
+    - name: Check for error when taking offline backup
+      set_fact:
+        error_offline_snapshot: 1
+        module_error: 1
+      when: dbquery_state_offline_snapshot.item[0].state.S == "Failed"
 
     - name: Scan if author primary instance is started
       dynamodb_search:
@@ -118,6 +186,23 @@
       with_items:
         "{{ cmd_start_author_primary.item }}"
 
+    - name: Query if starting Author Primary Service was successful
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id_start_author_primary }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+      register: dbquery_state_start_author_primary
+
+    - name: Check for error when starting Author Primary Service
+      set_fact:
+        error_start_author_primary: 1
+        module_error: 1
+      when: dbquery_state_start_author_primary.item[0].state.S == "Failed"
+
     - name: Scan if author standby instance is started
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
@@ -136,6 +221,23 @@
         cmd_id_start_author_standby: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_start_author_standby.item }}"
+
+    - name: Query if starting Author Standby Service was successful
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id_start_author_standby }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+      register: dbquery_state_start_author_standby
+
+    - name: Check for error when starting Author Standby Service
+      set_fact:
+        error_start_author_standby: 1
+        module_error: 1
+      when: dbquery_state_start_author_standby.item[0].state.S == "Failed"
 
     - name: Scan if publish instance is started
       dynamodb_search:
@@ -156,6 +258,23 @@
       with_items:
         "{{ cmd_start_publish.item }}"
 
+    - name: Query if starting Publish Services were successful
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id_start_publish }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+      register: dbquery_state_start_publish
+
+    - name: Check for error when starting Publish Service
+      set_fact:
+        error_start_publish: 1
+        module_error: 1
+      when: dbquery_state_start_publish.item[0].state.S == "Failed"
+
     - name: Query if offline-snapshot was successful
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
@@ -171,88 +290,170 @@
       retries:  720
       delay: 5
 
-    - name: Get path to output files
+    - name: Check if offline-snapshot failed
+      set_fact:
+        general_error: 1
+      when: dbquery.item[0].state.S == "Failed"
+
+    - name: Get path to output files of stopping Author Standby Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
       register: output_files_stop_author_standby
+      When: cmd_id_stop_author_standby is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of stopping Author Primary Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
       register: output_files_stop_author_primary
+      When: cmd_id_stop_author_primary is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of stopping Publish Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
       register: output_files_stop_publish
+      When: cmd_id_stop_publish is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of taking offline backup
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
       register: output_files_offline_backup
+      When: cmd_id_offline_backup is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of starting Author Primary Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
       register: output_files_start_author_primary
+      When: cmd_id_start_author_primary is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of stopping Author Standby Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
       register: output_files_start_author_standby
+      When: cmd_id_start_author_standby is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of stopping Publish Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
       register: output_files_start_publish
+      When: cmd_id_start_publish is defined
 
-    - name: Set facts for getting command output
+    - name: Set global facts for getting command output
       set_fact:
         log_path: "{{ playbook_dir }}/logs/"
-        dl_path_stop_author_standby: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
-        dl_path_stop_author_primary: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
-        dl_path_stop_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
-        dl_path_offline_backup: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
-        dl_path_start_author_primary: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
-        dl_path_start_author_standby: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
-        dl_path_start_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
-        s3_files_stop_author_standby: "{{ output_files_stop_author_standby.s3_keys }}"
-        s3_files_stop_author_primary: "{{ output_files_stop_author_primary.s3_keys }}"
-        s3_files_stop_publish: "{{ output_files_stop_publish.s3_keys }}"
-        s3_files_offline_backup: "{{ output_files_offline_backup.s3_keys }}"
-        s3_files_start_author_primary: "{{ output_files_start_author_primary.s3_keys }}"
-        s3_files_start_author_standby: "{{ output_files_start_author_standby.s3_keys }}"
-        s3_files_start_publish: "{{ output_files_start_publish.s3_keys }}"
 
-    - name: "Create Download directory"
+    - name: Set facts for getting command output of stopping Author Standby Service
+      set_fact:
+        dl_path_stop_author_standby: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
+        s3_files_stop_author_standby: "{{ output_files_stop_author_standby.s3_keys }}"
+      when: error_stop_author_standby is defined or general_error is defined
+
+    - name: Set facts for getting command output of stopping Author Primary Service
+      set_fact:
+        dl_path_stop_author_primary: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
+        s3_files_stop_author_primary: "{{ output_files_stop_author_primary.s3_keys }}"
+      when: error_stop_author_primary is defined or general_error is defined
+
+    - name: Set facts for getting command output of stopping Publish Services
+      set_fact:
+        dl_path_stop_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
+        s3_files_stop_publish: "{{ output_files_stop_publish.s3_keys }}"
+      when: error_stop_publish is defined or general_error is defined
+
+    - name: Set facts for getting command output of taking offline Backup
+      set_fact:
+        dl_path_offline_backup: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
+        s3_files_offline_backup: "{{ output_files_offline_backup.s3_keys }}"
+      when: error_offline_snapshot is defined or general_error is defined
+
+    - name: Set facts for getting command output of starting Author Primary Service
+      set_fact:
+        dl_path_start_author_primary: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
+        s3_files_start_author_primary: "{{ output_files_start_author_primary.s3_keys }}"
+      when: error_start_author_primary is defined or general_error is defined
+
+    - name: Set facts for getting command output of starting Author Standby Service
+      set_fact:
+        dl_path_start_author_standby: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
+        s3_files_start_author_standby: "{{ output_files_start_author_standby.s3_keys }}"
+      when: error_start_author_standby is defined or general_error is defined
+
+    - name: Set facts for getting command output of starting Publish Services
+      set_fact:
+        dl_path_start_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
+        s3_files_start_publish: "{{ output_files_start_publish.s3_keys }}"
+      when: error_start_publish is defined or general_error is defined
+
+    - name: "Create Download directory of stopping Author Standby Service"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
       with_items:
         - "{{ s3_files_stop_author_standby }}"
-        - "{{ s3_files_stop_author_primary }}"
-        - "{{ s3_files_stop_author_standby }}"
-        - "{{ s3_files_stop_publish }}"
-        - "{{ s3_files_offline_backup }}"
-        - "{{ s3_files_start_author_primary }}"
-        - "{{ s3_files_start_author_standby }}"
-        - "{{ s3_files_start_publish }}"
+      when: error_stop_author_standby is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Create Download directory of stopping Author Primary Service"
+      file:
+        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
+        state: directory
+      with_items:
+        - "{{ s3_files_stop_author_primary }}"
+      when: error_stop_author_primary is defined or general_error is defined
+
+    - name: "Create Download directory of stopping Publish Service"
+      file:
+        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
+        state: directory
+      with_items:
+        - "{{ s3_files_stop_publish }}"
+      when: error_stop_publish is defined or general_error is defined
+
+    - name: "Create Download directory of taking offline backup Service"
+      file:
+        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
+        state: directory
+      with_items:
+      - "{{ s3_files_offline_backup }}"
+      when: error_offline_snapshot is defined or general_error is defined
+
+    - name: "Create Download directory of starting Author Primary Service"
+      file:
+        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
+        state: directory
+      with_items:
+      - "{{ s3_files_start_author_primary }}"
+      when: error_start_author_primary is defined or general_error is defined
+
+    - name: "Create Download directory of starting Author Standby Service"
+      file:
+        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
+        state: directory
+      with_items:
+      - "{{ s3_files_start_author_standby }}"
+      when: error_start_author_standby is defined or general_error is defined
+
+    - name: "Create Download directory of starting Publish Service"
+      file:
+        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
+        state: directory
+      with_items:
+      - "{{ s3_files_start_publish }}"
+      when: error_start_publish is defined or general_error is defined
+
+    - name: "Save command output stopping Author Primary Service to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -260,78 +461,187 @@
         dest: "{{ log_path }}{{ item }}"
       with_items:
         - "{{ s3_files_stop_author_standby }}"
-        - "{{ s3_files_stop_author_primary }}"
-        - "{{ s3_files_stop_author_standby }}"
-        - "{{ s3_files_stop_publish }}"
-        - "{{ s3_files_offline_backup }}"
-        - "{{ s3_files_start_author_primary }}"
-        - "{{ s3_files_start_author_standby }}"
-        - "{{ s3_files_start_publish }}"
+      when: error_stop_author_standby is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_stop_author_standby}}"
+    - name: "Save command output stopping Author Standby Service to {{log_path }}"
+      aws_s3:
+        mode: get
+        bucket: "{{ s3.bucket }}"
+        object: "{{ item }}"
+        dest: "{{ log_path }}{{ item }}"
+      with_items:
+        - "{{ s3_files_stop_author_primary }}"
+      when: error_stop_author_primary is defined or general_error is defined
+
+    - name: "Save command output stopping Publish Service to {{log_path }}"
+      aws_s3:
+        mode: get
+        bucket: "{{ s3.bucket }}"
+        object: "{{ item }}"
+        dest: "{{ log_path }}{{ item }}"
+      with_items:
+        - "{{ s3_files_stop_publish }}"
+      when: error_stop_publish is defined or general_error is defined
+
+    - name: "Save command output taking offline backup to {{log_path }}"
+      aws_s3:
+        mode: get
+        bucket: "{{ s3.bucket }}"
+        object: "{{ item }}"
+        dest: "{{ log_path }}{{ item }}"
+      with_items:
+        - "{{ s3_files_offline_backup }}"
+      when: error_offline_snapshot is defined or general_error is defined
+
+    - name: "Save command output starting Author Primary Service to {{log_path }}"
+      aws_s3:
+        mode: get
+        bucket: "{{ s3.bucket }}"
+        object: "{{ item }}"
+        dest: "{{ log_path }}{{ item }}"
+      with_items:
+        - "{{ s3_files_start_author_primary }}"
+      when: error_start_author_primary is defined or general_error is defined
+
+    - name: "Save command output starting Author Standby Service to {{log_path }}"
+      aws_s3:
+        mode: get
+        bucket: "{{ s3.bucket }}"
+        object: "{{ item }}"
+        dest: "{{ log_path }}{{ item }}"
+      with_items:
+        - "{{ s3_files_start_author_standby }}"
+      when: error_start_author_standby is defined or general_error is defined
+
+    - name: "Save command output starting Publish Service to {{log_path }}"
+      aws_s3:
+        mode: get
+        bucket: "{{ s3.bucket }}"
+        object: "{{ item }}"
+        dest: "{{ log_path }}{{ item }}"
+      with_items:
+        - "{{ s3_files_start_publish }}"
+      when: error_start_publish is defined or general_error is defined
+
+    - name: "Find error log files of stopping Author Standby Service"
       find:
         paths: "{{log_path }}{{ dl_path_stop_author_standby }}"
         file_type: file
         patterns: stderr
         recurse: yes
       register: stderr_stop_author_standby
+      when: error_stop_author_standby is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_stop_author_primary}}"
+    - name: "Find error log files of stopping Author Primary Service"
       find:
         paths: "{{log_path }}{{ dl_path_stop_author_primary }}"
         file_type: file
         patterns: stderr
         recurse: yes
       register: stderr_stop_author_primary
+      when: error_stop_author_primary is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_stop_publish}}"
+    - name: "Find error log files of stopping Publish Service"
       find:
         paths: "{{log_path }}{{ dl_path_stop_publish }}"
         file_type: file
         patterns: stderr
         recurse: yes
       register: stderr_stop_publish
+      when: error_stop_publish is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_offline_backup}}"
+    - name: "Find error log files of taking offline backup"
       find:
         paths: "{{log_path }}{{ dl_path_offline_backup }}"
         file_type: file
         patterns: stderr
         recurse: yes
       register: stderr_offline_backup
+      when: error_offline_snapshot is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_start_author_primary}}"
+    - name: "Find error log files of starting Author Primary Service"
       find:
         paths: "{{log_path }}{{ dl_path_start_author_primary }}"
         file_type: file
         patterns: stderr
         recurse: yes
       register: stderr_start_author_primary
+      when: error_start_author_primary is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_start_author_standby}}"
+    - name: "Find error log files of starting Author Standby Service"
       find:
         paths: "{{log_path }}{{ dl_path_start_author_standby }}"
         file_type: file
         patterns: stderr
         recurse: yes
       register: stderr_start_author_standby
+      when: error_start_author_standby is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_start_author_standby}}"
+    - name: "Find error log files of starting Publish Service"
       find:
         paths: "{{log_path }}{{ dl_path_start_publish }}"
         file_type: file
         patterns: stderr
         recurse: yes
       register: stderr_path_start_publish
+      when: error_start_publish is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of stopping Author Standby Service"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_stop_author_standby}}"
+      when: error_stop_author_standby is defined or general_error is defined
+
+    - name: "Show Error Log of stopping Author Primary Service"
+      log_output:
+        type: file
+        log_files: "{{ item.files | map(attribute='path')|list }}"
+      with_items:
         - "{{stderr_stop_author_primary}}"
+      when: error_stop_author_primary is defined or general_error is defined
+
+    - name: "Show Error Log of stopping Publish Service"
+      log_output:
+        type: file
+        log_files: "{{ item.files | map(attribute='path')|list }}"
+      with_items:
         - "{{stderr_stop_publish}}"
+      when: error_stop_publish is defined or general_error is defined
+
+    - name: "Show Error Log of taking offline backup"
+      log_output:
+        type: file
+        log_files: "{{ item.files | map(attribute='path')|list }}"
+      with_items:
         - "{{stderr_offline_backup}}"
+      when: error_offline_snapshot is defined or general_error is defined
+
+    - name: "Show Error Log of starting Author Primary Service"
+      log_output:
+        type: file
+        log_files: "{{ item.files | map(attribute='path')|list }}"
+      with_items:
         - "{{stderr_start_author_primary}}"
+      when: error_start_author_primary is defined or general_error is defined
+
+    - name: "Show Error Log of starting Author Standby Service"
+      log_output:
+        type: file
+        log_files: "{{ item.files | map(attribute='path')|list }}"
+      with_items:
         - "{{stderr_start_author_standby}}"
+      when: error_start_author_standby is defined or general_error is defined
+
+    - name: "Show Error Log of starting Publish Service"
+      log_output:
+        type: file
+        log_files: "{{ item.files | map(attribute='path')|list }}"
+      with_items:
         - "{{stderr_path_start_publish}}"
+      when: error_start_publish is defined or general_error is defined
+
+    - fail:
+        msg: "Error while executing offline-snapshot"
+      when: general_error is defined or module_error is defined

@@ -4,7 +4,8 @@
  * add command export-packages
  * add polling state of the sent command
  * add ansible module to output the log of the sent command to stdout
- * add ansible playbook for offline-snapshot and offline-compaction-snapshot
+ * add ansible playbook for offline-snapshot and offline-compaction-snapsho
+ * Improvement of the error handling
 
 
 ### 1.1.0
