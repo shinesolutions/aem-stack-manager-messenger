@@ -53,7 +53,7 @@
         state: query
       register: dbquery_state_stop_author_standby
 
-    - name: Check for error
+    - name: Check for error when stopping Author Standby Service
       set_fact:
         error_stop_author_standby: 1
         module_error: 1
@@ -89,7 +89,7 @@
         state: query
       register: dbquery_state_stop_author_primary
 
-    - name: Check for error
+    - name: Check for error when stopping Author Primary Service
       set_fact:
         error_stop_author_primary: 1
         module_error: 1
@@ -125,7 +125,7 @@
         state: query
       register: dbquery_state_stop_publish
 
-    - name: Check for error
+    - name: Check for error when stopping Publish Service
       set_fact:
         error_stop_publish: 1
         module_error: 1
@@ -161,7 +161,7 @@
         state: query
       register: dbquery_state_offline_compaction
 
-    - name: Check for error
+    - name: Check for error when taking offline compaction
       set_fact:
         error_offline_compaction: 1
         module_error: 1
@@ -197,7 +197,7 @@
         state: query
       register: dbquery_state_offline_snapshot
 
-    - name: Check for error
+    - name: Check for error when taking offline backup
       set_fact:
         error_offline_snapshot: 1
         module_error: 1
@@ -233,7 +233,7 @@
         state: query
       register: dbquery_state_start_author_primary
 
-    - name: Check for error
+    - name: Check for error when starting Author Primary Service
       set_fact:
         error_start_author_primary: 1
         module_error: 1
@@ -269,7 +269,7 @@
         state: query
       register: dbquery_state_start_author_standby
 
-    - name: Check for error
+    - name: Check for error when starting Author Standby Service
       set_fact:
         error_start_author_standby: 1
         module_error: 1
@@ -305,7 +305,7 @@
         state: query
       register: dbquery_state_start_publish
 
-    - name: Check for error
+    - name: Check for error when starting Publish Service
       set_fact:
         error_start_publish: 1
         module_error: 1
@@ -341,7 +341,7 @@
         state: query
       register: dbquery_remain_compact_jobs
 
-    - name: Check for error
+    - name: Check for error when checking for remaining compact jobs
       set_fact:
         error_remain_compact_jobs: 1
         module_error: 1
@@ -377,7 +377,7 @@
         state: query
       register: dbquery_stop_remain_publish
 
-    - name: Check for error
+    - name: Check for error when stoppping remaining Publish Service
       set_fact:
         error_stop_remain_publish: 1
         module_error: 1
@@ -413,7 +413,7 @@
         state: query
       register: dbquery_compact_publish
 
-    - name: Check for error
+    - name: Check for error when compact remaining Publisher
       set_fact:
         error_remain_compact_publish: 1
         module_error: 1
@@ -449,7 +449,7 @@
         state: query
       register: dbquery_start_remain_publish
 
-    - name: Check for error
+    - name: Check for error when starting remaining Publisher
       set_fact:
         error_start_remain_publish: 1
         module_error: 1
@@ -474,7 +474,7 @@
         general_error: 1
       when: dbquery.item[0].state.S == "Failed"
 
-    - name: Get path to output files
+    - name: Get path to output files of stopping Author Standby Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -482,7 +482,7 @@
       register: output_files_stop_author_standby
       When: cmd_id_stop_author_standby is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of stopping Author Primary Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -490,7 +490,7 @@
       register: output_files_stop_author_primary
       When: cmd_id_stop_author_primary is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of stopping Publish Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -498,7 +498,7 @@
       register: output_files_stop_publish
       When: cmd_id_stop_publish is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of taking offline compaction
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -506,7 +506,7 @@
       register: output_files_offline_compaction
       When: cmd_id_offline_compaction is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of taking offline backup
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -514,7 +514,7 @@
       register: output_files_offline_backup
       When: cmd_id_offline_backup is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of starting Author Primary Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -522,7 +522,7 @@
       register: output_files_start_author_primary
       When: cmd_id_start_author_primary is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of starting Author Standby Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -530,7 +530,7 @@
       register: output_files_start_author_standby
       When: cmd_id_start_author_standby is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of starting Publish Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -538,7 +538,7 @@
       register: output_files_start_publish
       When: cmd_id_start_publish is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of checking remaining compaction jobs
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -546,7 +546,7 @@
       register: output_files_remain_compact_jobs
       When: cmd_id_remain_compact_jobs is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of stopping remaining publisher
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -554,7 +554,7 @@
       register: output_files_stop_remain_publish
       When: cmd_id_stop_remain_publish is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of compact remaining publisher
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -562,7 +562,7 @@
       register: output_files_compact_publish
       When: cmd_id_compact_publish is defined
 
-    - name: Get path to output files
+    - name: Get path to output files of starting remaining publisher
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -646,7 +646,7 @@
         s3_files_start_remain_publish: "{{ output_files_start_remain_publish.s3_keys }}"
       when: error_start_remain_publish is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of stopping Author Standby Service"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -654,7 +654,7 @@
         - "{{ s3_files_stop_author_standby }}"
       when: error_stop_author_standby is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of stopping Author Primary Service"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -662,7 +662,7 @@
         - "{{ s3_files_stop_author_primary }}"
       when: error_stop_author_primary is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of stopping Publish Service"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -670,7 +670,7 @@
         - "{{ s3_files_stop_publish }}"
       when: error_stop_publish is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of taking offline compaction"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -678,7 +678,7 @@
       - "{{ s3_files_offline_compaction }}"
       when: error_offline_compaction is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of taking offline backup Service"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -686,7 +686,7 @@
       - "{{ s3_files_offline_backup }}"
       when: error_offline_snapshot is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of starting Author Primary Service"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -694,7 +694,7 @@
       - "{{ s3_files_start_author_primary }}"
       when: error_start_author_primary is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of starting Author Standby Service"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -702,7 +702,7 @@
       - "{{ s3_files_start_author_standby }}"
       when: error_start_author_standby is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of starting Publish Service"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -710,7 +710,7 @@
       - "{{ s3_files_start_publish }}"
       when: error_start_publish is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of remaining compaction job"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -718,7 +718,7 @@
       - "{{ s3_files_remain_compact_jobs }}"
       when: error_remain_compact_jobs is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of stopping remaining Publisher"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -726,7 +726,7 @@
       - "{{ s3_files_stop_remain_publish }}"
       when: error_stop_remain_publish is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of compact remaining Publisher"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -734,7 +734,7 @@
       - "{{ s3_files_compact_publish }}"
       when: error_remain_compact_publish is defined or general_error is defined
 
-    - name: "Create Download directory"
+    - name: "Create Download directory of starting remaining Publisher"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -742,7 +742,7 @@
       - "{{ s3_files_start_remain_publish }}"
       when: error_start_remain_publish is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output stopping Author Standby Service to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -752,7 +752,7 @@
         - "{{ s3_files_stop_author_standby }}"
       when: error_stop_author_standby is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output stopping Author Primary Service to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -762,7 +762,7 @@
         - "{{ s3_files_stop_author_primary }}"
       when: error_stop_author_primary is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output stopping Publish Service to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -772,7 +772,7 @@
         - "{{ s3_files_stop_publish }}"
       when: error_stop_publish is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output taking opffline compaction to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -782,7 +782,7 @@
         - "{{ s3_files_offline_compaction }}"
       when: error_offline_compaction is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output taking offline backup to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -792,7 +792,7 @@
         - "{{ s3_files_offline_backup }}"
       when: error_offline_snapshot is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output starting Author Primary Service to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -802,7 +802,7 @@
         - "{{ s3_files_start_author_primary }}"
       when: error_start_author_primary is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output starting Author Standby Service to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -812,7 +812,7 @@
         - "{{ s3_files_start_author_standby }}"
       when: error_start_author_standby is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output starting Publish Service to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -822,7 +822,7 @@
         - "{{ s3_files_start_publish }}"
       when: error_start_publish is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output check for remaining compaction jobs to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -832,7 +832,7 @@
         - "{{ s3_files_remain_compact_jobs }}"
       when: error_remain_compact_jobs is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output stopping remaining Publisher to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -842,7 +842,7 @@
         - "{{ s3_files_stop_remain_publish }}"
       when: error_stop_remain_publish is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output taking remaining compaction to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -852,7 +852,7 @@
         - "{{ s3_files_compact_publish }}"
       when: error_remain_compact_publish is defined or general_error is defined
 
-    - name: "Save command output to {{log_path }}"
+    - name: "Save command output starting remaining Publisher to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -862,7 +862,7 @@
         - "{{ s3_files_start_remain_publish }}"
       when: error_start_remain_publish is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_stop_author_standby}}"
+    - name: "Find error log files of stopping Author Standby Service"
       find:
         paths: "{{log_path }}{{ dl_path_stop_author_standby }}"
         file_type: file
@@ -871,7 +871,7 @@
       register: stderr_stop_author_standby
       when: error_stop_author_standby is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_stop_author_primary}}"
+    - name: "Find error log files of stopping Author Primary Service"
       find:
         paths: "{{log_path }}{{ dl_path_stop_author_primary }}"
         file_type: file
@@ -880,7 +880,7 @@
       register: stderr_stop_author_primary
       when: error_stop_author_primary is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_stop_publish}}"
+    - name: "Find error log files of stopping Publish Service"
       find:
         paths: "{{log_path }}{{ dl_path_stop_publish }}"
         file_type: file
@@ -889,7 +889,7 @@
       register: stderr_stop_publish
       when: error_stop_publish is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_offline_compaction}}"
+    - name: "Find error log files of taking offline compaction"
       find:
         paths: "{{log_path }}{{ dl_path_offline_compaction }}"
         file_type: file
@@ -898,7 +898,7 @@
       register: stderr_offline_compaction
       when: error_offline_compaction is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_offline_backup}}"
+    - name: "Find error log files of taking offline backup"
       find:
         paths: "{{log_path }}{{ dl_path_offline_backup }}"
         file_type: file
@@ -907,7 +907,7 @@
       register: stderr_offline_backup
       when: error_offline_snapshot is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_start_author_primary}}"
+    - name: "Find error log files of starting Author Primary Service"
       find:
         paths: "{{log_path }}{{ dl_path_start_author_primary }}"
         file_type: file
@@ -916,7 +916,7 @@
       register: stderr_start_author_primary
       when: error_start_author_primary is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_start_author_standby}}"
+    - name: "Find error log files of starting Author Standby Service"
       find:
         paths: "{{log_path }}{{ dl_path_start_author_standby }}"
         file_type: file
@@ -925,7 +925,7 @@
       register: stderr_start_author_standby
       when: error_start_author_standby is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_start_publish}}"
+    - name: "Find error log files of starting Publish Service"
       find:
         paths: "{{log_path }}{{ dl_path_start_publish }}"
         file_type: file
@@ -934,7 +934,7 @@
       register: stderr_path_start_publish
       when: error_start_publish is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_remain_compact_jobs}}"
+    - name: "Find error log files of checking for remaining compaction jobs"
       find:
         paths: "{{log_path }}{{ dl_path_remain_compact_jobs }}"
         file_type: file
@@ -943,7 +943,7 @@
       register: stderr_path_remain_compact_jobs
       when: error_remain_compact_jobs is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_stop_remain_publish}}"
+    - name: "Find error log files of stopping remaining Publisher"
       find:
         paths: "{{log_path }}{{ dl_path_stop_remain_publish }}"
         file_type: file
@@ -952,7 +952,7 @@
       register: stderr_path_stop_remain_publish
       when: error_stop_remain_publish is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_compact_publish}}"
+    - name: "Find error log files of taking remaining offline compaction"
       find:
         paths: "{{log_path }}{{ dl_path_compact_publish }}"
         file_type: file
@@ -961,7 +961,7 @@
       register: stderr_path_compact_publish
       when: error_remain_compact_publish is defined or general_error is defined
 
-    - name: "Find error log files in {{log_path }}{{dl_path_start_remain_publish}}"
+    - name: "Find error log files of starting remaining Publisher"
       find:
         paths: "{{log_path }}{{ dl_path_start_remain_publish }}"
         file_type: file
@@ -970,84 +970,96 @@
       register: stderr_path_start_remain_publish
       when: error_start_remain_publish is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of stopping Author Standby Service"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_stop_author_standby}}"
       when: error_stop_author_standby is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of stopping Author Primary Service"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_stop_author_primary}}"
       when: error_stop_author_primary is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of stopping Publish Service"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_stop_publish}}"
       when: error_stop_publish is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of taking offline compaction"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_offline_compaction}}"
       when: error_offline_compaction is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of taking offline backup"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_offline_backup}}"
       when: error_offline_snapshot is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of starting Author Primary Service"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_start_author_primary}}"
       when: error_start_author_primary is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of starting Author Standby Service"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_start_author_standby}}"
       when: error_start_author_standby is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of starting Publish Service"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_path_start_publish}}"
       when: error_start_publish is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of checking remaining compaction jobs"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_path_remain_compact_jobs}}"
       when: error_remain_compact_jobs is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of stopping remaining Publisher"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_path_stop_remain_publish}}"
       when: error_stop_remain_publish is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of taking remaining offline compaction"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:
         - "{{stderr_path_compact_publish}}"
       when: error_remain_compact_publish is defined or general_error is defined
 
-    - log_output:
+    - name: "Show Error Log of starting remaining Publisher"
+      log_output:
         type: file
         log_files: "{{ item.files | map(attribute='path')|list }}"
       with_items:

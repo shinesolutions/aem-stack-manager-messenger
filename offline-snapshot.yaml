@@ -335,7 +335,7 @@
       register: output_files_start_author_primary
       When: cmd_id_start_author_primary is defined
 
-    - name: Get path to output files of stopping Author Standby Service
+    - name: Get path to output files of starting Author Standby Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -343,7 +343,7 @@
       register: output_files_start_author_standby
       When: cmd_id_start_author_standby is defined
 
-    - name: Get path to output files of stopping Publish Service
+    - name: Get path to output files of starting Publish Service
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
@@ -453,7 +453,7 @@
       - "{{ s3_files_start_publish }}"
       when: error_start_publish is defined or general_error is defined
 
-    - name: "Save command output stopping Author Primary Service to {{log_path }}"
+    - name: "Save command output stopping Author Standby Service to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
@@ -463,7 +463,7 @@
         - "{{ s3_files_stop_author_standby }}"
       when: error_stop_author_standby is defined or general_error is defined
 
-    - name: "Save command output stopping Author Standby Service to {{log_path }}"
+    - name: "Save command output stopping Author Primary Service to {{log_path }}"
       aws_s3:
         mode: get
         bucket: "{{ s3.bucket }}"
