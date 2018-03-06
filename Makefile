@@ -41,6 +41,9 @@ enable-crxde:
 disable-crxde:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
 
+flush-dispatcher-cache:
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
+
 live-snapshot:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
 
@@ -52,6 +55,9 @@ offline-snapshot:
 
 offline-compaction-snapshot:
 	./offline-compaction-snapshot.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
+
+run-adhoc-puppet:
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) puppet_tar_file=$(puppet_tar_file)"
 
 
 package:
