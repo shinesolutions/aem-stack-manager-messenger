@@ -74,7 +74,7 @@
         log_path: "{{ playbook_dir }}/logs/"
         dl_path: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
         s3_files: "{{ output_files.s3_keys }}"
-      When: cmd_id is defined
+      when: cmd_id is defined
 
     - name: "Create Download directory in {{log_path }}{{ dl_path }}"
       file:
