@@ -1,4 +1,8 @@
 {
   "task": "promote-author",
-  "stack_prefix": stack_prefix
+  "stack_prefix": stack_prefix,
+  "details": {
+    "component": ['author-standby'],
+    "comment": "promote standby author instance to be the primary",
+    }
 }

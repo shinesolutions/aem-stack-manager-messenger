@@ -2,6 +2,16 @@
   "task": "deploy-artifacts",
   "stack_prefix": stack_prefix,
   "details": {
-    "descriptor_file": descriptor_file
+    "component": [
+      'author-primary',
+      'author-standby',
+      'publish',
+      'author-dispatcher',
+      'publish-dispatcher'
+    ],
+    "comment": "deploying artifacts based on a descriptor file",
+    "parameters": {
+      "descriptorFile": [descriptor_file]
+    }
   }
 }
