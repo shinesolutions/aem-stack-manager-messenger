@@ -480,7 +480,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
       register: output_files_stop_author_standby
-      When: cmd_id_stop_author_standby is defined
+      when: cmd_id_stop_author_standby is defined
 
     - name: Get path to output files of stopping Author Primary Service
       aws_s3:
@@ -488,7 +488,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
       register: output_files_stop_author_primary
-      When: cmd_id_stop_author_primary is defined
+      when: cmd_id_stop_author_primary is defined
 
     - name: Get path to output files of stopping Publish Service
       aws_s3:
@@ -496,7 +496,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
       register: output_files_stop_publish
-      When: cmd_id_stop_publish is defined
+      when: cmd_id_stop_publish is defined
 
     - name: Get path to output files of taking offline compaction
       aws_s3:
@@ -504,7 +504,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_compaction }}"
       register: output_files_offline_compaction
-      When: cmd_id_offline_compaction is defined
+      when: cmd_id_offline_compaction is defined
 
     - name: Get path to output files of taking offline backup
       aws_s3:
@@ -512,7 +512,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
       register: output_files_offline_backup
-      When: cmd_id_offline_backup is defined
+      when: cmd_id_offline_backup is defined
 
     - name: Get path to output files of starting Author Primary Service
       aws_s3:
@@ -520,7 +520,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
       register: output_files_start_author_primary
-      When: cmd_id_start_author_primary is defined
+      when: cmd_id_start_author_primary is defined
 
     - name: Get path to output files of starting Author Standby Service
       aws_s3:
@@ -528,7 +528,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
       register: output_files_start_author_standby
-      When: cmd_id_start_author_standby is defined
+      when: cmd_id_start_author_standby is defined
 
     - name: Get path to output files of starting Publish Service
       aws_s3:
@@ -536,7 +536,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
       register: output_files_start_publish
-      When: cmd_id_start_publish is defined
+      when: cmd_id_start_publish is defined
 
     - name: Get path to output files of checking remaining compaction jobs
       aws_s3:
@@ -544,7 +544,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_remain_compact_jobs }}"
       register: output_files_remain_compact_jobs
-      When: cmd_id_remain_compact_jobs is defined
+      when: cmd_id_remain_compact_jobs is defined
 
     - name: Get path to output files of stopping remaining publisher
       aws_s3:
@@ -552,7 +552,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_remain_publish }}"
       register: output_files_stop_remain_publish
-      When: cmd_id_stop_remain_publish is defined
+      when: cmd_id_stop_remain_publish is defined
 
     - name: Get path to output files of compact remaining publisher
       aws_s3:
@@ -560,7 +560,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_compact_publish }}"
       register: output_files_compact_publish
-      When: cmd_id_compact_publish is defined
+      when: cmd_id_compact_publish is defined
 
     - name: Get path to output files of starting remaining publisher
       aws_s3:
@@ -568,7 +568,7 @@
         bucket: "{{ s3.bucket }}"
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_remain_publish }}"
       register: output_files_start_remain_publish
-      When: cmd_id_start_remain_publish is defined
+      when: cmd_id_start_remain_publish is defined
 
     - name: Set global facts for getting command output
       set_fact:
