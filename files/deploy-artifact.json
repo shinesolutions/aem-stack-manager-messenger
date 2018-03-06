@@ -5,7 +5,6 @@
     "component": [component],
     "comment": "deploying artifacts based on a descriptor file",
     "parameters": {
-      "descriptorFile": [descriptor_file],
       "source": [source],
       "group": [group],
       "name": [name],
