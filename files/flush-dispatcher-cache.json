@@ -1,0 +1,7 @@
+{
+  "task": "flush-dispatcher-cache",
+  "stack_prefix": stack_prefix,
+  "details": {
+    "component": component
+  }
+}
