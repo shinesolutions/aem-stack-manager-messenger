@@ -5,10 +5,10 @@
     "component": [component],
     "comment": "import AEM backed up pacakges for a stack based on group, name and timestamp",
     "parameters": {
-      "source_stack_prefix": [source_stack_prefix],
-      "package_group": [package_group],
-      "package_name": [package_name],
-      "package_datestamp": [package_datestamp]
+      "sourceStackPrefix": [source_stack_prefix],
+      "packageGroup": [package_group],
+      "packageName": [package_name],
+      "packageDatestamp": [package_datestamp]
     }
 
   }
