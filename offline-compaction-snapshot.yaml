@@ -72,11 +72,13 @@
       until: cmd_stop_author_primary.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_stop_author_primary: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_stop_author_primary.item }}"
+      when: module_error is undefined
 
     - name: Query if Author Primary Service successfully stopped
       dynamodb_search:
@@ -88,12 +90,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_stop_author_primary
+      when: module_error is undefined
 
     - name: Check for error when stopping Author Primary Service
       set_fact:
         error_stop_author_primary: 1
         module_error: 1
-      when: dbquery_state_stop_author_primary.item[0].state.S == "Failed"
+      when: dbquery_state_stop_author_primary.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if Publish Services are stopped
       dynamodb_search:
@@ -108,11 +111,13 @@
       until: cmd_stop_publish.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_stop_publish: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_stop_publish.item }}"
+      when: module_error is undefined
 
     - name: Query if Publish Services are successfully stopped
       dynamodb_search:
@@ -124,12 +129,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_stop_publish
+      when: module_error is undefined
 
     - name: Check for error when stopping Publish Service
       set_fact:
         error_stop_publish: 1
         module_error: 1
-      when: dbquery_state_stop_publish.item[0].state.S == "Failed"
+      when: dbquery_state_stop_publish.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if offline-compaction finished
       dynamodb_search:
@@ -144,11 +150,13 @@
       until: cmd_offline_compaction.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_offline_compaction: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_offline_compaction.item }}"
+      when: module_error is undefined
 
     - name: Query Offline-Compaction was successful
       dynamodb_search:
@@ -160,12 +168,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_offline_compaction
+      when: module_error is undefined
 
     - name: Check for error when taking offline compaction
       set_fact:
         error_offline_compaction: 1
         module_error: 1
-      when: dbquery_state_offline_compaction.item[0].state.S == "Failed"
+      when: dbquery_state_offline_compaction.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if offline-backup is executed
       dynamodb_search:
@@ -180,11 +189,13 @@
       until: cmd_offline_backup.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_offline_backup: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_offline_backup.item }}"
+      when: module_error is undefined
 
     - name: Query Offline-Snapshot was successful
       dynamodb_search:
@@ -196,12 +207,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_offline_snapshot
+      when: module_error is undefined
 
     - name: Check for error when taking offline backup
       set_fact:
         error_offline_snapshot: 1
         module_error: 1
-      when: dbquery_state_offline_snapshot.item[0].state.S == "Failed"
+      when: dbquery_state_offline_snapshot.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if Author Primary Service is started
       dynamodb_search:
@@ -216,11 +228,13 @@
       until: cmd_start_author_primary.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_start_author_primary: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_start_author_primary.item }}"
+      when: module_error is undefined
 
     - name: Query if starting Author Primary Service was successful
       dynamodb_search:
@@ -232,12 +246,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_start_author_primary
+      when: module_error is undefined
 
     - name: Check for error when starting Author Primary Service
       set_fact:
         error_start_author_primary: 1
         module_error: 1
-      when: dbquery_state_start_author_primary.item[0].state.S == "Failed"
+      when: dbquery_state_start_author_primary.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if author standby instance is started
       dynamodb_search:
@@ -252,11 +267,13 @@
       until: cmd_start_author_standby.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_start_author_standby: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_start_author_standby.item }}"
+      when: module_error is undefined
 
     - name: Query if starting Author Standby Service was successful
       dynamodb_search:
@@ -268,12 +285,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_start_author_standby
+      when: module_error is undefined
 
     - name: Check for error when starting Author Standby Service
       set_fact:
         error_start_author_standby: 1
         module_error: 1
-      when: dbquery_state_start_author_standby.item[0].state.S == "Failed"
+      when: dbquery_state_start_author_standby.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if publish instance is started
       dynamodb_search:
@@ -288,11 +306,13 @@
       until: cmd_start_publish.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_start_publish: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_start_publish.item }}"
+      when: module_error is undefined
 
     - name: Query if starting Publish Services were successful
       dynamodb_search:
@@ -304,12 +324,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_start_publish
+      when: module_error is undefined
 
     - name: Check for error when starting Publish Service
       set_fact:
         error_start_publish: 1
         module_error: 1
-      when: dbquery_state_start_publish.item[0].state.S == "Failed"
+      when: dbquery_state_start_publish.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if job remaining compact jobs are finished
       dynamodb_search:
@@ -324,11 +345,13 @@
       until: cmd_remain_compact_jobs.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_remain_compact_jobs: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_remain_compact_jobs.item }}"
+      when: module_error is undefined
 
     - name: Query if remaining compact jobs are finished
       dynamodb_search:
@@ -340,12 +363,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_remain_compact_jobs
+      when: module_error is undefined
 
     - name: Check for error when checking for remaining compact jobs
       set_fact:
         error_remain_compact_jobs: 1
         module_error: 1
-      when: dbquery_remain_compact_jobs.item[0].state.S == "Failed"
+      when: dbquery_remain_compact_jobs.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if remaining publish instances are stopped
       dynamodb_search:
@@ -360,11 +384,13 @@
       until: cmd_stop_remain_publish.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_stop_remain_publish: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_stop_remain_publish.item }}"
+      when: module_error is undefined
 
     - name: Query if stopping remaining Publish Services was successful
       dynamodb_search:
@@ -376,12 +402,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_stop_remain_publish
+      when: module_error is undefined
 
     - name: Check for error when stoppping remaining Publish Service
       set_fact:
         error_stop_remain_publish: 1
         module_error: 1
-      when: dbquery_stop_remain_publish.item[0].state.S == "Failed"
+      when: dbquery_stop_remain_publish.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if remaining publish instances are compacted
       dynamodb_search:
@@ -396,11 +423,13 @@
       until: cmd_compact_publish.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_compact_publish: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_compact_publish.item }}"
+      when: module_error is undefined
 
     - name: Query if remaining Publish Instances are compacted successful
       dynamodb_search:
@@ -412,12 +441,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_compact_publish
+      when: module_error is undefined
 
     - name: Check for error when compact remaining Publisher
       set_fact:
         error_remain_compact_publish: 1
         module_error: 1
-      when: dbquery_compact_publish.item[0].state.S == "Failed"
+      when: dbquery_compact_publish.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if remaining publish instances are started
       dynamodb_search:
@@ -432,11 +462,13 @@
       until: cmd_start_remain_publish.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_start_remain_publish: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_start_remain_publish.item }}"
+      when: module_error is undefined
 
     - name: Query if start remaining remaining Publish Services were successful
       dynamodb_search:
@@ -448,12 +480,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_start_remain_publish
+      when: module_error is undefined
 
     - name: Check for error when starting remaining Publisher
       set_fact:
         error_start_remain_publish: 1
         module_error: 1
-      when: dbquery_start_remain_publish.item[0].state.S == "Failed"
+      when: dbquery_start_remain_publish.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Query if offline-compaction-snapshot was successful
       dynamodb_search:
@@ -468,11 +501,12 @@
       until: dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - name: Check if offline-compaction-snapshot failed
       set_fact:
         general_error: 1
-      when: dbquery.item[0].state.S == "Failed"
+      when: dbquery.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Get path to output files of stopping Author Standby Service
       aws_s3:
