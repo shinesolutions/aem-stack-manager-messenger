@@ -72,11 +72,13 @@
       until: cmd_stop_author_primary.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_stop_author_primary: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_stop_author_primary.item }}"
+      when: module_error is undefined
 
     - name: Query if Author Primary Service successfully stopped
       dynamodb_search:
@@ -88,12 +90,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_stop_author_primary
+      when: module_error is undefined
 
     - name: Check for error when stopping Author Primary Service
       set_fact:
         error_stop_author_primary: 1
         module_error: 1
-      when: dbquery_state_stop_author_primary.item[0].state.S == "Failed"
+      when: dbquery_state_stop_author_primary.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if publish instance is stopped
       dynamodb_search:
@@ -108,11 +111,13 @@
       until: cmd_stop_publish.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_stop_publish: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_stop_publish.item }}"
+      when: module_error is undefined
 
     - name: Query if Publish Services are successfully stopped
       dynamodb_search:
@@ -124,12 +129,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_stop_publish
+      when: module_error is undefined
 
     - name: Check for error when stopping Publish Service
       set_fact:
         error_stop_publish: 1
         module_error: 1
-      when: dbquery_state_stop_publish.item[0].state.S == "Failed"
+      when: dbquery_state_stop_publish.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if offline-backup is executed
       dynamodb_search:
@@ -144,11 +150,13 @@
       until: cmd_offline_backup.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_offline_backup: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_offline_backup.item }}"
+      when: module_error is undefined
 
     - name: Query Offline-Snapshot was successful
       dynamodb_search:
@@ -160,12 +168,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_offline_snapshot
+      when: module_error is undefined
 
     - name: Check for error when taking offline backup
       set_fact:
         error_offline_snapshot: 1
         module_error: 1
-      when: dbquery_state_offline_snapshot.item[0].state.S == "Failed"
+      when: dbquery_state_offline_snapshot.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if author primary instance is started
       dynamodb_search:
@@ -180,11 +189,13 @@
       until: cmd_start_author_primary.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_start_author_primary: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_start_author_primary.item }}"
+      when: module_error is undefined
 
     - name: Query if starting Author Primary Service was successful
       dynamodb_search:
@@ -196,12 +207,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_start_author_primary
+      when: module_error is undefined
 
     - name: Check for error when starting Author Primary Service
       set_fact:
         error_start_author_primary: 1
         module_error: 1
-      when: dbquery_state_start_author_primary.item[0].state.S == "Failed"
+      when: dbquery_state_start_author_primary.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if author standby instance is started
       dynamodb_search:
@@ -216,11 +228,13 @@
       until: cmd_start_author_standby.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_start_author_standby: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_start_author_standby.item }}"
+      when: module_error is undefined
 
     - name: Query if starting Author Standby Service was successful
       dynamodb_search:
@@ -232,12 +246,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_start_author_standby
+      when: module_error is undefined
 
     - name: Check for error when starting Author Standby Service
       set_fact:
         error_start_author_standby: 1
         module_error: 1
-      when: dbquery_state_start_author_standby.item[0].state.S == "Failed"
+      when: dbquery_state_start_author_standby.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Scan if publish instance is started
       dynamodb_search:
@@ -252,11 +267,13 @@
       until: cmd_start_publish.item != []
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - set_fact:
         cmd_id_start_publish: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_start_publish.item }}"
+      when: module_error is undefined
 
     - name: Query if starting Publish Services were successful
       dynamodb_search:
@@ -268,12 +285,13 @@
         comparisonoperator: EQ
         state: query
       register: dbquery_state_start_publish
+      when: module_error is undefined
 
     - name: Check for error when starting Publish Service
       set_fact:
         error_start_publish: 1
         module_error: 1
-      when: dbquery_state_start_publish.item[0].state.S == "Failed"
+      when: dbquery_state_start_publish.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Query if offline-snapshot was successful
       dynamodb_search:
@@ -289,11 +307,12 @@
       # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
       retries:  720
       delay: 5
+      when: module_error is undefined
 
     - name: Check if offline-snapshot failed
       set_fact:
         general_error: 1
-      when: dbquery.item[0].state.S == "Failed"
+      when: dbquery.item[0].state.S == "Failed" and module_error is undefined
 
     - name: Get path to output files of stopping Author Standby Service
       aws_s3:
