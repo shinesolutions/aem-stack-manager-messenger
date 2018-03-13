@@ -109,7 +109,3 @@
         type: file
         log_files: "{{ stderr_files.files | map(attribute='path')|list }}"
       when: general_error is defined
-
-    - fail:
-        msg: " Error while executing offline-compactions-snapshot"
-      when: general_error is defined
