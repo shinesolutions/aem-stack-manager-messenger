@@ -1,3 +1,6 @@
+### 1.2.2
+*
+
 ### 1.2.1
 * Improve the error handling for multi-step events (offline compaction and offline snapshot)
 
