@@ -109,3 +109,7 @@
         type: file
         log_files: "{{ stderr_files.files | map(attribute='path')|list }}"
       when: general_error is defined
+      
+    - fail:
+        msg: "Error: Failed executing command."
+      when: general_error is defined
