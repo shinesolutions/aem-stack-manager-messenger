@@ -2,9 +2,12 @@
   "task": "export-package",
   "stack_prefix": stack_prefix,
   "details": {
-    "component": component,
-    "package_group": package_group,
-    "package_name": package_name,
-    "package_filter": package_filter
+    "component": [component],
+    "comment": "exporting AEM pacakges as backup based on package group, name and filter",
+    "parameters": {
+      "package_group": [package_group],
+      "package_name": [package_name],
+      "package_filter": [package_filter]
+    }
   }
 }

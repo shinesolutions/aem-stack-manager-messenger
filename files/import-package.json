@@ -2,10 +2,14 @@
   "task": "import-package",
   "stack_prefix": stack_prefix,
   "details": {
-    "component": component,
-    "source_stack_prefix": source_stack_prefix,
-    "package_group": package_group,
-    "package_name": package_name,
-    "package_datestamp": package_datestamp
+    "component": [component],
+    "comment": "import AEM backed up pacakges for a stack based on group, name and timestamp",
+    "parameters": {
+      "sourceStackPrefix": [source_stack_prefix],
+      "packageGroup": [package_group],
+      "packageName": [package_name],
+      "packageDatestamp": [package_datestamp]
+    }
+
   }
 }

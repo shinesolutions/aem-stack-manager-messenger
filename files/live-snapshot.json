@@ -2,6 +2,7 @@
   "task": "live-snapshot",
   "stack_prefix": stack_prefix,
   "details": {
-    "component": component,
-  }
+    "component": [component],
+    "comment": "take live snapshot on selected AEM instances by component",
+    }
 }

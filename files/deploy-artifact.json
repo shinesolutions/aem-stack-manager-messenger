@@ -2,13 +2,16 @@
   "task": "deploy-artifact",
   "stack_prefix": stack_prefix,
   "details": {
-    "component": component,
-    "source": source,
-    "group": group,
-    "name": name,
-    "version": version,
-    "replicate": replicate,
-    "activate": activate,
-    "force": force
+    "component": [component],
+    "comment": "deploying artifacts based on a descriptor file",
+    "parameters": {
+      "source": [source],
+      "group": [group],
+      "name": [name],
+      "version": [version],
+      "replicate": [replicate],
+      "activate": [activate],
+      "force": [force]
+    }
   }
 }

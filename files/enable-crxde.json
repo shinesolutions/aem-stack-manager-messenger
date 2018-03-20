@@ -2,6 +2,7 @@
   "task": "enable-crxde",
   "stack_prefix": stack_prefix,
   "details": {
-    "component": component
+    "component": [component],
+    "comment": "enable crxde on selected AEM instances by component"
   }
 }

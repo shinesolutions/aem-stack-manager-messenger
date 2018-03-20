@@ -56,6 +56,9 @@ offline-snapshot:
 offline-compaction-snapshot:
 	./offline-compaction-snapshot.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
 
+run-adhoc-puppet:
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) puppet_tar_file=$(puppet_tar_file)"
+
 
 package:
 	rm -rf stage
