@@ -347,7 +347,7 @@
       set_fact:
         error_start_publish: 1
         module_error: 1
-      when: dbquery_state_failed_start_publish is defined and bquery_state_failed_start_publish == "Failed" and module_error is undefined
+      when: dbquery_state_failed_start_publish is defined and dbquery_state_failed_start_publish == "Failed" and module_error is undefined
 
     - name: Query if offline-snapshot was successful
       dynamodb_search:
