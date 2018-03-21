@@ -29,7 +29,7 @@
     - name: Check if DB is locked
       set_fact:
         db_backup_locked: "{{dbquery_backup_lock.item[0].command_id.S}}"
-      when: "dbquery_backup_lock.item[0]"
+      when: dbquery_backup_lock.item[0] is defined
 
     - name: Fail when DB is locked
       fail:
