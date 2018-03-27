@@ -4,7 +4,7 @@
   "details": {
     "component": [
       'author-primary',
-      'publish',
+      'publish'
     ],
     "comment": "exporting AEM pacakges as backup based on descriptor file",
     "parameters": {
