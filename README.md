@@ -37,8 +37,16 @@ make deploy-artifacts \
     stack_prefix=stack1 \
     topic_config_file=ansible/inventory/group_vars/all.yaml \
     message_config_file=ansible/inventory/group_vars/deploy-artifacts.yaml \
-    descriptor_file=abc
+    descriptor_file=deploy_descriptor_file.json
 
+```
+
+```
+make deploy-artifacts \
+    stack_prefix=stack1-cons \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/deploy-artifacts-cons.yaml \
+    descriptor_file=deploy_descriptor_file_cons.json
 ```
 
 ```
@@ -88,8 +96,15 @@ make export-packages \
     stack_prefix=stack1 \
     topic_config_file=ansible/inventory/group_vars/all.yaml \
     message_config_file=ansible/inventory/group_vars/export-packages.yaml \
-    component=author-primary \
-    descriptor_file=descriptor_file.json \   
+    descriptor_file=descriptor_file.json
+```
+
+```
+make export-packages \
+    stack_prefix=stack1-cons \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/export-packages-cons.yaml \
+    descriptor_file=export_descriptor_file_cons.json
 ```
 
 ```

@@ -1,12 +1,11 @@
 {
-  "task": "export-packages",
+  "task": "deploy-artifacts",
   "stack_prefix": stack_prefix,
   "details": {
     "component": [
-      'author-primary',
-      'publish',
+      'author-publish-dispatcher'
     ],
-    "comment": "exporting AEM pacakges as backup based on descriptor file",
+    "comment": "deploying artifacts based on a descriptor file for consolidated",
     "parameters": {
       "descriptorFile": [descriptor_file]
     }

@@ -33,7 +33,7 @@ export-package:
 
 export-packages:
 	echo descriptor_file=$(descriptor_file)
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) descriptor_file=$(descriptor_file)"
+	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "descriptor_file=$(descriptor_file)"
 
 enable-crxde:
 	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
