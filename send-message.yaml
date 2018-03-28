@@ -54,8 +54,8 @@
       register: dbquery
       until:  dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
       # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
-      retries: {{poll_timeout.send_message_command_execution.retries}}
-      delay: {{poll_timeout.send_message_command_execution.delay}}
+      retries: "{{ poll_timeout.send_message_command_execution.retries }}"
+      delay: "{{ poll_timeout.send_message_command_execution.delay }}"
 
     - name: "Check if command failed"
       set_fact:
