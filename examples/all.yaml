@@ -5,3 +5,8 @@ sns_topic: arn:aws:sns:ap-southeast-2:0123456789:aem-stack-manager-AemStackManag
 stackmanager_prefix: aem-stack-manager
 s3:
   bucket: aem-stack-manager
+
+poll_timeout:
+  send_message_command_execution:
+    retries: 120
+    delay: 5
