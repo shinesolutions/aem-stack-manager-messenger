@@ -7,6 +7,6 @@ s3:
   bucket: aem-stack-manager
 
 poll_timeout:
-  send_message_command_execution:
+  check_command_execution:
     retries: 120
     delay: 5
