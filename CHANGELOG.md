@@ -1,5 +1,5 @@
 ### 1.2.3
-*
+* Add message_config_file for author-publish-dispatcher
 
 ### 1.2.2
 * Add payload files

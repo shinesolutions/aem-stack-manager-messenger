@@ -1,0 +1,13 @@
+{
+  "task": "export-packages",
+  "stack_prefix": stack_prefix,
+  "details": {
+    "component": [
+      'author-publish-dispatcher'
+    ],
+    "comment": "exporting AEM pacakges as backup based on descriptor file",
+    "parameters": {
+      "descriptorFile": [descriptor_file]
+    }
+  }
+}

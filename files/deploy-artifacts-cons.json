@@ -1,0 +1,13 @@
+{
+  "task": "deploy-artifacts",
+  "stack_prefix": stack_prefix,
+  "details": {
+    "component": [
+      'author-publish-dispatcher'
+    ],
+    "comment": "deploying artifacts based on a descriptor file for consolidated",
+    "parameters": {
+      "descriptorFile": [descriptor_file]
+    }
+  }
+}
