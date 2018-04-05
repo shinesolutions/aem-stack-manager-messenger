@@ -1,5 +1,6 @@
 ### 1.2.3
 * Add message_config_file for author-publish-dispatcher
+* Add poll_timeout.check_command_execution.retries and poll_timeout.check_command_execution.delay configurations #31
 
 ### 1.2.2
 * Add payload files
