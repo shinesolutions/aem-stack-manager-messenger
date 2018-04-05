@@ -15,7 +15,7 @@
     - debug:
         msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
 
-    - name: Send message to SNS Topic
+    - name: "Send message to SNS Topic"
       sns:
         msg: "{{ message }}"
         subject: "{{ subject }}"
@@ -23,7 +23,7 @@
         region: "{{ aws_region }}"
       register: publish_message
 
-    - name: Scan if message was send out by Lambda
+    - name: "Poll to check if message was successfully sent"
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: message_id
@@ -42,7 +42,7 @@
       with_items:
         "{{ dbscan.item }}"
 
-    - name: Query state
+    - name: "Poll to check if command was executed"
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: command_id
@@ -54,10 +54,10 @@
       register: dbquery
       until:  dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
       # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
-      retries: 120
-      delay: 5
+      retries: "{{ poll_timeout.check_command_execution.retries }}"
+      delay: "{{ poll_timeout.check_command_execution.delay }}"
 
-    - name: Check if command execution failed
+    - name: "Check if command failed"
       set_fact:
         general_error: 1
       when: dbquery.item[0].state.S == "Failed"
@@ -69,7 +69,7 @@
         prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
       register: output_files
 
-    - name: Set facts for getting command output
+    - name: "Set facts for getting command output"
       set_fact:
         log_path: "{{ playbook_dir }}/logs/"
         dl_path: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
@@ -109,7 +109,7 @@
         type: file
         log_files: "{{ stderr_files.files | map(attribute='path')|list }}"
       when: general_error is defined
-      
+
     - fail:
         msg: "Error: Failed executing command."
       when: general_error is defined
