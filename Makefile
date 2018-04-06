@@ -12,52 +12,52 @@ deps:
 	pip install -r requirements.txt
 
 lint:
-	shellcheck send-message.sh
-	ansible-playbook -vvv send-message.yaml --syntax-check
+	shellcheck scripts/*.sh
+	ansible-playbook -vvv ansible/playbooks/*.yaml --syntax-check
 
 
 # send message targets
 
 promote-author:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
 
 deploy-artifacts:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "descriptor_file=$(descriptor_file)"
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "descriptor_file=$(descriptor_file)"
 
 deploy-artifact:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) source=$(source) group=$(group) name=$(name) version=$(version) replicate=$(replicate) activate=$(activate) force=$(force)"
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) source=$(source) group=$(group) name=$(name) version=$(version) replicate=$(replicate) activate=$(activate) force=$(force)"
 
 export-package:
 	echo package_filter=$(package_filter)
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) package_group=$(package_group) package_name=$(package_name) package_filter=$(package_filter)"
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) package_group=$(package_group) package_name=$(package_name) package_filter=$(package_filter)"
 
 export-packages:
 	echo descriptor_file=$(descriptor_file)
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "descriptor_file=$(descriptor_file)"
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "descriptor_file=$(descriptor_file)"
 
 enable-crxde:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
 
 disable-crxde:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
 
 flush-dispatcher-cache:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
 
 live-snapshot:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component)"
 
 import-package:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) source_stack_prefix=$(source_stack_prefix) package_group=$(package_group) package_name=$(package_name) package_datestamp=$(package_datestamp)"
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) source_stack_prefix=$(source_stack_prefix) package_group=$(package_group) package_name=$(package_name) package_datestamp=$(package_datestamp)"
 
 offline-snapshot:
-	./offline-snapshot.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
+	./scripts/offline-snapshot.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
 
 offline-compaction-snapshot:
-	./offline-compaction-snapshot.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
+	./scripts/offline-compaction-snapshot.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
 
 run-adhoc-puppet:
-	./send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) puppet_tar_file=$(puppet_tar_file)"
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) puppet_tar_file=$(puppet_tar_file)"
 
 
 package:

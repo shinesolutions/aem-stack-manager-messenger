@@ -21,9 +21,10 @@ if [ ! -z "$4" ]; then
 fi
 
 mkdir -p logs
-echo "Sending Message SNS Topic"
-ANSIBLE_LOG_PATH=$log_path \
-  ansible-playbook send-message.yaml \
+echo "Sending Message SNS Topic..."
+ANSIBLE_CONFIG=ansible/ansible.cfg \
+  ANSIBLE_LOG_PATH=$log_path \
+  ansible-playbook ansible/playbooks/send-message.yaml \
   -v \
   -i ansible/inventory/hosts \
   --module-path ansible/library/ \
