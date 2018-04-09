@@ -13,8 +13,11 @@ deps:
 
 lint:
 	shellcheck scripts/*.sh
-	ansible-playbook -vvv ansible/playbooks/*.yaml --syntax-check
-
+	ANSIBLE_LIBRARY=ansible/library/ \
+	  ansible-playbook \
+    ansible/playbooks/*.yaml \
+		-v \
+		--syntax-check
 
 # send message targets
 
