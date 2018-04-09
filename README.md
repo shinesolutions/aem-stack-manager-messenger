@@ -167,6 +167,14 @@ make test-readiness-fullset \
 
 ```
 
+```
+make test-readiness-consolidated \
+    stack_prefix=stack1 \
+    topic_config_file=ansible/inventory/group_vars/all.yaml \
+    message_config_file=ansible/inventory/group_vars/test-readiness-consolidated.yaml
+
+```
+
 ## Development
 
 Requirements:

@@ -62,6 +62,9 @@ run-adhoc-puppet:
 test-readiness-fullset:
 	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
 
+test-readiness-consolidated:
+	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
+
 package:
 	rm -rf stage
 	mkdir -p stage

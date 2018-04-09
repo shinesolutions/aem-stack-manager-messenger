@@ -1,0 +1,10 @@
+{
+  "task": "test-readiness-consolidated",
+  "stack_prefix": stack_prefix,
+  "details": {
+    "component": [
+      'author-publish-dispatcher'
+    ],
+    "comment": "test the AEM Consolidated stack to see if it is ready to be used",
+    }
+}
