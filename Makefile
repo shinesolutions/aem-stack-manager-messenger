@@ -59,7 +59,7 @@ offline-compaction-snapshot:
 run-adhoc-puppet:
 	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)" "component=$(component) puppet_tar_file=$(puppet_tar_file)"
 
-test-readiness:
+test-readiness-fullset:
 	./scripts/send-message.sh "$(stack_prefix)" "$(topic_config_file)" "$(message_config_file)"
 
 package:

@@ -1,3 +1,0 @@
----
-subject: "{{stack_prefix}} - Test Readiness"
-message_file: ../../files/test-readiness.json
