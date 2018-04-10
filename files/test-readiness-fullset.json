@@ -1,8 +1,0 @@
-{
-  "task": "test-readiness-fullset",
-  "stack_prefix": stack_prefix,
-  "details": {
-    "component": ['orchestrator'],
-    "comment": "test the AEM fullset stack to see if it is ready to be used",
-    }
-}
