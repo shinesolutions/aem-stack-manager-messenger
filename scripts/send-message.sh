@@ -14,8 +14,8 @@ extra_vars=(--extra-vars "stack_prefix=$stack_prefix message_type=$message_type"
 # shellcheck disable=SC2154
 extra_vars+=(--extra-vars "@$config_path")
 
-if [ ! -z "$5" ]; then
-    extra_vars+=(--extra-vars "$5")
+if [ ! -z "$4" ]; then
+    extra_vars+=(--extra-vars "$4")
 fi
 
 mkdir -p logs
