@@ -14,9 +14,6 @@ extra_vars=(--extra-vars "stack_prefix=$stack_prefix message_type=$message_type"
 # shellcheck disable=SC2154
 extra_vars+=(--extra-vars "@$config_path")
 
-# shellcheck disable=SC2154
-extra_vars+=(--extra-vars "@$message_config_file")
-
 if [ ! -z "$5" ]; then
     extra_vars+=(--extra-vars "$5")
 fi
