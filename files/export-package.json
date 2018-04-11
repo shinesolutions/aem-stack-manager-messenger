@@ -7,7 +7,8 @@
     "parameters": {
       "package_group": [package_group],
       "package_name": [package_name],
-      "package_filter": [package_filter]
+      "package_filter": [package_filter],
+      "aem_id": [aem_id]
     }
   }
 }

@@ -11,7 +11,8 @@
       "version": [version],
       "replicate": [replicate],
       "activate": [activate],
-      "force": [force]
+      "force": [force],
+      "aem_id": [aem_id]
     }
   }
 }
