@@ -5,10 +5,10 @@
     "component": [component],
     "comment": "exporting AEM pacakges as backup based on package group, name and filter",
     "parameters": {
-      "package_group": [package_group],
-      "package_name": [package_name],
-      "package_filter": [package_filter],
-      "aem_id": [aem_id]
+      "packageGroup": [package_group],
+      "packageName": [package_name],
+      "packageFilter": [package_filter],
+      "aemId": [aem_id]
     }
   }
 }

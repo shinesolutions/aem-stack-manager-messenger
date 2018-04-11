@@ -8,7 +8,8 @@
       "sourceStackPrefix": [source_stack_prefix],
       "packageGroup": [package_group],
       "packageName": [package_name],
-      "packageDatestamp": [package_datestamp]
+      "packageDatestamp": [package_datestamp],
+      "aemId": [aem_id]
     }
 
   }

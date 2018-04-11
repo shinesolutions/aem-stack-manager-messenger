@@ -12,7 +12,7 @@
       "replicate": [replicate],
       "activate": [activate],
       "force": [force],
-      "aem_id": [aem_id]
+      "aemId": [aem_id]
     }
   }
 }
