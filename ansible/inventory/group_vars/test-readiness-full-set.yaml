@@ -1,0 +1,3 @@
+---
+subject: "{{stack_prefix}} - Test Readiness of Fullset"
+message_file: ../../files/test-readiness-full-set.json
