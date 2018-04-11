@@ -52,7 +52,7 @@ node {
                 sh '''
                     make promote-author \
                       stack_prefix=${StackPrefix} \
-                      topic_config_file=topic-config.yaml \
+                      config_path=topic-config.yaml \
                       message_config_file=inventory/group_vars/promote-author.yaml
     
                 '''
@@ -66,7 +66,7 @@ node {
                 sh '''
                     make deploy-artifacts \
                       stack_prefix=${StackPrefix} \
-                      topic_config_file=topic-config.yaml \
+                      config_path=topic-config.yaml \
                       message_config_file=inventory/group_vars/deploy-artifacts.yaml \
                       descriptor_file=${DescriptorFile}
 
@@ -79,7 +79,7 @@ node {
                 sh '''
                     make deploy-artifact \
                         stack_prefix=${StackPrefix} \
-                        topic_config_file=topic-config.yaml \
+                        config_path=topic-config.yaml \
                         message_config_file=inventory/group_vars/deploy-artifact.yaml \
                         component=${Component} \
                         artifact=${Artifact}
@@ -93,7 +93,7 @@ node {
                 sh '''
                     make export-package \
                         stack_prefix=${StackPrefix} \
-                        topic_config_file=topic-config.yaml \
+                        config_path=topic-config.yaml \
                         message_config_file=inventory/group_vars/export-package.yaml \
                         component=${Component} \
                         package_group=${PackageGroup} \
@@ -110,7 +110,7 @@ node {
                 sh '''
                     make import-package \
                         stack_prefix=${StackPrefix} \
-                        topic_config_file=topic-config.yaml \
+                        config_path=topic-config.yaml \
                         message_config_file=inventory/group_vars/import-package.yaml \
                         component=${Component} \
                         source_stack_prefix=${SourceStackPrefix} \
@@ -127,7 +127,7 @@ node {
                 sh '''
                     make offline-snapshot \
                       stack_prefix=${StackPrefix} \
-                      topic_config_file=topic-config.yaml \
+                      config_path=topic-config.yaml \
                       message_config_file=inventory/group_vars/offline-snapshot.yaml
 
                 '''
@@ -139,7 +139,7 @@ node {
                 sh '''
                     make offline-compaction-snapshot \
                       stack_prefix=${StackPrefix} \
-                      topic_config_file=topic-config.yaml \
+                      config_path=topic-config.yaml \
                       message_config_file=inventory/group_vars/offline-compaction-snapshot.yaml
 
                 '''

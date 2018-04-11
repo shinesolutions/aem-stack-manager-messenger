@@ -1,3 +1,0 @@
----
-subject: "{{stack_prefix}} - Flush Dispatcher Cache"
-message_file: ../../files/flush-dispatcher-cache.json

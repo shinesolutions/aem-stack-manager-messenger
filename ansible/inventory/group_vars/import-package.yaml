@@ -1,3 +1,0 @@
----
-subject: "{{stack_prefix}} - Import Package"
-message_file: ../../files/import-package.json

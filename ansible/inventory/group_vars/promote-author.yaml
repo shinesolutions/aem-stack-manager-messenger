@@ -1,3 +1,0 @@
----
-subject: "{{stack_prefix}} - Promote Author"
-message_file: ../../files/promote-author.json

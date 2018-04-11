@@ -1,3 +1,0 @@
----
-subject: "{{stack_prefix}} - Deploy Artifacts"
-message_file: ../../files/deploy-artifacts-cons.json

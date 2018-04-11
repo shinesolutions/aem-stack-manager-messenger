@@ -1,3 +1,0 @@
----
-subject: "{{stack_prefix}} - Enable CRXDE"
-message_file: ../../files/enable-crxde.json
