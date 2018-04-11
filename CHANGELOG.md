@@ -5,6 +5,7 @@
 * Add command test-readiness-consolidated
 * Rename topic_config parameter to config_path
 * Add aem_id parameter to deploy-artifact and export-package message payloads
+* Fix export package message payload
 
 ### 1.2.2
 * Add payload files
