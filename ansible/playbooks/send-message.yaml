@@ -34,8 +34,8 @@
         state: scan
       register: dbscan
       until: dbscan.item != []
-      retries: 120
-      delay: 5
+      retries: "{{ poll_timeout.check_message_sent.retries }}"
+      delay: "{{ poll_timeout.check_message_sent.delay }}"
 
     - set_fact:
         cmd_id: "{{ item.command_id.S }}"

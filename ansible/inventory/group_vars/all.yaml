@@ -10,3 +10,6 @@ poll_timeout:
   check_command_execution:
     retries: 120
     delay: 5
+  check_message_sent:
+    retries: 120
+    delay: 5

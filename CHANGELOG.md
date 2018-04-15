@@ -6,6 +6,7 @@
 * Rename topic_config parameter to config_path
 * Add aem_id parameter to deploy-artifact and export-package message payloads
 * Fix export package message payload
+* Add poll_timeout.check_message_sent.retries and poll_timeout.check_message_sent.delay configurations
 
 ### 1.2.2
 * Add payload files
