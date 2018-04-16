@@ -9,6 +9,9 @@
 # files are in .txt as they need to replace the variables e.g. 'stack_prefix' (un-quoted) which breaks the json validation.
 # if the variables were in double quotes, they would not be replaced with the value.
     message: "{{ lookup('file', '../../files/{{ message_type }}.json') }}"
+    message_types_check_success_only:
+      - test-readiness-consolidated
+      - test-readiness-full-set
 
   tasks:
 
@@ -42,7 +45,7 @@
       with_items:
         "{{ dbscan.item }}"
 
-    - name: "Poll to check if command was executed"
+    - name: "Poll to check if command was executed for message types that allow success or failure"
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: command_id
@@ -56,6 +59,23 @@
       # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
       retries: "{{ poll_timeout.check_command_execution.retries }}"
       delay: "{{ poll_timeout.check_command_execution.delay }}"
+      when: message_type not in message_types_check_success_only
+
+    - name: "Poll to check if command was executed for message types that allow success only"
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+      register: dbquery
+      until:  dbquery.item[0].state.S == "Success"
+      # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
+      retries: "{{ poll_timeout.check_command_execution.retries }}"
+      delay: "{{ poll_timeout.check_command_execution.delay }}"
+      when: message_type in message_types_check_success_only
 
     - name: "Check if command failed"
       set_fact:
