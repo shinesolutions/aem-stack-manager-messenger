@@ -13,13 +13,13 @@
   tasks:
 
     - debug:
-        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws_region }}"
+        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic.stack_manager }}, in region: {{ aws_region }}"
 
     - name: "Send message to SNS Topic"
       sns:
         msg: "{{ message }}"
         subject: "{{ subject }}"
-        topic: "{{ sns_topic }}"
+        topic: "{{ sns_topic.stack_manager }}"
         region: "{{ aws_region }}"
       register: publish_message
 

@@ -7,6 +7,7 @@
 * Add aem_id parameter to deploy-artifact and export-package message payloads
 * Fix export package message payload
 * Add poll_timeout.check_message_sent.retries and poll_timeout.check_message_sent.delay configurations
+* Simplify config by separating sns_topic into sns_topic.stack_manager and sns_topic.offline_snapshot
 
 ### 1.2.2
 * Add payload files

@@ -13,7 +13,7 @@
   tasks:
 
     - debug:
-        msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
+        msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic.offline_snapshot }} in region: {{ aws_region }}"
 
     - name: Query if Backup lock exist
       dynamodb_search:
@@ -40,7 +40,7 @@
       sns:
         msg: "{{ message }}"
         subject: "{{ subject }}"
-        topic: "{{ sns_topic }}"
+        topic: "{{ sns_topic.offline_snapshot }}"
         region: "{{ aws_region }}"
       register: publish_message
 
