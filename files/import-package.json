@@ -1,6 +1,6 @@
 {
   "task": "import-package",
-  "stack_prefix": stack_prefix,
+  "stack_prefix": target_aem_stack_prefix,
   "details": {
     "component": [component],
     "comment": "import AEM backed up pacakges for a stack based on group, name and timestamp",

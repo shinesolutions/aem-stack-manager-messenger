@@ -5,8 +5,8 @@
   connection: local
 
   vars:
-    subject: "{{stack_prefix}} - {{ message_type }}"
-# files are in .txt as they need to replace the variables e.g. 'stack_prefix' (un-quoted) which breaks the json validation.
+    subject: "{{target_aem_stack_prefix}} - {{ message_type }}"
+# files are in .txt as they need to replace the variables e.g. 'target_aem_stack_prefix' (un-quoted) which breaks the json validation.
 # if the variables were in double quotes, they would not be replaced with the value.
     message: "{{ lookup('file', '../../files/offline-snapshot.json') }}"
 
@@ -19,7 +19,7 @@
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: command_id
-        attribute_value: "{{ stack_prefix }}_backup_lock"
+        attribute_value: "{{ target_aem_stack_prefix }}_backup_lock"
         get_attribute: command_id
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ

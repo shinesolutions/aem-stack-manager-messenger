@@ -25,14 +25,16 @@ Execute the AEM Stack Manager events:
 Deploy a set of AEM Packages and Dispatcher configuration packages into an AEM environment:
 
   make deploy-artifacts \
-      stack_prefix=<aem_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir> \
       descriptor_file=deploy_descriptor_file.json
 
 Deploy a single AEM Package into AEM instances:
 
   make deploy-artifact \
-      stack_prefix=<aem_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir> \
       component=author-primary \
       source=s3://s3bucket/path/aem-helloworld-content-0.0.1-SNAPSHOT.zip \
@@ -46,21 +48,24 @@ Deploy a single AEM Package into AEM instances:
 Disable CRXDE on an AEM instance:
 
   make disable-crxde \
-      stack_prefix=<aem_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir> \
       component=author-primary
 
 Enable CRXDE on an AEM instance:
 
   make enable-crxde \
-      stack_prefix=<aem_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir> \
       component=author-primary
 
 Export a single AEM package from an AEM instance:
 
   make export-package \
-      stack_prefix=<aem_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir> \
       component=author-primary \
       package_group=somegroup \
@@ -70,28 +75,32 @@ Export a single AEM package from an AEM instance:
 Export a set of packages from an AEM instance via a descriptor file ([example](https://github.com/shinesolutions/aem-aws-stack-builder/blob/master/examples/descriptors/export-backup-descriptor.json)):
 
   make export-packages \
-      stack_prefix=<aem_stack_prefix>-cons \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix>-cons \
       config_path=<path/to/config/dir> \
       descriptor_file=<export_backup_descriptor_file>
 
 Flush dispatcher cache:
 
   make flush-dispatcher-cache \
-      stack_prefix=<aem_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir> \
       component=publish-dispatcher
 
 Trigger live snapshot of an AEM repository:
 
   make live-snapshot \
-      stack_prefix=<aem_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir> \
       component=author-primary
 
 Import a single AEM package into an AEM instance:
 
   make import-package \
-      stack_prefix=<aem_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir> \
       component=author-primary \
       source_stack_prefix=stack2 \
@@ -102,19 +111,22 @@ Import a single AEM package into an AEM instance:
 Promote an AEM Author Standby to become AEM Author Primary:
 
   make promote-author \
-      stack_prefix=<aem_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir>
 
 Take offline snapshot of the repositories within an AEM environment:
 
   make offline-snapshot \
-      stack_prefix=<aem_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir>
 
 Trigger offline compaction and take offline snapshot of the repositories within an AEM environment:
 
   make offline-compaction-snapshot \
-      stack_prefix=<aem_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir>
 
 Test readiness of AEM Full Set environment:

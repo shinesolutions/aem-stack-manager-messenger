@@ -1,6 +1,6 @@
 {
   "task": "deploy-artifact",
-  "stack_prefix": stack_prefix,
+  "stack_prefix": target_aem_stack_prefix,
   "details": {
     "component": [component],
     "comment": "deploying artifacts based on a descriptor file",

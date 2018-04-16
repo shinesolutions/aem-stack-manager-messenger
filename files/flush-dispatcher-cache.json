@@ -1,6 +1,6 @@
 {
   "task": "flush-dispatcher-cache",
-  "stack_prefix": stack_prefix,
+  "stack_prefix": target_aem_stack_prefix,
   "details": {
     "component": [component],
     "comment": "flush dispatcher cache on selected AEM Dispatcher instances by component",

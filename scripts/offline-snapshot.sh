@@ -8,7 +8,7 @@ log_path=logs/$run_id-send-message.log
 # Construct Ansible extra_vars flags.
 # If CONFIG_FILE is set, values will be added.
 
-extra_vars=(--extra-vars "stack_prefix=$stack_prefix message_type=$message_type")
+extra_vars=(--extra-vars "stack_prefix=$stack_prefix target_aem_stack_prefix=$target_aem_stack_prefix message_type=$message_type")
 
 # shellcheck disable=SC2154
 extra_vars+=(--extra-vars "@$config_path")

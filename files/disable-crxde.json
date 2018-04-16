@@ -1,6 +1,6 @@
 {
   "task": "disable-crxde",
-  "stack_prefix": stack_prefix,
+  "stack_prefix": target_aem_stack_prefix,
   "details": {
     "component": [component],
     "comment": "disable crxde on selected AEM instances by component",
