@@ -35,7 +35,7 @@ Use the send-message make targets, passing in parameters for each message and th
 ```
 make deploy-artifacts \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml \
+    config_path=examples/user-config/ \
     descriptor_file=deploy_descriptor_file.json
 
 ```
@@ -43,14 +43,14 @@ make deploy-artifacts \
 ```
 make deploy-artifacts \
     stack_prefix=stack1-cons \
-    config_path=ansible/inventory/group_vars/all.yaml \
+    config_path=examples/user-config/ \
     descriptor_file=deploy_descriptor_file_cons.json
 ```
 
 ```
 make deploy-artifact \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml \
+    config_path=examples/user-config/ \
     component=author-primary \
     source=s3://s3bucket/path/aem-helloworld-content-0.0.1-SNAPSHOT.zip \
     group=shinesolutions \
@@ -64,21 +64,21 @@ make deploy-artifact \
 ```
 make disable-crxde \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml \
+    config_path=examples/user-config/ \
     component=author-primary \
 ```
 
 ```
 make enable-crxde \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml \
+    config_path=examples/user-config/ \
     component=author-primary \
 ```
 
 ```
 make export-package \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml \
+    config_path=examples/user-config/ \
     component=author-primary \
     package_group=somegroup \
     package_name=somepackage \
@@ -88,35 +88,35 @@ make export-package \
 ```
 make export-packages \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml \
+    config_path=examples/user-config/ \
     descriptor_file=descriptor_file.json \   
 ```
 
 ```
 make export-packages \
     stack_prefix=stack1-cons \
-    config_path=ansible/inventory/group_vars/all.yaml \
+    config_path=examples/user-config/ \
     descriptor_file=descriptor_file-cons.json \   
 ```
 
 ```
 make flush-dispatcher-cache \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml \
+    config_path=examples/user-config/ \
     component=publish-dispatcher \
 ```
 
 ```
 make live-snapshot \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml \
+    config_path=examples/user-config/ \
     component=author-primary \
 ```
 
 ```
 make import-package \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml \
+    config_path=examples/user-config/ \
     component=author-primary \
     source_stack_prefix=stack2 \
     package_group=somegroup \
@@ -127,35 +127,35 @@ make import-package \
 ```
 make promote-author \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml
+    config_path=examples/user-config/
 
 ```
 
 ```
 make offline-snapshot \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml
+    config_path=examples/user-config/
 
 ```
 
 ```
 make offline-compaction-snapshot \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml
+    config_path=examples/user-config/
 
 ```
 
 ```
 make test-readiness-full-set \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml
+    config_path=examples/user-config/
 
 ```
 
 ```
 make test-readiness-consolidated \
     stack_prefix=stack1 \
-    config_path=ansible/inventory/group_vars/all.yaml
+    config_path=examples/user-config/
 
 ```
 

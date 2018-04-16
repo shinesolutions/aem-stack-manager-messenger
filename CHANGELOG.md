@@ -3,7 +3,7 @@
 * Add poll_timeout.check_command_execution.retries and poll_timeout.check_command_execution.delay configurations #31
 * Add command test-readiness-full-set
 * Add command test-readiness-consolidated
-* Rename topic_config parameter to config_path
+* Replace topic_config parameter with config_path, which handles a directory containing config files
 * Add aem_id parameter to deploy-artifact and export-package message payloads
 * Fix export package message payload
 * Add poll_timeout.check_message_sent.retries and poll_timeout.check_message_sent.delay configurations
