@@ -1,4 +1,3 @@
----
 aws_region: ap-southeast-2
 dynamodb_tablename: aem-stack-manager-AemStackManagerTable
 sns_topic: arn:aws:sns:ap-southeast-2:0123456789:aem-stack-manager-AemOfflineBackup
