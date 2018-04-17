@@ -18,7 +18,7 @@
     - name: "Retrieve Main Stack CloudFormation resources facts"
       cloudformation_facts:
         stack_name: "{{ main_stack_name }}"
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: main_stack_facts
 
     - set_fact:
@@ -30,7 +30,7 @@
     - name: "Retrieve Stack Manager CloudFormation resources facts"
       cloudformation_facts:
         stack_name: "{{ stack_manager_stack_name }}"
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: stack_manager_stack_facts
 
     - debug:
@@ -45,7 +45,7 @@
         sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
 
     - debug:
-        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws_region }}"
+        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"
 
     - name: Query if Backup lock exist
       dynamodb_search:
@@ -73,7 +73,7 @@
         msg: "{{ message }}"
         subject: "{{ subject }}"
         topic: "{{ sns_topic }}"
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: publish_message
 
     - name: Scan if Author Standby Service is stopped

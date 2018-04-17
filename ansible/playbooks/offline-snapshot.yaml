@@ -18,7 +18,7 @@
     - name: "Retrieve Main Stack CloudFormation resources facts"
       cloudformation_facts:
         stack_name: "{{ main_stack_name }}"
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: main_stack_facts
 
     - set_fact:
@@ -30,7 +30,7 @@
     - name: "Retrieve Stack Manager CloudFormation resources facts"
       cloudformation_facts:
         stack_name: "{{ stack_manager_stack_name }}"
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: stack_manager_stack_facts
 
     - debug:
@@ -45,7 +45,7 @@
         sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
 
     - debug:
-        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws_region }}"
+        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"
 
     - name: Query if Backup lock exist
       dynamodb_search:
@@ -56,7 +56,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: query
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: dbquery_backup_lock
 
     - name: Check if DB is locked
@@ -74,7 +74,7 @@
         msg: "{{ message }}"
         subject: "{{ subject }}"
         topic: "{{ sns_topic }}"
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: publish_message
 
     - name: Scan if author standby instance is stopped
@@ -86,7 +86,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: scan
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: cmd_stop_author_standby
       until: cmd_stop_author_standby.item != []
       retries:  720
@@ -106,7 +106,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: query
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: dbquery_state_stop_author_standby
 
     - name: Set fact for error check
@@ -129,7 +129,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: scan
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: cmd_stop_author_primary
       until: cmd_stop_author_primary.item != []
       retries:  720
@@ -151,7 +151,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: query
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: dbquery_state_stop_author_primary
       when: module_error is undefined
 
@@ -175,7 +175,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: scan
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: cmd_stop_publish
       until: cmd_stop_publish.item != []
       retries:  720
@@ -197,7 +197,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: query
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: dbquery_state_stop_publish
       when: module_error is undefined
 
@@ -221,7 +221,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: scan
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: cmd_offline_backup
       until: cmd_offline_backup.item != []
       retries:  720
@@ -243,7 +243,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: query
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: dbquery_state_offline_snapshot
       when: module_error is undefined
 
@@ -267,7 +267,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: scan
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: cmd_start_author_primary
       until: cmd_start_author_primary.item != []
       retries:  720
@@ -289,7 +289,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: query
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: dbquery_state_start_author_primary
       when: module_error is undefined
 
@@ -313,7 +313,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: scan
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: cmd_start_author_standby
       until: cmd_start_author_standby.item != []
       retries:  720
@@ -335,7 +335,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: query
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: dbquery_state_start_author_standby
       when: module_error is undefined
 
@@ -359,7 +359,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: scan
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: cmd_start_publish
       until: cmd_start_publish.item != []
       retries:  720
@@ -381,7 +381,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: query
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: dbquery_state_start_publish
       when: module_error is undefined
 
@@ -405,7 +405,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: query
-        region: "{{ aws_region }}"
+        region: "{{ aws.region }}"
       register: dbquery
       until: dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
       # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
