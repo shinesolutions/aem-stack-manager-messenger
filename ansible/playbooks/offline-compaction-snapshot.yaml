@@ -33,17 +33,19 @@
         region: "{{ aws_region }}"
       register: stack_manager_stack_facts
 
+    - debug:
+        msg: "{{ stack_manager_stack_facts }}"
+
     - set_fact:
         stack_manager_stack_outputs: "{{ stack_manager_stack_facts.ansible_facts.cloudformation[stack_manager_stack_name].stack_outputs }}"
+        s3_bucket: "{{ stack_manager_stack_facts.ansible_facts.cloudformation[stack_manager_stack_name].stack_parameters.DataBucketNameParameter }}"
 
     - set_fact:
         dynamodb_tablename: "{{ stack_manager_stack_outputs.AemStackManagerTableName }}"
-
-    - set_fact:
         sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
 
     - debug:
-        msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
+        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws_region }}"
 
     - name: Query if Backup lock exist
       dynamodb_search:
@@ -627,7 +629,7 @@
     - name: Get path to output files of stopping Author Standby Service
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
       register: output_files_stop_author_standby
       when: cmd_id_stop_author_standby is defined
@@ -635,7 +637,7 @@
     - name: Get path to output files of stopping Author Primary Service
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
       register: output_files_stop_author_primary
       when: cmd_id_stop_author_primary is defined
@@ -643,7 +645,7 @@
     - name: Get path to output files of stopping Publish Service
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
       register: output_files_stop_publish
       when: cmd_id_stop_publish is defined
@@ -651,7 +653,7 @@
     - name: Get path to output files of taking offline compaction
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_compaction }}"
       register: output_files_offline_compaction
       when: cmd_id_offline_compaction is defined
@@ -659,7 +661,7 @@
     - name: Get path to output files of taking offline backup
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
       register: output_files_offline_backup
       when: cmd_id_offline_backup is defined
@@ -667,7 +669,7 @@
     - name: Get path to output files of starting Author Primary Service
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
       register: output_files_start_author_primary
       when: cmd_id_start_author_primary is defined
@@ -675,7 +677,7 @@
     - name: Get path to output files of starting Author Standby Service
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
       register: output_files_start_author_standby
       when: cmd_id_start_author_standby is defined
@@ -683,7 +685,7 @@
     - name: Get path to output files of starting Publish Service
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
       register: output_files_start_publish
       when: cmd_id_start_publish is defined
@@ -691,7 +693,7 @@
     - name: Get path to output files of checking remaining compaction jobs
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_remain_compact_jobs }}"
       register: output_files_remain_compact_jobs
       when: cmd_id_remain_compact_jobs is defined
@@ -699,7 +701,7 @@
     - name: Get path to output files of stopping remaining publisher
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_remain_publish }}"
       register: output_files_stop_remain_publish
       when: cmd_id_stop_remain_publish is defined
@@ -707,7 +709,7 @@
     - name: Get path to output files of compact remaining publisher
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_compact_publish }}"
       register: output_files_compact_publish
       when: cmd_id_compact_publish is defined
@@ -715,7 +717,7 @@
     - name: Get path to output files of starting remaining publisher
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_remain_publish }}"
       register: output_files_start_remain_publish
       when: cmd_id_start_remain_publish is defined
@@ -895,7 +897,7 @@
     - name: "Save command output stopping Author Standby Service to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
@@ -905,7 +907,7 @@
     - name: "Save command output stopping Author Primary Service to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
@@ -915,7 +917,7 @@
     - name: "Save command output stopping Publish Service to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
@@ -925,7 +927,7 @@
     - name: "Save command output taking opffline compaction to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
@@ -935,7 +937,7 @@
     - name: "Save command output taking offline backup to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
@@ -945,7 +947,7 @@
     - name: "Save command output starting Author Primary Service to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
@@ -955,7 +957,7 @@
     - name: "Save command output starting Author Standby Service to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
@@ -965,7 +967,7 @@
     - name: "Save command output starting Publish Service to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
@@ -975,7 +977,7 @@
     - name: "Save command output check for remaining compaction jobs to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
@@ -985,7 +987,7 @@
     - name: "Save command output stopping remaining Publisher to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
@@ -995,7 +997,7 @@
     - name: "Save command output taking remaining compaction to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
@@ -1005,7 +1007,7 @@
     - name: "Save command output starting remaining Publisher to {{log_path }}"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:

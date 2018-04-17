@@ -36,13 +36,15 @@
         region: "{{ aws_region }}"
       register: stack_manager_stack_facts
 
+    - debug:
+        msg: "{{ stack_manager_stack_facts }}"
+
     - set_fact:
         stack_manager_stack_outputs: "{{ stack_manager_stack_facts.ansible_facts.cloudformation[stack_manager_stack_name].stack_outputs }}"
+        s3_bucket: "{{ stack_manager_stack_facts.ansible_facts.cloudformation[stack_manager_stack_name].stack_parameters.DataBucketNameParameter }}"
 
     - set_fact:
         dynamodb_tablename: "{{ stack_manager_stack_outputs.AemStackManagerTableName }}"
-
-    - set_fact:
         sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
 
     - debug:
@@ -105,13 +107,10 @@
         general_error: 1
       when: dbquery.item[0].state.S == "Failed"
 
-    - debug:
-        msg: "{{ s3.bucket }}"
-
     - name: "Get path to log files"
       aws_s3:
         mode: list
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
       register: output_files
 
@@ -122,14 +121,12 @@
         s3_files: "{{ output_files.s3_keys }}"
       when: cmd_id is defined
 
-    - name: "Create log directory {{ log_path }}"
-      file:
-        path: "{{ log_path }}"
-        state: directory
+    - debug:
+        msg: "{{ s3_files }}"
 
-    - name: "Create Download directory in {{log_path }}{{ dl_path }}"
+    - name: "Create Download directory in {{log_path }}/{{ dl_path }}"
       file:
-        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
+        path: "{{ log_path }}/{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
       with_items:
         - "{{ s3_files }}"
@@ -138,7 +135,7 @@
     - name: "Save log files"
       aws_s3:
         mode: get
-        bucket: "{{ s3.bucket }}"
+        bucket: "{{ s3_bucket }}"
         object: "{{ item }}"
         dest: "{{ log_path }}{{ item }}"
       with_items:
