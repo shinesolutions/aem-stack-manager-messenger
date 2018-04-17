@@ -1,14 +1,12 @@
 ---
 aws_region: ap-southeast-2
-dynamodb_tablename: aem-stack-manager-AemStackManagerTable
-sns_topic:
-  stack_manager: arn:aws:sns:ap-southeast-2:0123456789:aem-stack-manager-AemStackManager
-  offline_snapshot: arn:aws:sns:ap-southeast-2:0123456789:aem-stack-manager-AemStackManager
-stackmanager_prefix: aem-stack-manager
 s3:
   bucket: aem-stack-manager
 
 poll_timeout:
   check_command_execution:
-    retries: 120
-    delay: 5
+    retries: 240
+    delay: 2
+  check_message_sent:
+    retries: 240
+    delay: 2

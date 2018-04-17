@@ -2,27 +2,29 @@
 
 set -o errexit
 
-message_type=$1
+playbook_type=$1
+message_type=$2
 run_id=${RUN_ID:-$(date +%Y-%m-%d:%H:%M:%S)}
-log_path=logs/$run_id-send-message.log
+log_path=logs/$run_id-$playbook_type.log
 
 # Construct Ansible extra_vars flags.
 # If CONFIG_FILE is set, values will be added.
 
 extra_vars=(--extra-vars "stack_prefix=$stack_prefix target_aem_stack_prefix=$target_aem_stack_prefix message_type=$message_type")
 
-# shellcheck disable=SC2154
-extra_vars+=(--extra-vars "@$config_path")
+for config_file in $( find -L "${config_path}" -maxdepth 1 -type f -a \( -name '*.yaml' -o -name '*.yml' \) | sort ); do
+  extra_vars+=( --extra-vars "@${config_file}")
+done
 
-if [ ! -z "$4" ]; then
-    extra_vars+=(--extra-vars "$4")
+if [ ! -z "$6" ]; then
+    extra_vars+=(--extra-vars "$6")
 fi
 
 mkdir -p logs
 echo "Sending Message SNS Topic..."
 ANSIBLE_CONFIG=ansible/ansible.cfg \
   ANSIBLE_LOG_PATH=$log_path \
-  ansible-playbook ansible/playbooks/send-message.yaml \
+  ansible-playbook "ansible/playbooks/$playbook_type.yaml" \
   -v \
   -i ansible/inventory/hosts \
   --module-path ansible/library/ \

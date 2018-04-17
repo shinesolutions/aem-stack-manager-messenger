@@ -12,8 +12,38 @@
 
   tasks:
 
+    - set_fact:
+        main_stack_name: "{{ stack_prefix }}-aem-stack-manager-main-stack-manager"
+
+    - name: "Retrieve Main Stack CloudFormation resources facts"
+      cloudformation_facts:
+        stack_name: "{{ main_stack_name }}"
+        region: "{{ aws_region }}"
+      register: main_stack_facts
+
+    - set_fact:
+        stack_manager_stack_arn: "{{ main_stack_facts.ansible_facts.cloudformation[main_stack_name].stack_outputs.StackManagerStackArn }}"
+
+    - set_fact:
+        stack_manager_stack_name: "{{ stack_manager_stack_arn.split('/')[1] }}"
+
+    - name: "Retrieve Stack Manager CloudFormation resources facts"
+      cloudformation_facts:
+        stack_name: "{{ stack_manager_stack_name }}"
+        region: "{{ aws_region }}"
+      register: stack_manager_stack_facts
+
+    - set_fact:
+        stack_manager_stack_outputs: "{{ stack_manager_stack_facts.ansible_facts.cloudformation[stack_manager_stack_name].stack_outputs }}"
+
+    - set_fact:
+        dynamodb_tablename: "{{ stack_manager_stack_outputs.AemStackManagerTableName }}"
+
+    - set_fact:
+        sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
+
     - debug:
-        msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic.offline_snapshot }} in region: {{ aws_region }}"
+        msg: "Send message: {{ message }} with subject: {{ subject }} to topic: {{ sns_topic }} in region: {{ aws_region }}"
 
     - name: Query if Backup lock exist
       dynamodb_search:
@@ -40,7 +70,7 @@
       sns:
         msg: "{{ message }}"
         subject: "{{ subject }}"
-        topic: "{{ sns_topic.offline_snapshot }}"
+        topic: "{{ sns_topic }}"
         region: "{{ aws_region }}"
       register: publish_message
 
@@ -598,7 +628,7 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
       register: output_files_stop_author_standby
       when: cmd_id_stop_author_standby is defined
 
@@ -606,7 +636,7 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
       register: output_files_stop_author_primary
       when: cmd_id_stop_author_primary is defined
 
@@ -614,7 +644,7 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
       register: output_files_stop_publish
       when: cmd_id_stop_publish is defined
 
@@ -622,7 +652,7 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_compaction }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_compaction }}"
       register: output_files_offline_compaction
       when: cmd_id_offline_compaction is defined
 
@@ -630,7 +660,7 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
       register: output_files_offline_backup
       when: cmd_id_offline_backup is defined
 
@@ -638,7 +668,7 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
       register: output_files_start_author_primary
       when: cmd_id_start_author_primary is defined
 
@@ -646,7 +676,7 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
       register: output_files_start_author_standby
       when: cmd_id_start_author_standby is defined
 
@@ -654,7 +684,7 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
       register: output_files_start_publish
       when: cmd_id_start_publish is defined
 
@@ -662,7 +692,7 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_remain_compact_jobs }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_remain_compact_jobs }}"
       register: output_files_remain_compact_jobs
       when: cmd_id_remain_compact_jobs is defined
 
@@ -670,7 +700,7 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_remain_publish }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_remain_publish }}"
       register: output_files_stop_remain_publish
       when: cmd_id_stop_remain_publish is defined
 
@@ -678,7 +708,7 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_compact_publish }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_compact_publish }}"
       register: output_files_compact_publish
       when: cmd_id_compact_publish is defined
 
@@ -686,83 +716,83 @@
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_remain_publish }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_remain_publish }}"
       register: output_files_start_remain_publish
       when: cmd_id_start_remain_publish is defined
 
     - name: Set global facts for getting command output
       set_fact:
-        log_path: "{{ playbook_dir }}/logs/"
+        log_path: "{{ playbook_dir }}/../../logs/"
 
     - name: Set facts for getting command output stop Author Standby Service
       set_fact:
-        dl_path_stop_author_standby: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
+        dl_path_stop_author_standby: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
         s3_files_stop_author_standby: "{{ output_files_stop_author_standby.s3_keys }}"
       when: error_stop_author_standby is defined or general_error is defined
 
     - name: Set facts for getting command output stop Author Primary Service
       set_fact:
-        dl_path_stop_author_primary: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
+        dl_path_stop_author_primary: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
         s3_files_stop_author_primary: "{{ output_files_stop_author_primary.s3_keys }}"
       when: error_stop_author_primary is defined or general_error is defined
 
     - name: Set facts for getting command output stop Publish Services
       set_fact:
-        dl_path_stop_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
+        dl_path_stop_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
         s3_files_stop_publish: "{{ output_files_stop_publish.s3_keys }}"
       when: error_stop_publish is defined or general_error is defined
 
     - name: Set facts for getting command output Offline Compaction
       set_fact:
-        dl_path_offline_compaction: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{cmd_id_offline_compaction}}"
+        dl_path_offline_compaction: "{{ stack_prefix }}/stack-manager/SSMOutput/{{cmd_id_offline_compaction}}"
         s3_files_offline_compaction: "{{ output_files_offline_compaction.s3_keys }}"
       when: error_offline_compaction is defined or general_error is defined
 
     - name: Set facts for getting command output Offline Backup
       set_fact:
-        dl_path_offline_backup: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
+        dl_path_offline_backup: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
         s3_files_offline_backup: "{{ output_files_offline_backup.s3_keys }}"
       when: error_offline_snapshot is defined or general_error is defined
 
     - name: Set facts for getting command output start Author Primary Service
       set_fact:
-        dl_path_start_author_primary: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
+        dl_path_start_author_primary: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
         s3_files_start_author_primary: "{{ output_files_start_author_primary.s3_keys }}"
       when: error_start_author_primary is defined or general_error is defined
 
     - name: Set facts for getting command output start Author Standby Service
       set_fact:
-        dl_path_start_author_standby: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
+        dl_path_start_author_standby: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
         s3_files_start_author_standby: "{{ output_files_start_author_standby.s3_keys }}"
       when: error_start_author_standby is defined or general_error is defined
 
     - name: Set facts for getting command output start Publish Services
       set_fact:
-        dl_path_start_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
+        dl_path_start_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
         s3_files_start_publish: "{{ output_files_start_publish.s3_keys }}"
       when: error_start_publish is defined or general_error is defined
 
     - name: Set facts for getting command output remaining compact jobs
       set_fact:
-        dl_path_remain_compact_jobs: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{cmd_id_remain_compact_jobs}}"
+        dl_path_remain_compact_jobs: "{{ stack_prefix }}/stack-manager/SSMOutput/{{cmd_id_remain_compact_jobs}}"
         s3_files_remain_compact_jobs: "{{ output_files_remain_compact_jobs.s3_keys }}"
       when: error_remain_compact_jobs is defined or general_error is defined
 
     - name: Set facts for getting command output stop remaining Publish Services
       set_fact:
-        dl_path_stop_remain_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{cmd_id_stop_remain_publish}}"
+        dl_path_stop_remain_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{cmd_id_stop_remain_publish}}"
         s3_files_stop_remain_publish: "{{ output_files_stop_remain_publish.s3_keys }}"
       when: error_stop_remain_publish is defined or general_error is defined
 
     - name: Set facts for getting command output compact remaining publisher
       set_fact:
-        dl_path_compact_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{cmd_id_compact_publish}}"
+        dl_path_compact_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{cmd_id_compact_publish}}"
         s3_files_compact_publish: "{{ output_files_compact_publish.s3_keys }}"
       when: error_remain_compact_publish is defined or general_error is defined
 
     - name: Set facts for getting command output start remaining Publish Servvice
       set_fact:
-        dl_path_start_remain_publish: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{cmd_id_start_remain_publish}}"
+        dl_path_start_remain_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{cmd_id_start_remain_publish}}"
         s3_files_start_remain_publish: "{{ output_files_start_remain_publish.s3_keys }}"
       when: error_start_remain_publish is defined or general_error is defined
 

@@ -15,14 +15,44 @@
 
   tasks:
 
+    - set_fact:
+        main_stack_name: "{{ stack_prefix }}-aem-stack-manager-main-stack-manager"
+
+    - name: "Retrieve Main Stack CloudFormation resources facts"
+      cloudformation_facts:
+        stack_name: "{{ main_stack_name }}"
+        region: "{{ aws_region }}"
+      register: main_stack_facts
+
+    - set_fact:
+        stack_manager_stack_arn: "{{ main_stack_facts.ansible_facts.cloudformation[main_stack_name].stack_outputs.StackManagerStackArn }}"
+
+    - set_fact:
+        stack_manager_stack_name: "{{ stack_manager_stack_arn.split('/')[1] }}"
+
+    - name: "Retrieve Stack Manager CloudFormation resources facts"
+      cloudformation_facts:
+        stack_name: "{{ stack_manager_stack_name }}"
+        region: "{{ aws_region }}"
+      register: stack_manager_stack_facts
+
+    - set_fact:
+        stack_manager_stack_outputs: "{{ stack_manager_stack_facts.ansible_facts.cloudformation[stack_manager_stack_name].stack_outputs }}"
+
+    - set_fact:
+        dynamodb_tablename: "{{ stack_manager_stack_outputs.AemStackManagerTableName }}"
+
+    - set_fact:
+        sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
+
     - debug:
-        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic.stack_manager }}, in region: {{ aws_region }}"
+        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws_region }}"
 
     - name: "Send message to SNS Topic"
       sns:
         msg: "{{ message }}"
         subject: "{{ subject }}"
-        topic: "{{ sns_topic.stack_manager }}"
+        topic: "{{ sns_topic }}"
         region: "{{ aws_region }}"
       register: publish_message
 
@@ -35,6 +65,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: scan
+        region: "{{ aws_region }}"
       register: dbscan
       until: dbscan.item != []
       retries: "{{ poll_timeout.check_message_sent.retries }}"
@@ -45,23 +76,15 @@
       with_items:
         "{{ dbscan.item }}"
 
-    - name: "Poll to check if command was executed for message types that allow success or failure"
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: command_id
-        attribute_value: "{{ cmd_id }}"
-        get_attribute: state
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: query
-      register: dbquery
-      until:  dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
-      # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
-      retries: "{{ poll_timeout.check_command_execution.retries }}"
-      delay: "{{ poll_timeout.check_command_execution.delay }}"
+    - set_fact:
+        expected_states: ["Success"]
+      when: message_type in message_types_check_success_only
+
+    - set_fact:
+        expected_states: ["Success", "Failed"]
       when: message_type not in message_types_check_success_only
 
-    - name: "Poll to check if command was executed for message types that allow success only"
+    - name: "Poll to check if command was executed"
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: command_id
@@ -70,31 +93,39 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: query
+        region: "{{ aws_region }}"
       register: dbquery
-      until:  dbquery.item[0].state.S == "Success"
+      until:  dbquery.item[0].state.S in expected_states
       # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
       retries: "{{ poll_timeout.check_command_execution.retries }}"
       delay: "{{ poll_timeout.check_command_execution.delay }}"
-      when: message_type in message_types_check_success_only
 
     - name: "Check if command failed"
       set_fact:
         general_error: 1
       when: dbquery.item[0].state.S == "Failed"
 
+    - debug:
+        msg: "{{ s3.bucket }}"
+
     - name: "Get path to log files"
       aws_s3:
         mode: list
         bucket: "{{ s3.bucket }}"
-        prefix: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
       register: output_files
 
     - name: "Set facts for getting command output"
       set_fact:
-        log_path: "{{ playbook_dir }}/logs/"
-        dl_path: "{{ stackmanager_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
+        log_path: "{{ playbook_dir }}/../../logs/"
+        dl_path: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
         s3_files: "{{ output_files.s3_keys }}"
       when: cmd_id is defined
+
+    - name: "Create log directory {{ log_path }}"
+      file:
+        path: "{{ log_path }}"
+        state: directory
 
     - name: "Create Download directory in {{log_path }}{{ dl_path }}"
       file:
