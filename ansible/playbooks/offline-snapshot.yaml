@@ -771,5 +771,5 @@
       when: error_start_publish is defined or general_error is defined
 
     - fail:
-        msg: "Error while executing offline-snapshot"
+        msg: "Error: Failed executing event {{ message_type }}"
       when: general_error is defined or module_error is defined

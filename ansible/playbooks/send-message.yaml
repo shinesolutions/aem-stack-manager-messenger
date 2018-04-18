@@ -174,5 +174,5 @@
       when: general_error is defined
 
     - fail:
-        msg: "Error: Failed executing command."
+        msg: "Error: Failed executing event {{ message_type }}"
       when: general_error is defined
