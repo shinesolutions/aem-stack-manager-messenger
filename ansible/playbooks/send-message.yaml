@@ -130,7 +130,7 @@
         state: directory
       with_items:
         - "{{ s3_files }}"
-      when: general_error is defined
+      when: general_error is defined or show_log_on_failure_only == false
 
     - name: "Save log files"
       aws_s3:
@@ -141,7 +141,22 @@
       with_items:
         - "{{ s3_files }}"
       register: saved_files
-      when: general_error is defined
+      when: general_error is defined or show_log_on_failure_only == false
+
+    - name: "Find non-error log files"
+      find:
+        paths: "{{log_path }}{{ dl_path }}"
+        file_type: file
+        patterns: stdout
+        recurse: yes
+      register: stdout_files
+      when: show_log_on_failure_only == false
+
+    - name: "Show non-error log files content"
+      log_output:
+        type: file
+        log_files: "{{ stdout_files.files | map(attribute='path')|list }}"
+      when: show_log_on_failure_only == false
 
     - name: "Find error log files"
       find:
@@ -152,7 +167,7 @@
       register: stderr_files
       when: general_error is defined
 
-    - name: "Show Error Log"
+    - name: "Show error log files content"
       log_output:
         type: file
         log_files: "{{ stderr_files.files | map(attribute='path')|list }}"

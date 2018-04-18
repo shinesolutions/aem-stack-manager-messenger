@@ -2,6 +2,8 @@
 aws:
   region: overwrite-me
 
+show_log_on_failure_only: true
+
 poll_timeout:
   check_command_execution:
     retries: 120

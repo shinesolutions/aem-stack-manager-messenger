@@ -11,6 +11,7 @@
 * Use stack_prefix parameter for Stack Manager stack prefix, introduce target_aem_stack_prefix for the actual AEM stack prefix #37
 * Remove database table name, SNS topic ARNs, and S3 bucket configurations, they're now derived from stack prefix #36
 * Replace aws_region configuration with aws.region
+* Add show_log_on_failure_only configuration #32
 
 ### 1.2.2
 * Add payload files
