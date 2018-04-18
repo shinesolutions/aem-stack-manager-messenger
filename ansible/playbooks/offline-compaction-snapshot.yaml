@@ -33,9 +33,6 @@
         region: "{{ aws.region }}"
       register: stack_manager_stack_facts
 
-    - debug:
-        msg: "{{ stack_manager_stack_facts }}"
-
     - set_fact:
         stack_manager_stack_outputs: "{{ stack_manager_stack_facts.ansible_facts.cloudformation[stack_manager_stack_name].stack_outputs }}"
         s3_bucket: "{{ stack_manager_stack_facts.ansible_facts.cloudformation[stack_manager_stack_name].stack_parameters.DataBucketNameParameter }}"

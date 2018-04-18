@@ -36,9 +36,6 @@
         region: "{{ aws.region }}"
       register: stack_manager_stack_facts
 
-    - debug:
-        msg: "{{ stack_manager_stack_facts }}"
-
     - set_fact:
         stack_manager_stack_outputs: "{{ stack_manager_stack_facts.ansible_facts.cloudformation[stack_manager_stack_name].stack_outputs }}"
         s3_bucket: "{{ stack_manager_stack_facts.ansible_facts.cloudformation[stack_manager_stack_name].stack_parameters.DataBucketNameParameter }}"
@@ -120,9 +117,6 @@
         dl_path: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
         s3_files: "{{ output_files.s3_keys }}"
       when: cmd_id is defined
-
-    - debug:
-        msg: "{{ s3_files }}"
 
     - name: "Create Download directory in {{log_path }}/{{ dl_path }}"
       file:
