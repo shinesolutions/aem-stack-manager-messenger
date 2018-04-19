@@ -12,7 +12,7 @@ deps:
 	pip install -r requirements.txt
 
 lint:
-	shellcheck scripts/*.sh
+	shellcheck scripts/*.sh test/integration/*.sh
 	ANSIBLE_LIBRARY=ansible/library/ \
 	  ansible-playbook \
     ansible/playbooks/*.yaml \
