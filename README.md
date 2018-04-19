@@ -24,11 +24,11 @@ Execute the AEM Stack Manager events:
 
 Deploy a set of AEM Packages and Dispatcher configuration packages into an AEM environment:
 
-    make deploy-artifacts \
+    make deploy-artifacts-full-set \
       stack_prefix=<stack_manager_stack_prefix> \
       target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir> \
-      descriptor_file=deploy_descriptor_file.json
+      descriptor_file=deploy-artifacts-descriptor.json
 
 Deploy a single AEM Package into AEM instances:
 
@@ -37,6 +37,7 @@ Deploy a single AEM Package into AEM instances:
       target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir> \
       component=author-primary \
+      aem_id=author \
       source=s3://s3bucket/path/aem-helloworld-content-0.0.1-SNAPSHOT.zip \
       group=shinesolutions \
       name=aem-helloworld-content \
