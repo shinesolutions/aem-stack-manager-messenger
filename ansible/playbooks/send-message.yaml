@@ -18,7 +18,7 @@
     - set_fact:
         main_stack_name: "{{ stack_prefix }}-aem-stack-manager-main-stack-manager"
 
-    - name: "Retrieve Main Stack CloudFormation resources facts"
+    - name: "{{ subject }}: Retrieve Main Stack CloudFormation resources facts"
       cloudformation_facts:
         stack_name: "{{ main_stack_name }}"
         region: "{{ aws.region }}"
@@ -30,7 +30,7 @@
     - set_fact:
         stack_manager_stack_name: "{{ stack_manager_stack_arn.split('/')[1] }}"
 
-    - name: "Retrieve Stack Manager CloudFormation resources facts"
+    - name: "{{ subject }}: Retrieve Stack Manager CloudFormation resources facts"
       cloudformation_facts:
         stack_name: "{{ stack_manager_stack_name }}"
         region: "{{ aws.region }}"
@@ -47,7 +47,7 @@
     - debug:
         msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"
 
-    - name: "Send message to SNS Topic"
+    - name: "{{ subject }}: Send message to SNS Topic"
       sns:
         msg: "{{ message }}"
         subject: "{{ subject }}"
@@ -55,7 +55,7 @@
         region: "{{ aws.region }}"
       register: publish_message
 
-    - name: "Poll to check if message was successfully sent"
+    - name: "{{ subject }}: Poll to check if message was successfully sent"
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: message_id
@@ -83,7 +83,7 @@
         expected_states: ["Success", "Failed"]
       when: message_type not in message_types_check_success_only
 
-    - name: "Poll to check if command was executed"
+    - name: "{{ subject }}: Poll to check if command was executed"
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: command_id
@@ -99,26 +99,26 @@
       retries: "{{ poll_timeout.check_command_execution.retries }}"
       delay: "{{ poll_timeout.check_command_execution.delay }}"
 
-    - name: "Check if command failed"
+    - name: "{{ subject }}: Check if command failed"
       set_fact:
         general_error: 1
       when: dbquery.item[0].state.S == "Failed"
 
-    - name: "Get path to log files"
+    - name: "{{ subject }}: Get path to log files"
       aws_s3:
         mode: list
         bucket: "{{ s3_bucket }}"
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
       register: output_files
 
-    - name: "Set facts for getting command output"
+    - name: "{{ subject }}: Set facts for getting command output"
       set_fact:
         log_path: "{{ playbook_dir }}/../../logs/"
         dl_path: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id }}"
         s3_files: "{{ output_files.s3_keys }}"
       when: cmd_id is defined
 
-    - name: "Create Download directory in {{log_path }}/{{ dl_path }}"
+    - name: "{{ subject }}: Create Download directory in {{log_path }}/{{ dl_path }}"
       file:
         path: "{{ log_path }}/{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
@@ -126,7 +126,7 @@
         - "{{ s3_files }}"
       when: general_error is defined or show_log_on_failure_only == false
 
-    - name: "Save log files"
+    - name: "{{ subject }}: Save log files"
       aws_s3:
         mode: get
         bucket: "{{ s3_bucket }}"
@@ -137,7 +137,7 @@
       register: saved_files
       when: general_error is defined or show_log_on_failure_only == false
 
-    - name: "Find non-error log files"
+    - name: "{{ subject }}: Find non-error log files"
       find:
         paths: "{{log_path }}{{ dl_path }}"
         file_type: file
@@ -146,13 +146,13 @@
       register: stdout_files
       when: show_log_on_failure_only == false
 
-    - name: "Show non-error log files content"
+    - name: "{{ subject }}: Show non-error log files content"
       log_output:
         type: file
         log_files: "{{ stdout_files.files | map(attribute='path')|list }}"
       when: show_log_on_failure_only == false
 
-    - name: "Find error log files"
+    - name: "{{ subject }}: Find error log files"
       find:
         paths: "{{log_path }}{{ dl_path }}"
         file_type: file
@@ -161,7 +161,7 @@
       register: stderr_files
       when: general_error is defined
 
-    - name: "Show error log files content"
+    - name: "{{ subject }}: Show error log files content"
       log_output:
         type: file
         log_files: "{{ stderr_files.files | map(attribute='path')|list }}"
