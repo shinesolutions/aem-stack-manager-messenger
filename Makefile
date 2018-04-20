@@ -19,7 +19,7 @@ lint:
 		-v \
 		--syntax-check
 
-# send message targets
+# Stack Manager event targets
 
 deploy-artifact:
 	./scripts/run-playbook.sh send-message deploy-artifact "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_id=$(aem_id) source=$(source) group=$(group) name=$(name) version=$(version) replicate=$(replicate) activate=$(activate) force=$(force)"
@@ -74,6 +74,14 @@ test-readiness-consolidated:
 
 test-readiness-full-set:
 	./scripts/run-playbook.sh send-message test-readiness-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
+
+# Integration test targets
+
+test-consolidated:
+	test/integration/all-events-consolidated.sh "$(stack_prefix)" "$(target_aem_stack_prefix)"
+
+test-full-set:
+	test/integration/all-events-full-set.sh "$(stack_prefix)" "$(target_aem_stack_prefix)"
 
 package:
 	rm -rf stage

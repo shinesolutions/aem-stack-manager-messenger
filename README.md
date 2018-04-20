@@ -141,3 +141,18 @@ Test readiness of AEM Consolidated environment:
     make test-readiness-consolidated \
       stack_prefix=<aem_consolidated_stack_prefix> \
       config_path=<path/to/config/dir>
+
+Testing
+-------
+
+Run integration tests of all Stack Manager events against an AEM Full-Set architecture:
+
+    make test-full-set \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix>
+
+Run integration tests of all Stack Manager events against an AEM Consolidated architecture:
+
+    make test-consolidated \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix>
