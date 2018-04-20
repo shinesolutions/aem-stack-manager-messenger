@@ -130,15 +130,15 @@ Trigger offline compaction and take offline snapshot of the repositories within 
       target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir>
 
-Test readiness of AEM Full Set environment:
+Check readiness of AEM Full Set environment:
 
-    make test-readiness-full-set \
+    make check-readiness-full-set \
       stack_prefix=<aem_fullset_stack_prefix> \
       config_path=<path/to/config/dir>
 
-Test readiness of AEM Consolidated environment:
+Check readiness of AEM Consolidated environment:
 
-    make test-readiness-consolidated \
+    make check-readiness-consolidated \
       stack_prefix=<aem_consolidated_stack_prefix> \
       config_path=<path/to/config/dir>
 
