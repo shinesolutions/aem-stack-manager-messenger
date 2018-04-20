@@ -12,18 +12,6 @@ AEM_PACKAGE_NAME=aem-helloworld-content
 AEM_PACKAGE_VERSION=0.0.1
 AEM_PACKAGE_URL="http://central.maven.org/maven2/com/$AEM_PACKAGE_GROUP/$AEM_PACKAGE_NAME/$AEM_PACKAGE_VERSION/$AEM_PACKAGE_NAME-$AEM_PACKAGE_VERSION.zip"
 
-make offline-snapshot \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-make test-readiness-full-set \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-exit 0
-
 ##################################################
 # Test AEM Full-Set Architecture readiness
 ##################################################
@@ -32,6 +20,26 @@ make test-readiness-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
+
+# ##################################################
+# # List packages on AEM Author
+# ##################################################
+#
+# make list-packages \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH" \
+#   component=author
+#
+# ##################################################
+# # List packages on AEM Publish
+# ##################################################
+#
+# make list-packages \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH" \
+#   component=publish
 
 ##################################################
 # Enable and disable CRXDE on AEM Author
@@ -53,17 +61,17 @@ make disable-crxde \
 # Enable and disable CRXDE on AEM Publish
 ##################################################
 
-# make enable-crxde \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH" \
-#   component=publish
+make enable-crxde \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=publish
 
-# make disable-crxde \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH" \
-#   component=publish
+make disable-crxde \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=publish
 
 ##################################################
 # Flush AEM Author-Dispatcher cache
@@ -89,11 +97,11 @@ make flush-dispatcher-cache \
 # Deploy a set of artifacts to AEM Full-Set Architecture
 ##################################################
 
-# make deploy-artifacts-full-set \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH" \
-#   descriptor_file=deploy-artifacts-descriptor.json
+make deploy-artifacts-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  descriptor_file=deploy-artifacts-descriptor.json
 
 ##################################################
 # Deploy a single AEM package to AEM Author
@@ -156,3 +164,22 @@ make live-snapshot \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH" \
   component=publish
+
+##################################################
+# Offline snapshot AEM Full-Set Architecture
+##################################################
+
+# make test-readiness-full-set \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
+#
+# make offline-snapshot \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
+#
+# make test-readiness-full-set \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
