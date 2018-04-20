@@ -13,10 +13,10 @@ AEM_PACKAGE_VERSION=0.0.1
 AEM_PACKAGE_URL="http://central.maven.org/maven2/com/$AEM_PACKAGE_GROUP/$AEM_PACKAGE_NAME/$AEM_PACKAGE_VERSION/$AEM_PACKAGE_NAME-$AEM_PACKAGE_VERSION.zip"
 
 ##################################################
-# Test AEM Full-Set Architecture readiness
+# Check AEM Full-Set Architecture readiness
 ##################################################
 
-make test-readiness-full-set \
+make check-readiness-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -169,7 +169,7 @@ make live-snapshot \
 # Offline snapshot AEM Full-Set Architecture
 ##################################################
 
-# make test-readiness-full-set \
+# make check-readiness-full-set \
 #   stack_prefix="$STACK_PREFIX" \
 #   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
 #   config_path="$CONFIG_PATH"
@@ -179,7 +179,7 @@ make live-snapshot \
 #   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
 #   config_path="$CONFIG_PATH"
 #
-# make test-readiness-full-set \
+# make check-readiness-full-set \
 #   stack_prefix="$STACK_PREFIX" \
 #   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
 #   config_path="$CONFIG_PATH"
