@@ -39,7 +39,7 @@
 
     - set_fact:
         dynamodb_tablename: "{{ stack_manager_stack_outputs.AemStackManagerTableName }}"
-        sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
+        sns_topic: "{{ stack_manager_stack_outputs.BackupTopicArn }}"
 
     - debug:
         msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"
