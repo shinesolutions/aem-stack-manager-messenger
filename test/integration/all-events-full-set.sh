@@ -24,22 +24,22 @@ make check-readiness-full-set \
 # ##################################################
 # # List packages on AEM Author
 # ##################################################
-#
-# make list-packages \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH" \
-#   component=author
-#
+
+make list-packages \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=author-primary
+
 # ##################################################
 # # List packages on AEM Publish
 # ##################################################
-#
-# make list-packages \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH" \
-#   component=publish
+
+make list-packages \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=publish
 
 ##################################################
 # Enable and disable CRXDE on AEM Author
