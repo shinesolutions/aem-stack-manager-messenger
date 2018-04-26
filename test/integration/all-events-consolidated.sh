@@ -61,7 +61,7 @@ make flush-dispatcher-cache \
 # Deploy a set of artifacts to AEM Full-Set Architecture
 ##################################################
 
-make deploy-artifacts-full-set \
+make deploy-artifacts-consolidated \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH" \
