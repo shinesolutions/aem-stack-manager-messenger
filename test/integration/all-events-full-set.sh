@@ -169,17 +169,17 @@ make live-snapshot \
 # Offline snapshot AEM Full-Set Architecture
 ##################################################
 
-# make check-readiness-full-set \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH"
-#
-# make offline-snapshot \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH"
-#
-# make check-readiness-full-set \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH"
+make check-readiness-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+make offline-snapshot \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+make check-readiness-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
