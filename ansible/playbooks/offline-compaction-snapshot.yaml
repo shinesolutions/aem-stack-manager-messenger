@@ -53,6 +53,7 @@
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: query
+        region: "{{ aws.region }}"
       register: dbquery_backup_lock
 
     - name: Check if DB is locked
