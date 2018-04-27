@@ -103,6 +103,11 @@ make deploy-artifacts-full-set \
   config_path="$CONFIG_PATH" \
   descriptor_file=deploy-artifacts-descriptor.json
 
+make check-readiness-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
 ##################################################
 # Deploy a single AEM package to AEM Author
 ##################################################
@@ -120,6 +125,11 @@ make deploy-artifact \
   replicate=true \
   activate=false \
   force=true
+
+make check-readiness-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
 
 ##################################################
 # Deploy a single AEM package to AEM Publish
@@ -139,6 +149,11 @@ make deploy-artifact \
   activate=false \
   force=true
 
+make check-readiness-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
 ##################################################
 # Take live snapshot of AEM Author repositories
 ##################################################
@@ -155,6 +170,11 @@ make live-snapshot \
   config_path="$CONFIG_PATH" \
   component=author-standby
 
+make check-readiness-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
 ##################################################
 # Take live snapshot of AEM Publish repositories
 ##################################################
@@ -165,14 +185,14 @@ make live-snapshot \
   config_path="$CONFIG_PATH" \
   component=publish
 
-##################################################
-# Offline snapshot AEM Full-Set Architecture
-##################################################
-
 make check-readiness-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
+
+##################################################
+# Offline snapshot AEM Full-Set Architecture
+##################################################
 
 make offline-snapshot \
   stack_prefix="$STACK_PREFIX" \
@@ -183,3 +203,17 @@ make check-readiness-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
+
+# ##################################################
+# # Offline compaction snapshot AEM Full-Set Architecture
+# ##################################################
+#
+# make offline-compaction-snapshot \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
+#
+# make check-readiness-full-set \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
