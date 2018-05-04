@@ -1,0 +1,12 @@
+{
+  "task": "schedule-offline-snapshot",
+  "stack_prefix": target_aem_stack_prefix,
+  "details": {
+    "component": ['author-publish-dispatcher'],
+    "comment": "Set schedule job offline-snapshot and/or offline-compaction-snapshot on consolidated",
+    "parameters": {
+      "jobName": [schedule_job],
+      "State": [state]
+    }
+  }
+}

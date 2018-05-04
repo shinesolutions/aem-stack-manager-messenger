@@ -75,6 +75,11 @@ check-readiness-consolidated:
 check-readiness-full-set:
 	./scripts/run-playbook.sh send-message test-readiness-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 
+schedule-offline-snapshot-full-set:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=$(schedule_job) state=$(state)"
+
+schedule-offline-snapshot-full-consolidated:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=$(schedule_job) state=$(state)"
 # Integration test targets
 
 test-consolidated:
