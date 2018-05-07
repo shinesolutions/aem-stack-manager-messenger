@@ -1,4 +1,4 @@
-version ?= 1.3.0
+§version ?= 1.3.0
 
 # development targets
 
@@ -76,10 +76,42 @@ check-readiness-full-set:
 	./scripts/run-playbook.sh send-message test-readiness-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 
 schedule-offline-snapshot-full-set:
-	./scripts/run-playbook.sh send-message schedule-offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=$(schedule_job) state=$(state)"
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot state=enable"
 
-schedule-offline-snapshot-full-consolidated:
-	./scripts/run-playbook.sh send-message schedule-offline-snapshot-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=$(schedule_job) state=$(state)"
+deschedule-offline-snapshot-full-set:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot state=disable"
+
+schedule-offline-compaction-snapshot-full-set:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot state=enable"
+
+deschedule-offline-compaction-snapshot-full-set:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot state=disable"
+
+schedule-all-offline-snapshot-full-set:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=all state=enable"
+
+deschedule-all-offline-snapshot-full-set:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=all state=disable"
+
+schedule-offline-snapshot-consolidated:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot state=enable"
+
+deschedule-offline-snapshot-consolidated:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot state=disable"
+
+schedule-offline-compaction-snapshot-consolidated:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot state=enable"
+
+deschedule-offline-compaction-snapshot-consolidated:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot state=disable"
+
+schedule-all-offline-snapshot-consolidated:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=all state=enable"
+
+deschedule-all-offline-snapshot-consolidated:
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=all state=disable"
+
+
 # Integration test targets
 
 test-consolidated:

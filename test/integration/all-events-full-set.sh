@@ -155,70 +155,58 @@ make check-readiness-full-set \
   config_path="$CONFIG_PATH"
 
 ##################################################
-# Enable scheduled jobs for offline-snapshot
+# Schedule jobs for offline-snapshot
 ##################################################
 
 make schedule-offline-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH" \
-  schedule_job=offline_snapshot \
-  state=enable
+  config_path="$CONFIG_PATH"
 
 ##################################################
-# Disable scheduled jobs for offline-snapshot
+# Deschedule jobs for offline-snapshot
 ##################################################
 
-make schedule-offline-snapshot-full-set \
+make deschedule-offline-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH" \
-  schedule_job=offline_snapshot \
-  state=disable
+  config_path="$CONFIG_PATH"
 
 ##################################################
-# Enable scheduled jobs for offline-compaction-snapshot
+# Schedule jobs for offline-compaction-snapshot
 ##################################################
 
-make schedule-offline-snapshot-full-set \
+make schedule-offline-compaction-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH" \
-  schedule_job=offline_compaction_snapshot \
-  state=enable
+  config_path="$CONFIG_PATH"
 
 ##################################################
-# Disable scheduled jobs for offline-compaction-snapshot
+# Deschedule jobs for offline-compaction-snapshot
 ##################################################
 
-make schedule-offline-snapshot-full-set \
+make deschedule-offline-compaction-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH" \
-  schedule_job=offline_compaction_snapshot \
-  state=disable
+  config_path="$CONFIG_PATH"
 
 ##################################################
-# Enable scheduled jobs for all offline snapshot jobs
+# Schedule jobs for all offline snapshot jobs
 ##################################################
 
-make schedule-offline-snapshot-full-set \
+make schedule-all-offline-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH" \
-  schedule_job=all \
-  state=enable
+  config_path="$CONFIG_PATH"
 
 ##################################################
-# Disable scheduled jobs for all offline snapshot jobs
+# Deschedule jobs for all offline snapshot jobs
 ##################################################
 
-make schedule-offline-snapshot-full-set \
+make deschedule-all-offline-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH" \
-  schedule_job=all \
-  state=disable
+  config_path="$CONFIG_PATH"
 
 ##################################################
 # Take live snapshot of AEM Author repositories
