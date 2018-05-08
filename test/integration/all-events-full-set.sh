@@ -158,7 +158,7 @@ make check-readiness-full-set \
 # Schedule jobs for offline-snapshot
 ##################################################
 
-make schedule-offline-snapshot-full-set \
+make enable-offline-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -167,7 +167,7 @@ make schedule-offline-snapshot-full-set \
 # Deschedule jobs for offline-snapshot
 ##################################################
 
-make deschedule-offline-snapshot-full-set \
+make disable-offline-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -176,7 +176,7 @@ make deschedule-offline-snapshot-full-set \
 # Schedule jobs for offline-compaction-snapshot
 ##################################################
 
-make schedule-offline-compaction-snapshot-full-set \
+make enable-offline-compaction-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -185,7 +185,7 @@ make schedule-offline-compaction-snapshot-full-set \
 # Deschedule jobs for offline-compaction-snapshot
 ##################################################
 
-make deschedule-offline-compaction-snapshot-full-set \
+make disable-offline-compaction-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -194,7 +194,7 @@ make deschedule-offline-compaction-snapshot-full-set \
 # Schedule jobs for all offline snapshot jobs
 ##################################################
 
-make schedule-all-offline-snapshot-full-set \
+make enable-all-offline-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -203,7 +203,7 @@ make schedule-all-offline-snapshot-full-set \
 # Deschedule jobs for all offline snapshot jobs
 ##################################################
 
-make deschedule-all-offline-snapshot-full-set \
+make disable-all-offline-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"

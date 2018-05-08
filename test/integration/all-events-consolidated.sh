@@ -107,7 +107,7 @@ make deploy-artifact \
 # Schedule jobs for offline-snapshot
 ##################################################
 
-make schedule-offline-snapshot-consolidated \
+make enable-offline-snapshot-consolidated \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -116,7 +116,7 @@ make schedule-offline-snapshot-consolidated \
 # Deschedule jobs for offline-snapshot
 ##################################################
 
-make deschedule-offline-snapshot-consolidated \
+make disable-offline-snapshot-consolidated \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -125,7 +125,7 @@ make deschedule-offline-snapshot-consolidated \
 # Schedule jobs for offline-compaction-snapshot
 ##################################################
 
-make schedule-offline-compaction-snapshot-consolidated \
+make enable-offline-compaction-snapshot-consolidated \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -134,7 +134,7 @@ make schedule-offline-compaction-snapshot-consolidated \
 # Deschedule jobs for offline-compaction-snapshot
 ##################################################
 
-make deschedule-offline-compaction-snapshot-consolidated \
+make disable-offline-compaction-snapshot-consolidated \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -143,7 +143,7 @@ make deschedule-offline-compaction-snapshot-consolidated \
 # Schedule jobs for all offline snapshot jobs
 ##################################################
 
-make schedule-all-offline-snapshot-consolidated \
+make enable-all-offline-snapshot-consolidated \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -152,7 +152,7 @@ make schedule-all-offline-snapshot-consolidated \
 # Deschedule jobs for all offline snapshot jobs
 ##################################################
 
-make deschedule-all-offline-snapshot-consolidated \
+make disable-all-offline-snapshot-consolidated \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
