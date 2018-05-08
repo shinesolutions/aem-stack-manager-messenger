@@ -6,7 +6,7 @@
     "comment": "Set schedule job offline-snapshot and/or offline-compaction-snapshot on full-set",
     "parameters": {
       "jobName": [schedule_job],
-      "State": [state]
+      "State": ['enable']
     }
   }
 }
