@@ -155,6 +155,60 @@ make check-readiness-full-set \
   config_path="$CONFIG_PATH"
 
 ##################################################
+# Schedule jobs for offline-snapshot
+##################################################
+
+make enable-offline-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Deschedule jobs for offline-snapshot
+##################################################
+
+make disable-offline-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Schedule jobs for offline-compaction-snapshot
+##################################################
+
+make enable-offline-compaction-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Deschedule jobs for offline-compaction-snapshot
+##################################################
+
+make disable-offline-compaction-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Schedule jobs for all offline snapshot jobs
+##################################################
+
+make enable-all-offline-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Deschedule jobs for all offline snapshot jobs
+##################################################
+
+make disable-all-offline-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
 # Take live snapshot of AEM Author repositories
 ##################################################
 

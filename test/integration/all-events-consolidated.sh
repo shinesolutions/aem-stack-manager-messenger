@@ -104,6 +104,60 @@ make deploy-artifact \
   force=true
 
 ##################################################
+# Schedule jobs for offline-snapshot
+##################################################
+
+make enable-offline-snapshot-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Deschedule jobs for offline-snapshot
+##################################################
+
+make disable-offline-snapshot-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Schedule jobs for offline-compaction-snapshot
+##################################################
+
+make enable-offline-compaction-snapshot-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Deschedule jobs for offline-compaction-snapshot
+##################################################
+
+make disable-offline-compaction-snapshot-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Schedule jobs for all offline snapshot jobs
+##################################################
+
+make enable-all-offline-snapshot-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Deschedule jobs for all offline snapshot jobs
+##################################################
+
+make disable-all-offline-snapshot-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
 # Take live snapshot of AEM Author and AEM Publish repositories
 ##################################################
 

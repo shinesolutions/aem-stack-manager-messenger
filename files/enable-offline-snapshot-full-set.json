@@ -1,0 +1,12 @@
+{
+  "task": "schedule-offline-snapshot",
+  "stack_prefix": target_aem_stack_prefix,
+  "details": {
+    "component": ['orchestrator'],
+    "comment": "Set schedule job offline-snapshot and/or offline-compaction-snapshot on full-set",
+    "parameters": {
+      "jobName": [schedule_job],
+      "State": ['enable']
+    }
+  }
+}
