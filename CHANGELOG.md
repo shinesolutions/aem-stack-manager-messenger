@@ -13,6 +13,7 @@
 * Replace aws_region configuration with aws.region
 * Add show_log_on_failure_only configuration #32
 * add command list-packages
+* Add schedule/unschedule offline snapshot support
 
 ### 1.2.2
 * Add payload files
