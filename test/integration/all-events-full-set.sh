@@ -158,55 +158,55 @@ make check-readiness-full-set \
 # Schedule jobs for offline-snapshot
 ##################################################
 
-make enable-offline-snapshot-full-set \
+make schedule-offline-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
 
 ##################################################
-# Deschedule jobs for offline-snapshot
+# Unschedule jobs for offline-snapshot
 ##################################################
 
-make disable-offline-snapshot-full-set \
+make unschedule-offline-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
 
-##################################################
-# Schedule jobs for offline-compaction-snapshot
-##################################################
+# ##################################################
+# # Schedule jobs for offline-compaction-snapshot
+# ##################################################
+#
+# make schedule-offline-compaction-snapshot-full-set \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
+#
+# ##################################################
+# # Unschedule jobs for offline-compaction-snapshot
+# ##################################################
+#
+# make unschedule-offline-compaction-snapshot-full-set \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
 
-make enable-offline-compaction-snapshot-full-set \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-##################################################
-# Deschedule jobs for offline-compaction-snapshot
-##################################################
-
-make disable-offline-compaction-snapshot-full-set \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-##################################################
-# Schedule jobs for all offline snapshot jobs
-##################################################
-
-make enable-all-offline-snapshot-full-set \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-##################################################
-# Deschedule jobs for all offline snapshot jobs
-##################################################
-
-make disable-all-offline-snapshot-full-set \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
+# ##################################################
+# # Schedule jobs for all offline snapshot jobs
+# ##################################################
+#
+# make enable-all-offline-snapshot-full-set \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
+#
+# ##################################################
+# # Deschedule jobs for all offline snapshot jobs
+# ##################################################
+#
+# make disable-all-offline-snapshot-full-set \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
 
 ##################################################
 # Take live snapshot of AEM Author repositories
@@ -258,16 +258,16 @@ make check-readiness-full-set \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
 
-# ##################################################
-# # Offline compaction snapshot AEM Full-Set Architecture
-# ##################################################
-#
-# make offline-compaction-snapshot \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH"
-#
-# make check-readiness-full-set \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH"
+##################################################
+# Offline compaction snapshot AEM Full-Set Architecture
+##################################################
+
+make offline-compaction-snapshot \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+make check-readiness-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"

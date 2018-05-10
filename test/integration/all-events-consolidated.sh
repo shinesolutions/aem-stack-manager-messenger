@@ -13,7 +13,7 @@ AEM_PACKAGE_VERSION=0.0.1
 AEM_PACKAGE_URL="http://central.maven.org/maven2/com/$AEM_PACKAGE_GROUP/$AEM_PACKAGE_NAME/$AEM_PACKAGE_VERSION/$AEM_PACKAGE_NAME-$AEM_PACKAGE_VERSION.zip"
 
 ##################################################
-# Check AEM Full-Set Architecture readiness
+# Check AEM Consolidated Architecture readiness
 ##################################################
 
 # make check-readiness-consolidated \
@@ -107,55 +107,55 @@ make deploy-artifact \
 # Schedule jobs for offline-snapshot
 ##################################################
 
-make enable-offline-snapshot-consolidated \
+make schedule-offline-snapshot-consolidated \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
 
 ##################################################
-# Deschedule jobs for offline-snapshot
+# Unschedule jobs for offline-snapshot
 ##################################################
 
-make disable-offline-snapshot-consolidated \
+make unschedule-offline-snapshot-consolidated \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
 
-##################################################
-# Schedule jobs for offline-compaction-snapshot
-##################################################
+# ##################################################
+# # Schedule jobs for offline-compaction-snapshot
+# ##################################################
+#
+# make schedule-offline-compaction-snapshot-consolidated \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
+#
+# ##################################################
+# # Unschedule jobs for offline-compaction-snapshot
+# ##################################################
+#
+# make unschedule-offline-compaction-snapshot-consolidated \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
 
-make enable-offline-compaction-snapshot-consolidated \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-##################################################
-# Deschedule jobs for offline-compaction-snapshot
-##################################################
-
-make disable-offline-compaction-snapshot-consolidated \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-##################################################
-# Schedule jobs for all offline snapshot jobs
-##################################################
-
-make enable-all-offline-snapshot-consolidated \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-##################################################
-# Deschedule jobs for all offline snapshot jobs
-##################################################
-
-make disable-all-offline-snapshot-consolidated \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
+# ##################################################
+# # Schedule jobs for all offline snapshot jobs
+# ##################################################
+#
+# make enable-all-offline-snapshot-consolidated \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
+#
+# ##################################################
+# # Deschedule jobs for all offline snapshot jobs
+# ##################################################
+#
+# make disable-all-offline-snapshot-consolidated \
+#   stack_prefix="$STACK_PREFIX" \
+#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+#   config_path="$CONFIG_PATH"
 
 ##################################################
 # Take live snapshot of AEM Author and AEM Publish repositories
