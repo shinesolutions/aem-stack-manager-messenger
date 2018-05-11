@@ -121,41 +121,23 @@ make unschedule-offline-snapshot-consolidated \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
 
-# ##################################################
-# # Schedule jobs for offline-compaction-snapshot
-# ##################################################
-#
-# make schedule-offline-compaction-snapshot-consolidated \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH"
-#
-# ##################################################
-# # Unschedule jobs for offline-compaction-snapshot
-# ##################################################
-#
-# make unschedule-offline-compaction-snapshot-consolidated \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH"
+##################################################
+# Schedule jobs for offline-compaction-snapshot
+##################################################
 
-# ##################################################
-# # Schedule jobs for all offline snapshot jobs
-# ##################################################
-#
-# make enable-all-offline-snapshot-consolidated \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH"
-#
-# ##################################################
-# # Deschedule jobs for all offline snapshot jobs
-# ##################################################
-#
-# make disable-all-offline-snapshot-consolidated \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH"
+make schedule-offline-compaction-snapshot-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Unschedule jobs for offline-compaction-snapshot
+##################################################
+
+make unschedule-offline-compaction-snapshot-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
 
 ##################################################
 # Take live snapshot of AEM Author and AEM Publish repositories

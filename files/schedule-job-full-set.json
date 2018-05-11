@@ -3,7 +3,7 @@
   "stack_prefix": target_aem_stack_prefix,
   "details": {
     "component": ['orchestrator'],
-    "comment": "Set schedule job offline-snapshot and/or offline-compaction-snapshot on full-set",
+    "comment": "Set scheduled job (e.g. offline-snapshot, offline-compaction-snapshot) on AEM Full-Set architecture",
     "parameters": {
       "jobName": [schedule_job],
       "State": ['enable']

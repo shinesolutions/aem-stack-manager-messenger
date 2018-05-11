@@ -3,10 +3,10 @@
   "stack_prefix": target_aem_stack_prefix,
   "details": {
     "component": ['author-publish-dispatcher'],
-    "comment": "Set schedule job offline-snapshot and/or offline-compaction-snapshot on consolidated",
+    "comment": "Remove scheduled job (e.g. offline-snapshot, offline-compaction-snapshot) on AEM Consolidated architecture",
     "parameters": {
       "jobName": [schedule_job],
-      "State": ['enable']
+      "State": ['disable']
     }
   }
 }
