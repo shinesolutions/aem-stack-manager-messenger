@@ -3,7 +3,7 @@
   "stack_prefix": target_aem_stack_prefix,
   "details": {
     "component": ['orchestrator'],
-    "comment": "Remove scheduled job (e.g. offline-snapshot, offline-compaction-snapshot) on AEM Full-Set architecture",
+    "comment": "Remove scheduled job on AEM Full-Set architecture",
     "parameters": {
       "jobName": [schedule_job],
       "State": ['disable']
