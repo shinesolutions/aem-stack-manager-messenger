@@ -103,66 +103,91 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.ec2 import AnsibleAWSError, connect_to_aws, ec2_argument_spec, get_aws_connection_info
 
-def scan_filter(module):
-    table = module.params.get('table_name')
+def filter(module):
+    table_name = module.params.get('table_name')
+    state = module.params.get('state')
     get_attribute = module.params.get('get_attribute')
-    scan_limit = module.params.get('scan_limit')
+    limit = module.params.get('limit')
     select = module.params.get('select')
     attribute = module.params.get('attribute')
     attribute_value = module.params.get('attribute_value')
     comparisonoperator = module.params.get('comparisonoperator')
 
-    if select == 'ALL_ATTRIBUTES':
-        filter = {
-                    'TableName': table,
-                    'Limit': scan_limit,
-                    'Select': select,
-                    'ScanFilter':{
-                        attribute: {
-                            'AttributeValueList': [
-                            {'S': attribute_value,}
-                            ],
-                            'ComparisonOperator': comparisonoperator
+    if state == 'scan':
+        if select == 'ALL_ATTRIBUTES':
+            filter = {
+                        'TableName': table_name,
+                        'Limit': limit,
+                        'Select': select,
+                        'ScanFilter':{
+                            attribute: {
+                                'AttributeValueList': [
+                                {'S': attribute_value,}
+                                ],
+                                'ComparisonOperator': comparisonoperator
+                            }
                         }
-                    },
-                }
-    else:
-        filter = {
-                    'TableName': table,
-                    'AttributesToGet': [
-                        get_attribute,
-                    ],
-                    'Limit': scan_limit,
-                    'Select': select,
-                    'ScanFilter':{
-                        attribute: {
-                            'AttributeValueList': [
-                            {'S': attribute_value,}
-                            ],
-                            'ComparisonOperator': comparisonoperator
+                    }
+        else:
+            filter = {
+                        'TableName': table_name,
+                        'AttributesToGet': [
+                            get_attribute,
+                        ],
+                        'Limit': limit,
+                        'Select': select,
+                        'ScanFilter':{
+                            attribute: {
+                                'AttributeValueList': [
+                                {'S': attribute_value,}
+                                ],
+                                'ComparisonOperator': comparisonoperator
+                            }
                         }
-                    },
-                }
+                    }
+    elif state == 'query':
+            filter = {
+                        'TableName': table_name,
+                        'AttributesToGet': [
+                            get_attribute,
+                        ],
+                        'Limit': limit,
+                        'Select': select,
+                        'KeyConditions': {
+                            attribute: {
+                                'AttributeValueList': [
+                                {'S': attribute_value,}
+                                ],
+                            'ComparisonOperator': comparisonoperator
+                            }
+                        }
+                    }
 
     return filter
 
-def dynamo_table_exists(table, module):
+def dynamo_table_exists(module, resource_client):
+    table_name = module.params.get('table_name')
+    table = resource_client.Table(table_name)
     try:
         table.load()
         return True
-    except Exception as e:
-        module.fail_json(msg="Error: " + str(e))
+    except:
+        return False
 
 def scan(client_connection, resource_connection, module):
-    table_name = module.params.get('table_name')
-
     try:
-        table = resource_connection.Table(table_name)
-        if dynamo_table_exists(table, module):
-            response = client_connection.scan(**scan_filter(module))
+        if dynamo_table_exists(module, resource_connection):
+            scan_filter_dict = filter(module)
+            response = client_connection.scan(**scan_filter_dict)
+
+            while 'LastEvaluatedKey' in response:
+                scan_filter_dict.update({'ExclusiveStartKey': response['LastEvaluatedKey']})
+                response = client_connection.scan(**scan_filter_dict)
+
             result = response['Items']
+
         else:
-            module.fail_json("Error: Table not found")
+            module.fail_json(msg="Error: Table not found")
 
     except Exception as e:
         module.fail_json(msg="Error: " + str(e), exception=traceback.format_exc(e))
@@ -170,36 +195,18 @@ def scan(client_connection, resource_connection, module):
         return result
 
 def query(client_connection, resource_connection, module):
-    table_name = module.params.get('table_name')
-    get_attribute = module.params.get('get_attribute')
-    scan_limit = module.params.get('scan_limit')
-    select = module.params.get('select')
-    attribute = module.params.get('attribute')
-    attribute_value = module.params.get('attribute_value')
-    comparisonoperator = module.params.get('comparisonoperator')
-
     try:
-        table = resource_connection.Table(table_name)
-        if dynamo_table_exists(table, module):
-            response = client_connection.query(
-                TableName = table_name,
-                AttributesToGet=[
-                    get_attribute,
-                ],
-                Limit = scan_limit,
-                Select = select,
-                KeyConditions={
-                    attribute: {
-                        'AttributeValueList': [
-                        {'S': attribute_value,}
-                        ],
-                    'ComparisonOperator': comparisonoperator
-                    }
-                },
-            )
+        if dynamo_table_exists(module, resource_connection):
+            query_filter_dict = filter(module)
+            response = client_connection.query(**query_filter_dict)
+
+            while 'LastEvaluatedKey' in response:
+                query_filter_dict.update({'ExclusiveStartKey': response['LastEvaluatedKey']})
+                response = client_connection.scan(**query_filter_dict)
+
             result = response['Items']
         else:
-            module.fail_json("Error: Table not found")
+            module.fail_json(msg="Error: Table not found")
 
     except Exception as e:
         module.fail_json(msg="Error: Can't execute query - " + str(e), exception=traceback.format_exc(e))
@@ -211,13 +218,12 @@ def main():
     argument_spec.update(dict(
         table_name = dict(required=True, type='str'),
         get_attribute = dict(type='str'),
-        scan_limit = dict(default=10000, type='int'),
+        limit = dict(default=10000, type='int'),
         select = dict(default='ALL_ATTRIBUTES', type='str', choices=['ALL_ATTRIBUTES', 'ALL_PROJECTED_ATTRIBUTES', 'SPECIFIC_ATTRIBUTES', 'COUNT']),
         attribute = dict(type='str'),
         attribute_value = dict(default=[], type='str'),
         comparisonoperator = dict(default='EQ', type='str', choices=['EQ', 'NE', 'IN', 'LE', 'LT', 'GE', 'GT', 'BETWEEN', 'NOT_NULL', 'NULL', 'CONTAINS', 'NOT_CONTAINS', 'BEGINS_WITH']),
-        state = dict(required=True, type='str', choices=['scan', 'query']),
-
+        state = dict(required=True, type='str', choices=['scan', 'query'])
     ))
 
     module = AnsibleModule(argument_spec=argument_spec)
