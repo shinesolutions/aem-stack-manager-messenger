@@ -81,10 +81,10 @@ schedule-offline-snapshot-full-set:
 unschedule-offline-snapshot-full-set:
 	./scripts/run-playbook.sh send-message unschedule-offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot"
 
-enable-offline-compaction-snapshot-full-set:
+schedule-offline-compaction-snapshot-full-set:
 	./scripts/run-playbook.sh send-message schedule-offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot"
 
-disable-offline-compaction-snapshot-full-set:
+unschedule-offline-compaction-snapshot-full-set:
 	./scripts/run-playbook.sh send-message unschedule-offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot"
 
 schedule-offline-snapshot-consolidated:
