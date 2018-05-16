@@ -73,6 +73,7 @@ check-readiness-consolidated:
 	./scripts/run-playbook.sh send-message test-readiness-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 
 check-readiness-full-set:
+	sleep 120
 	./scripts/run-playbook.sh send-message test-readiness-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 
 schedule-offline-snapshot-full-set:
