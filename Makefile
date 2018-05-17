@@ -73,6 +73,8 @@ check-readiness-consolidated:
 	./scripts/run-playbook.sh send-message test-readiness-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 
 check-readiness-full-set:
+	# TODO: remove this temporary delay until provisioning readiness is checked
+	# this is part of https://github.com/shinesolutions/aem-stack-manager-messenger/issues/45
 	sleep 120
 	./scripts/run-playbook.sh send-message test-readiness-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 
