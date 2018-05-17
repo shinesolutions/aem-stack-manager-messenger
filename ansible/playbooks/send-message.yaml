@@ -9,9 +9,6 @@
 # files are in .txt as they need to replace the variables e.g. 'target_aem_stack_prefix' (un-quoted) which breaks the json validation.
 # if the variables were in double quotes, they would not be replaced with the value.
     message: "{{ lookup('file', '../../files/{{ message_type }}.json') }}"
-    message_types_check_success_only:
-      - test-readiness-consolidated
-      - test-readiness-full-set
 
   tasks:
 
@@ -75,14 +72,6 @@
       with_items:
         "{{ dbscan.item }}"
 
-    - set_fact:
-        expected_states: ["Success"]
-      when: message_type in message_types_check_success_only
-
-    - set_fact:
-        expected_states: ["Success", "Failed"]
-      when: message_type not in message_types_check_success_only
-
     - name: "{{ subject }}: Poll to check if command was executed"
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
@@ -94,7 +83,7 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery
-      until:  dbquery.item[0].state.S in expected_states
+      until:  dbquery.item[0].state.S in ["Success", "Failed"]
       # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
       retries: "{{ poll_timeout.check_command_execution.retries }}"
       delay: "{{ poll_timeout.check_command_execution.delay }}"
