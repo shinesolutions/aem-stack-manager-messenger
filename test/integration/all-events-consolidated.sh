@@ -16,10 +16,10 @@ AEM_PACKAGE_URL="http://central.maven.org/maven2/com/$AEM_PACKAGE_GROUP/$AEM_PAC
 # Check AEM Consolidated Architecture readiness
 ##################################################
 
-# make check-readiness-consolidated \
-#   stack_prefix="$STACK_PREFIX" \
-#   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-#   config_path="$CONFIG_PATH"
+make check-readiness-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
 
 # ##################################################
 # # List packages on AEM Author and AEM Publish
@@ -67,6 +67,11 @@ make deploy-artifacts-consolidated \
   config_path="$CONFIG_PATH" \
   descriptor_file=deploy-artifacts-descriptor.json
 
+make check-readiness-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
 ##################################################
 # Deploy a single AEM package to AEM Author
 ##################################################
@@ -85,6 +90,11 @@ make deploy-artifact \
   activate=false \
   force=true
 
+make check-readiness-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
 ##################################################
 # Deploy a single AEM package to AEM Publish
 ##################################################
@@ -102,6 +112,11 @@ make deploy-artifact \
   replicate=false \
   activate=false \
   force=true
+
+make check-readiness-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
 
 ##################################################
 # Schedule jobs for offline-snapshot
@@ -148,3 +163,8 @@ make live-snapshot \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH" \
   component=author-publish-dispatcher
+
+make check-readiness-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
