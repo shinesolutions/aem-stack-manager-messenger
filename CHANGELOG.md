@@ -1,3 +1,6 @@
+### 1.4.0
+*
+
 ### 1.3.1
 * Check readiness no longer retries on failure now that Stack Manager event's SSM command ensures cloud-init completeness #45
 
