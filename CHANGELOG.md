@@ -1,5 +1,5 @@
 ### 1.3.1
-* Check readiness no longer retries on failure now that Stack Manager event ensure cloud-init completeness #45
+* Check readiness no longer retries on failure now that Stack Manager event's SSM command ensures cloud-init completeness #45
 
 ### 1.3.0
 * Add message_config_file for author-publish-dispatcher
