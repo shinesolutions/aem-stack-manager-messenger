@@ -33,9 +33,6 @@ deploy-artifacts-full-set:
 disable-crxde:
 	./scripts/run-playbook.sh send-message disable-crxde "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component)"
 
-list-packages:
-	./scripts/run-playbook.sh send-message list-packages "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component)"
-
 export-package:
 	./scripts/run-playbook.sh send-message export-package "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_id=$(aem_id) package_group=$(package_group) package_name=$(package_name) package_filter=$(package_filter)"
 
@@ -54,14 +51,17 @@ flush-dispatcher-cache:
 import-package:
 	./scripts/run-playbook.sh send-message import-package "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_id=$(aem_id) source_stack_prefix=$(source_stack_prefix) package_group=$(package_group) package_name=$(package_name) package_datestamp=$(package_datestamp)"
 
+list-packages:
+	./scripts/run-playbook.sh send-message list-packages "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component)"
+
 live-snapshot:
 	./scripts/run-playbook.sh send-message live-snapshot "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component)"
 
-offline-compaction-snapshot:
-	./scripts/run-playbook.sh offline-compaction-snapshot offline-compaction-snapshot "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
-
 offline-snapshot:
 	./scripts/run-playbook.sh offline-snapshot offline-snapshot "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
+
+offline-compaction-snapshot:
+	./scripts/run-playbook.sh offline-compaction-snapshot offline-compaction-snapshot "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 
 promote-author:
 	./scripts/run-playbook.sh send-message promote-author "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
