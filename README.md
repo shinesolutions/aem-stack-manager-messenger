@@ -22,15 +22,21 @@ Create [configuration file](https://github.com/shinesolutions/aem-stack-manager-
 
 Execute the AEM Stack Manager events:
 
-Deploy a set of AEM Packages and Dispatcher configuration packages into an AEM environment:
+Deploy a set of AEM Packages and Dispatcher artifacts into an AEM environment using a [deployment descriptor](https://github.com/shinesolutions/aem-aws-stack-builder/blob/master/docs/descriptor-deployment.md) file:
 
     make deploy-artifacts-full-set \
       stack_prefix=<stack_manager_stack_prefix> \
-      target_aem_stack_prefix=<aem_stack_prefix> \
+      target_aem_stack_prefix=<aem_full_set_stack_prefix> \
       config_path=<path/to/config/dir> \
       descriptor_file=deploy-artifacts-descriptor.json
 
-Deploy a single AEM Package into AEM instances:
+    make deploy-artifacts-consolidated \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      descriptor_file=deploy-artifacts-descriptor.json
+
+Deploy a single AEM Package into an AEM instance:
 
     make deploy-artifact \
       stack_prefix=<stack_manager_stack_prefix> \
@@ -46,6 +52,14 @@ Deploy a single AEM Package into AEM instances:
       activate=false \
       force=true
 
+Enable CRXDE on an AEM instance:
+
+    make enable-crxde \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      component=author-primary
+
 Disable CRXDE on an AEM instance:
 
     make disable-crxde \
@@ -54,13 +68,19 @@ Disable CRXDE on an AEM instance:
       config_path=<path/to/config/dir> \
       component=author-primary
 
-Enable CRXDE on an AEM instance:
+Export a set of packages from an AEM instance using an [export descriptor](https://github.com/shinesolutions/aem-aws-stack-builder/blob/master/docs/descriptor-export.md) file:
 
-    make enable-crxde \
+    make export-packages-full-set \
       stack_prefix=<stack_manager_stack_prefix> \
-      target_aem_stack_prefix=<aem_stack_prefix> \
+      target_aem_stack_prefix=<aem_full_set_stack_prefix> \
       config_path=<path/to/config/dir> \
-      component=author-primary
+      descriptor_file=<export_backup_descriptor_file>
+
+    make export-packages-consolidated \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      descriptor_file=<export_backup_descriptor_file>
 
 Export a single AEM package from an AEM instance:
 
@@ -72,14 +92,6 @@ Export a single AEM package from an AEM instance:
       package_group=somegroup \
       package_name=somepackage \
       package_filter='[{"root":"/apps/geometrixx","rules":[]},{"root":"/apps/geometrixx-common","rules":[]}]'
-
-Export a set of packages from an AEM instance via a descriptor file ([example](https://github.com/shinesolutions/aem-aws-stack-builder/blob/master/examples/descriptors/export-backup-descriptor.json)):
-
-    make export-packages \
-      stack_prefix=<stack_manager_stack_prefix> \
-      target_aem_stack_prefix=<aem_stack_prefix>-cons \
-      config_path=<path/to/config/dir> \
-      descriptor_file=<export_backup_descriptor_file>
 
 Flush dispatcher cache:
 
@@ -109,6 +121,14 @@ Import a single AEM package into an AEM instance:
       package_name=somepackage \
       package_datestamp=201702
 
+List AEM packages available on an AEM instance:
+
+    make list-packages \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      component=author-primary
+
 Promote an AEM Author Standby to become AEM Author Primary:
 
     make promote-author \
@@ -116,30 +136,80 @@ Promote an AEM Author Standby to become AEM Author Primary:
       target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir>
 
-Take offline snapshot of the repositories within an AEM environment:
+Take live snapshot of the repositories within an AEM component:
+
+    make live-snapshot \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      component=author-primary
+
+Take offline snapshots of a single AEM Author and a single AEM Publish repositories within an AEM environment (currently only supports Full-Set):
 
     make offline-snapshot \
       stack_prefix=<stack_manager_stack_prefix> \
       target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir>
 
-Trigger offline compaction and take offline snapshot of the repositories within an AEM environment:
+Take offline snapshots of a single AEM Author and a single AEM Publish repositories within an AEM environment and run offline compaction on those AEM instances (currently only supports Full-Set):
 
     make offline-compaction-snapshot \
       stack_prefix=<stack_manager_stack_prefix> \
       target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir>
 
-Check readiness of AEM Full Set environment:
+Check readiness of an AEM environment:
 
     make check-readiness-full-set \
-      stack_prefix=<aem_fullset_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_full_set_stack_prefix> \
       config_path=<path/to/config/dir>
 
-Check readiness of AEM Consolidated environment:
-
     make check-readiness-consolidated \
-      stack_prefix=<aem_consolidated_stack_prefix> \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
+      config_path=<path/to/config/dir>
+
+Schedule/unschedule jobs on an AEM environment:
+
+    make schedule-offline-snapshot-full-set \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_full_set_stack_prefix> \
+      config_path=<path/to/config/dir>
+
+    make unschedule-offline-snapshot-full-set \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_full_set_stack_prefix> \
+      config_path=<path/to/config/dir>
+
+    make schedule-offline-compaction-snapshot-full-set \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_full_set_stack_prefix> \
+      config_path=<path/to/config/dir>
+
+    make unschedule-offline-compaction-snapshot-full-set \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_full_set_stack_prefix> \
+      config_path=<path/to/config/dir>
+
+    make schedule-offline-snapshot-consolidated \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
+      config_path=<path/to/config/dir>
+
+    make unschedule-offline-snapshot-consolidated \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
+      config_path=<path/to/config/dir>
+
+    make schedule-offline-compaction-snapshot-consolidated \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
+      config_path=<path/to/config/dir>
+
+    make unschedule-offline-compaction-snapshot-consolidated \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
       config_path=<path/to/config/dir>
 
 Testing
@@ -149,10 +219,10 @@ Run integration tests of all Stack Manager events against an AEM Full-Set archit
 
     make test-full-set \
       stack_prefix=<stack_manager_stack_prefix> \
-      target_aem_stack_prefix=<aem_stack_prefix>
+      target_aem_stack_prefix=<aem_full_set_stack_prefix>
 
 Run integration tests of all Stack Manager events against an AEM Consolidated architecture:
 
     make test-consolidated \
       stack_prefix=<stack_manager_stack_prefix> \
-      target_aem_stack_prefix=<aem_stack_prefix>
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix>
