@@ -9,8 +9,8 @@ show_log_on_failure_only: true
 
 poll_timeout:
   check_command_execution:
-    retries: 120
-    delay: 5
+    retries: 720
+    delay: 10
   check_message_sent:
     retries: 120
     delay: 5
