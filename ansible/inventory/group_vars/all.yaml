@@ -3,7 +3,7 @@ aws:
   region: overwrite-me
 
 main:
-  stack_name: aem-stack-manager-main-stack
+  stack_name: aem-stack-manager-main-stack-manager
 
 show_log_on_failure_only: true
 
