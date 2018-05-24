@@ -13,7 +13,7 @@
   tasks:
 
     - set_fact:
-        main_stack_name: "{{ stack_prefix }}-aem-stack-manager-main-stack-manager"
+        main_stack_name: "{{ stack_prefix }}-{{ main.stack_name }}"
 
     - name: "{{ subject }}: Retrieve Main Stack CloudFormation resources facts"
       cloudformation_facts:
