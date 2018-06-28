@@ -1,3 +1,6 @@
+### 1.4.1
+*
+
 ### 1.4.0
 * Parameterise Stack Manager's main stack name #44
 * Increase check command execution timeout to retry 720 times with 10 secs delay
