@@ -6,7 +6,7 @@ ci: clean deps lint package
 
 clean:
 	rm -rf logs
-	rm -f *.retry
+	rm -f ansible/playbooks/*.retry
 
 deps:
 	pip install -r requirements.txt

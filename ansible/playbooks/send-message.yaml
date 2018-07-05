@@ -40,6 +40,7 @@
     - set_fact:
         dynamodb_tablename: "{{ stack_manager_stack_outputs.AemStackManagerTableName }}"
         sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
+        externalId: "{{ 99999999999 | random | to_uuid }}"
 
     - debug:
         msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"
@@ -50,48 +51,53 @@
         subject: "{{ subject }}"
         topic: "{{ sns_topic }}"
         region: "{{ aws.region }}"
-      register: publish_message
 
-    - name: "{{ subject }}: Poll to check if message was successfully sent"
+    - name: "{{ subject }}: Poll to check if command was executed"
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
-        attribute: message_id
-        attribute_value: "{{ publish_message.item.PublishResponse.PublishResult.MessageId }}"
+        attribute: externalId
+        attribute_value: "{{ externalId }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+        region: "{{ aws.region }}"
+      register: dbscan
+      until: dbscan.item != [] and dbscan.item[0].state.S in ["Success", "Failed"]
+      retries: "{{ poll_timeout.check_message_sent.retries }}"
+      delay: "{{ poll_timeout.check_message_sent.delay }}"
+
+    - set_fact:
+        cmd_state: "{{ item.state.S }}"
+      with_items:
+        "{{ dbscan.item }}"
+
+    - name: "{{ subject }}: Check if command failed"
+      set_fact:
+        general_error: 1
+      when: cmd_state == "Failed"
+
+    - name: "{{ subject }}: Query for command id"
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: externalId
+        attribute_value: "{{ externalId }}"
         get_attribute: command_id
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
         state: scan
         region: "{{ aws.region }}"
       register: dbscan
-      until: dbscan.item != []
-      retries: "{{ poll_timeout.check_message_sent.retries }}"
-      delay: "{{ poll_timeout.check_message_sent.delay }}"
 
     - set_fact:
         cmd_id: "{{ item.command_id.S }}"
       with_items:
         "{{ dbscan.item }}"
+      when: dbscan is defined and dbscan.item is defined
 
-    - name: "{{ subject }}: Poll to check if command was executed"
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: command_id
-        attribute_value: "{{ cmd_id }}"
-        get_attribute: state
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: query
-        region: "{{ aws.region }}"
-      register: dbquery
-      until:  dbquery.item[0].state.S in ["Success", "Failed"]
-      # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
-      retries: "{{ poll_timeout.check_command_execution.retries }}"
-      delay: "{{ poll_timeout.check_command_execution.delay }}"
-
-    - name: "{{ subject }}: Check if command failed"
-      set_fact:
-        general_error: 1
-      when: dbquery.item[0].state.S == "Failed"
+    - fail:
+        msg: "Lambda function execution failed. Check Cloudwatch Logfiles for detail information"
+      when: general_error is defined and cmd_id is undefined
 
     - name: "{{ subject }}: Get path to log files"
       aws_s3:

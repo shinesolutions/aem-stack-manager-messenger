@@ -1,5 +1,6 @@
 ### 1.4.1
-*
+* Adding external id for SSM command execution
+* Improved error handling for SSM command execution
 
 ### 1.4.0
 * Parameterise Stack Manager's main stack name #44
