@@ -1,4 +1,5 @@
 {
+  "externalId": externalId,
   "task": "flush-dispatcher-cache",
   "stack_prefix": target_aem_stack_prefix,
   "details": {
