@@ -40,7 +40,7 @@
     - set_fact:
         dynamodb_tablename: "{{ stack_manager_stack_outputs.AemStackManagerTableName }}"
         sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
-        externalId: "{{ 99999999999 | random | to_uuid }}"
+        externalId: "{{ 9999999999999999999999 | random | to_uuid }}"
 
     - debug:
         msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"

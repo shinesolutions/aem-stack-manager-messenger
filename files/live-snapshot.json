@@ -1,4 +1,5 @@
 {
+  "externalId": externalId,
   "task": "live-snapshot",
   "stack_prefix": target_aem_stack_prefix,
   "details": {

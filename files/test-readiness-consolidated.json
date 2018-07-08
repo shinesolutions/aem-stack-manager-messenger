@@ -1,4 +1,5 @@
 {
+  "externalId": externalId,
   "task": "test-readiness-consolidated",
   "stack_prefix": target_aem_stack_prefix,
   "details": {
