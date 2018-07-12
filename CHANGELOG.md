@@ -1,3 +1,6 @@
+### 1.4.2
+*
+
 ### 1.4.1
 * Adding external id for SSM command execution
 * Improved error handling for SSM command execution
