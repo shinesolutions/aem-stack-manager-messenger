@@ -1,0 +1,19 @@
+{
+  "externalId": externalId,
+  "task": "import-package",
+  "stack_prefix": target_aem_stack_prefix,
+  "details": {
+    "component": [component],
+    "comment": "import AEM backed up pacakges for a stack based on group, name and timestamp",
+    "parameters": {
+      "aemArtifactsBase": [aem_artifacts_base],
+      "aemBase": [aem_base],
+      "aemHealthcheckVersion": [aem_healthcheck_version],
+      "aemID": [aem_id],
+      "aemPort": [aem_port],
+      "aemProfile": [aem_profile],
+      "aemSslPort": [aem_ssl_port],
+    }
+
+  }
+}
