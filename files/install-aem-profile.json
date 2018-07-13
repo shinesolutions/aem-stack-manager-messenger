@@ -1,10 +1,10 @@
 {
   "externalId": externalId,
-  "task": "import-package",
+  "task": "install-aem-profile",
   "stack_prefix": target_aem_stack_prefix,
   "details": {
     "component": [component],
-    "comment": "import AEM backed up pacakges for a stack based on group, name and timestamp",
+    "comment": "Install AEM Security Updates as defined in the AEM Profile",
     "parameters": {
       "aemArtifactsBase": [aem_artifacts_base],
       "aemBase": [aem_base],
