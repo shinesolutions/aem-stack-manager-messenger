@@ -1,5 +1,5 @@
 ### 1.4.2
-*
+* Rename offline-snapshot, offline-compaction-snapshot with full-set suffix
 
 ### 1.4.1
 * Adding external id for SSM command execution

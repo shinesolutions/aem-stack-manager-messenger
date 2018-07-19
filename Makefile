@@ -57,11 +57,17 @@ list-packages:
 live-snapshot:
 	./scripts/run-playbook.sh send-message live-snapshot "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component)"
 
-offline-snapshot:
-	./scripts/run-playbook.sh offline-snapshot offline-snapshot "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
+# Retained for backward compatibility for 1.4.1 and older
+offline-snapshot: offline-snapshot-full-set
 
-offline-compaction-snapshot:
-	./scripts/run-playbook.sh offline-compaction-snapshot offline-compaction-snapshot "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
+# Retained for backward compatibility for 1.4.1 and older
+offline-compaction-snapshot: offline-compaction-snapshot-full-set
+
+offline-snapshot-full-set:
+	./scripts/run-playbook.sh offline-snapshot-full-set offline-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
+
+offline-compaction-snapshot-full-set:
+	./scripts/run-playbook.sh offline-compaction-snapshot-full-set offline-compaction-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 
 promote-author:
 	./scripts/run-playbook.sh send-message promote-author "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
