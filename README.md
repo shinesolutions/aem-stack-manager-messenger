@@ -144,16 +144,30 @@ Take live snapshot of the repositories within an AEM component:
       config_path=<path/to/config/dir> \
       component=author-primary
 
-Take offline snapshots of a single AEM Author and a single AEM Publish repositories within an AEM environment (currently only supports Full-Set):
+Take offline snapshots of a single AEM Author and a single AEM Publish repositories within an AEM environment (See offline-snapshot-full-set):
 
     make offline-snapshot \
       stack_prefix=<stack_manager_stack_prefix> \
       target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir>
 
-Take offline snapshots of a single AEM Author and a single AEM Publish repositories within an AEM environment and run offline compaction on those AEM instances (currently only supports Full-Set):
+Take offline snapshots of a single AEM Author and a single AEM Publish repositories within an AEM environment and run offline compaction on those AEM instances (See offline-compaction-snapshot-full-set):
 
     make offline-compaction-snapshot \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
+      config_path=<path/to/config/dir>
+
+Take offline snapshots of a single AEM Author and a single AEM Publish repositories within an AEM environment (currently only supports Full-Set):
+
+    make offline-snapshot-full-set \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
+      config_path=<path/to/config/dir>
+
+Take offline snapshots of a single AEM Author and a single AEM Publish repositories within an AEM environment and run offline compaction on those AEM instances (currently only supports Full-Set):
+
+    make offline-compaction-snapshot-full-set \
       stack_prefix=<stack_manager_stack_prefix> \
       target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir>
