@@ -9,5 +9,8 @@ Frequently Asked Questions
     4. Add the event to [Stack Manager config, CloudFormation, and SSM commands](https://github.com/shinesolutions/aem-aws-stack-builder/commit/0fab6590ce13099271dffaf3e8e05c4289980a95) in AEM AWS Stack Builder
     5. Update the [README](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/README.md) file with example usage command for the event
 
-* __Q:__ Where are the log files for the SSM commands execution?<br/>
+* __Q:__ Where can I find the CloudWatch logs for the Stack Manager event?<br/>
+  __A:__ On AWS console, go to CloudWatch service and find the log group `/aws/lambda/<stack_prefix>-stack-manager-AemStackManager` .
+
+* __Q:__ Where can I find the log files for the SSM commands execution on the EC2 instance?<br/>
   __A:__ You can find `stdout` and `stderr` log files at `/var/lib/amazon/ssm/<instance_id>/document/orchestration/<execution_id>/` .
