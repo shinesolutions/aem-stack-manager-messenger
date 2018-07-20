@@ -69,6 +69,12 @@ offline-snapshot-full-set:
 offline-compaction-snapshot-full-set:
 	./scripts/run-playbook.sh offline-compaction-snapshot-full-set offline-compaction-snapshot-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 
+offline-snapshot-consolidated:
+	./scripts/run-playbook.sh send-message offline-snapshot-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
+
+offline-compaction-snapshot-consolidated:
+	./scripts/run-playbook.sh send-message offline-compaction-snapshot-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
+
 promote-author:
 	./scripts/run-playbook.sh send-message promote-author "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 

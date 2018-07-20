@@ -172,6 +172,20 @@ Take offline snapshots of a single AEM Author and a single AEM Publish repositor
       target_aem_stack_prefix=<aem_stack_prefix> \
       config_path=<path/to/config/dir>
 
+Take offline snapshots of a single AEM Author and a single AEM Publish repositories within an AEM Consolidated instance:
+
+    make offline-snapshot-consolidated \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
+      config_path=<path/to/config/dir>
+
+Take offline snapshots of a single AEM Author and a single AEM Publish repositories within an AEM Consolidated instance and run offline compaction on the AEM instance:
+
+    make offline-compaction-snapshot-consolidated \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
+      config_path=<path/to/config/dir>
+
 Check readiness of an AEM environment:
 
     make check-readiness-full-set \
