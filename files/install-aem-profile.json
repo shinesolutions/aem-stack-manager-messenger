@@ -1,0 +1,19 @@
+{
+  "externalId": externalId,
+  "task": "install-aem-profile",
+  "stack_prefix": target_aem_stack_prefix,
+  "details": {
+    "component": [component],
+    "comment": "Install AEM Security Updates as defined in the AEM Profile",
+    "parameters": {
+      "aemArtifactsBase": [aem_artifacts_base],
+      "aemBase": [aem_base],
+      "aemHealthcheckVersion": [aem_healthcheck_version],
+      "aemID": [aem_id],
+      "aemPort": [aem_port],
+      "aemProfile": [aem_profile],
+      "aemSslPort": [aem_ssl_port],
+    }
+
+  }
+}

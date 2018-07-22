@@ -1,5 +1,5 @@
 ### 1.4.2
-*
+* Add new Stack Manager event install-aem-profile
 
 ### 1.4.1
 * Adding external id for SSM command execution
