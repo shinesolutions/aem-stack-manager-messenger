@@ -393,7 +393,7 @@
         module_error: 1
       when: dbquery_state_failed_start_publish is defined and dbquery_state_failed_start_publish == "Failed" and module_error is undefined
 
-    - name: Query if offline-snapshot was successful
+    - name: Query if offline-snapshot-full-set was successful
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: command_id
@@ -415,7 +415,7 @@
         dbquery_failed: "{{dbquery.item[0].state.S}}"
       when: "'item' in dbquery"
 
-    - name: Check if offline-snapshot failed
+    - name: Check if offline-snapshot-full-set failed
       set_fact:
         general_error: 1
       when: dbquery_failed is defined and dbquery_failed == "Failed" and module_error is undefined
