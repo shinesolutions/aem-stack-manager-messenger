@@ -13,7 +13,7 @@ Frequently Asked Questions
   __A:__ On AWS console, go to EC2 service, Run Command section, and use the filter to find the status.
   
 * __Q:__ Where can I find the CloudWatch logs for the Stack Manager event?<br/>
-  __A:__ On AWS console, go to CloudWatch service, Logs section, and find the log group `/aws/lambda/<stack_prefix>-stack-manager-AemStackManager`.
+  __A:__ On AWS console, go to CloudWatch service, Logs section, and find the log group `/aws/lambda/<stack_prefix>-stack-manager-<ssm_command>`.
 
 * __Q:__ Where can I find the log files for the SSM commands execution on the EC2 instance?<br/>
   __A:__ You can find `stdout` and `stderr` log files at `/var/lib/amazon/ssm/<instance_id>/document/orchestration/<execution_id>/` .
