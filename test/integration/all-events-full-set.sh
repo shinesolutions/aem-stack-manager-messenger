@@ -230,7 +230,7 @@ make check-readiness-full-set \
 # Offline snapshot AEM Full-Set Architecture
 ##################################################
 
-make offline-snapshot \
+make offline-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
@@ -244,7 +244,7 @@ make check-readiness-full-set \
 # Offline compaction snapshot AEM Full-Set Architecture
 ##################################################
 
-make offline-compaction-snapshot \
+make offline-compaction-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
