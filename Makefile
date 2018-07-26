@@ -111,6 +111,9 @@ schedule-offline-compaction-snapshot-consolidated:
 unschedule-offline-compaction-snapshot-consolidated:
 	./scripts/run-playbook.sh send-message unschedule-job-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot"
 
+install-aem-profile:
+	./scripts/run-playbook.sh send-message install-aem-profile "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_profile=$(aem_profile) aem_artifacts_base=$(aem_artifacts_base) aem_base=$(aem_base) aem_healthcheck_version=$(aem_healthcheck_version) aem_id=$(aem_id) aem_port=$(aem_port) aem_ssl_port=$(aem_ssl_port)"
+
 # Integration test targets
 
 test-consolidated:

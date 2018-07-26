@@ -1,6 +1,7 @@
 ### 1.4.2
 * Rename offline-snapshot, offline-compaction-snapshot with full-set suffix
 * Add offline-snapshot, offline-compaction-snapshot for AEM Consolidated
+* Add new Stack Manager event install-aem-profile
 
 ### 1.4.1
 * Adding external id for SSM command execution
