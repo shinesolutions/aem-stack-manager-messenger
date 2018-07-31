@@ -2,6 +2,8 @@
 * Rename offline-snapshot, offline-compaction-snapshot with full-set suffix
 * Add offline-snapshot, offline-compaction-snapshot for AEM Consolidated
 * Add new Stack Manager event install-aem-profile
+* Remove poll_timeout.check_message_sent.retries and poll_timeout.check_message_sent.delay configurations
+* Replace all check_message_sent usage with check_command_execution
 
 ### 1.4.1
 * Adding external id for SSM command execution

@@ -64,8 +64,8 @@
         region: "{{ aws.region }}"
       register: dbscan
       until: dbscan.item != [] and dbscan.item[0].state.S in ["Success", "Failed"]
-      retries: "{{ poll_timeout.check_message_sent.retries }}"
-      delay: "{{ poll_timeout.check_message_sent.delay }}"
+      retries: "{{ poll_timeout.check_command_execution.retries }}"
+      delay: "{{ poll_timeout.check_command_execution.delay }}"
 
     - set_fact:
         cmd_state: "{{ item.state.S }}"
