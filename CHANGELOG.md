@@ -1,3 +1,7 @@
+### 1.5.1
+* Add export-package & import-package to integration test
+*
+
 ### 1.5.0
 * Rename offline-snapshot, offline-compaction-snapshot with full-set suffix
 * Add offline-snapshot, offline-compaction-snapshot for AEM Consolidated
