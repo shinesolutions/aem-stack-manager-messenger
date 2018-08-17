@@ -11,6 +11,7 @@ AEM_PACKAGE_GROUP=shinesolutions
 AEM_PACKAGE_NAME=aem-helloworld-content
 AEM_PACKAGE_VERSION=0.0.1
 AEM_PACKAGE_URL="http://central.maven.org/maven2/com/$AEM_PACKAGE_GROUP/$AEM_PACKAGE_NAME/$AEM_PACKAGE_VERSION/$AEM_PACKAGE_NAME-$AEM_PACKAGE_VERSION.zip"
+AEM_EXPORT_PACKAGE_DATE=$(date "+%Y%m%d")
 
 ##################################################
 # Check AEM Consolidated Architecture readiness
@@ -112,6 +113,74 @@ make deploy-artifact \
   replicate=false \
   activate=false \
   force=true
+
+make check-readiness-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Export package from AEM Author to S3
+##################################################
+
+make export-package \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=author-publish-dispatcher \
+	aem_id=author \
+	package_group=shinesolutions \
+	package_name=aem-helloworld-content \
+	package_filter="[{'root':'/apps/helloworld','rules':[]},{'root':'/content/helloworld','rules':[{'modifier':'exclude','pattern':'.*.\\d*\\.\\d*\\.(png|jpeg|gif)'}]},{'root':'/etc/designs/helloworld','rules':[]}]"
+
+##################################################
+# Import package from S3 to AEM Author
+##################################################
+
+make import-package \
+	stack_prefix="$STACK_PREFIX" \
+	target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+	config_path="$CONFIG_PATH" \
+	component=author-publish-dispatcher \
+	aem_id=author \
+	source_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+	package_group="$AEM_PACKAGE_GROUP" \
+	package_name="$AEM_PACKAGE_NAME" \
+	package_datestamp="$AEM_EXPORT_PACKAGE_DATE"
+
+make check-readiness-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Export package from AEM Publisher to S3
+##################################################
+
+make export-package \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=author-publish-dispatcher \
+	aem_id=publish \
+	package_group=shinesolutions \
+	package_name=aem-helloworld-content \
+	package_filter="[{'root':'/apps/helloworld','rules':[]},{'root':'/content/helloworld','rules':[{'modifier':'exclude','pattern':'.*.\\d*\\.\\d*\\.(png|jpeg|gif)'}]},{'root':'/etc/designs/helloworld','rules':[]}]"
+
+##################################################
+# Import package from S3 to AEM Publisher
+##################################################
+
+make import-package \
+	stack_prefix="$STACK_PREFIX" \
+	target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+	config_path="$CONFIG_PATH" \
+	component=author-publish-dispatcher \
+	aem_id=publish \
+	source_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+	package_group="$AEM_PACKAGE_GROUP" \
+	package_name="$AEM_PACKAGE_NAME" \
+	package_datestamp="$AEM_EXPORT_PACKAGE_DATE"
 
 make check-readiness-consolidated \
   stack_prefix="$STACK_PREFIX" \
