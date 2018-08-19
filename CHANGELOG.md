@@ -1,6 +1,8 @@
+### 1.5.2
+*
+
 ### 1.5.1
 * Add export-package & import-package to integration test
-*
 
 ### 1.5.0
 * Rename offline-snapshot, offline-compaction-snapshot with full-set suffix
