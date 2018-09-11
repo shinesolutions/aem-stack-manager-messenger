@@ -22,6 +22,24 @@ make check-readiness-full-set \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
 
+##################################################
+# Unschedule jobs for offline-snapshot
+##################################################
+
+make unschedule-offline-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Unschedule jobs for offline-compaction-snapshot
+##################################################
+
+make unschedule-offline-compaction-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
 # ##################################################
 # # List packages on AEM Author
 # ##################################################
@@ -224,42 +242,6 @@ make check-readiness-full-set \
   config_path="$CONFIG_PATH"
 
 ##################################################
-# Schedule jobs for offline-snapshot
-##################################################
-
-make schedule-offline-snapshot-full-set \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-##################################################
-# Unschedule jobs for offline-snapshot
-##################################################
-
-make unschedule-offline-snapshot-full-set \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-##################################################
-# Schedule jobs for offline-compaction-snapshot
-##################################################
-
-make schedule-offline-compaction-snapshot-full-set \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-##################################################
-# Unschedule jobs for offline-compaction-snapshot
-##################################################
-
-make unschedule-offline-compaction-snapshot-full-set \
-  stack_prefix="$STACK_PREFIX" \
-  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
-  config_path="$CONFIG_PATH"
-
-##################################################
 # Take live snapshot of AEM Author repositories
 ##################################################
 
@@ -319,6 +301,24 @@ make offline-compaction-snapshot-full-set \
   config_path="$CONFIG_PATH"
 
 make check-readiness-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Schedule jobs for offline-snapshot
+##################################################
+
+make schedule-offline-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Schedule jobs for offline-compaction-snapshot
+##################################################
+
+make schedule-offline-compaction-snapshot-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"

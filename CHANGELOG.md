@@ -1,5 +1,5 @@
 ### 1.5.2
-*
+* Move all unschedule jobs to run at the beginning of the tests, all schedule jobs to run at the end
 
 ### 1.5.1
 * Add export-package & import-package to integration test
