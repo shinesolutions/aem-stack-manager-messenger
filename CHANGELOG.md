@@ -1,5 +1,5 @@
 ### 1.5.3
-*
+* Add feature to check if the target AEM Stack exists #29
 
 ### 1.5.2
 * Move all unschedule jobs to run at the beginning of the tests, all schedule jobs to run at the end
