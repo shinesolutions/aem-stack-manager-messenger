@@ -1,5 +1,5 @@
 ### 1.5.3
-*
+* Temporarily add unreleased ansible SNS module upgrade to boto3. #59
 
 ### 1.5.2
 * Move all unschedule jobs to run at the beginning of the tests, all schedule jobs to run at the end
