@@ -1,3 +1,6 @@
+### 1.5.4
+*
+
 ### 1.5.3
 * Temporarily add unreleased ansible SNS module upgrade to boto3. #59
 * Add feature to check if the target AEM Stack exists #29
