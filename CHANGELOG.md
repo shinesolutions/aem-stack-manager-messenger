@@ -1,5 +1,5 @@
 ### 1.5.4
-*
+* Change default logging to always dump log
 
 ### 1.5.3
 * Temporarily add unreleased ansible SNS module upgrade to boto3. #59

@@ -17,7 +17,7 @@
           "tag:StackPrefix": "{{ target_aem_stack_prefix }}"
       # To reduce the output of the playbook this outputs is suppress.
       # The value can be replaced with a debug true/false option in the future.
-      no_log: True
+      no_log: False
       register: target_aem_stack_exists
 
     - name: "Check if Target AEM Stack {{ target_aem_stack_prefix }} exist."
