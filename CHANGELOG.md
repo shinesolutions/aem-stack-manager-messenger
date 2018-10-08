@@ -1,3 +1,6 @@
+### 1.5.6
+*
+
 ### 1.5.5
 * Fix missing region on AEM Stack existence check #29
 
