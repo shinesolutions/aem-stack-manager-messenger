@@ -1,5 +1,5 @@
 ### 1.5.5
-*
+* Fix missing region on AEM Stack existence check #29
 
 ### 1.5.4
 * Change default logging to always dump log

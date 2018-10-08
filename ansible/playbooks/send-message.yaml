@@ -15,6 +15,7 @@
       ec2_instance_facts:
         filters:
           "tag:StackPrefix": "{{ target_aem_stack_prefix }}"
+        region: "{{ aws.region }}"
       # To reduce the output of the playbook this outputs is suppress.
       # The value can be replaced with a debug true/false option in the future.
       no_log: False
