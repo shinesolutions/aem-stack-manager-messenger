@@ -1,3 +1,6 @@
+### 1.5.7
+*
+
 ### 1.5.6
 * Fix SNS result message ID retrieval
 
