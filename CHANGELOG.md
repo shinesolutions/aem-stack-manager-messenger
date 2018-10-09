@@ -1,5 +1,5 @@
 ### 1.5.6
-*
+* Fix SNS result message ID retrieval
 
 ### 1.5.5
 * Fix missing region on AEM Stack existence check #29

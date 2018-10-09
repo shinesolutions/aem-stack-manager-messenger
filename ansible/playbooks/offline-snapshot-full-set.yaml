@@ -92,7 +92,7 @@
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: message_id
-        attribute_value: "{{ publish_message.item.PublishResponse.PublishResult.MessageId }}"
+        attribute_value: "{{ publish_message.message_id }}"
         get_attribute: command_id
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
