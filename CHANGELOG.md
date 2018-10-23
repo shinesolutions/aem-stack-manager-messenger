@@ -1,5 +1,5 @@
 ### 1.5.7
-*
+* Add new Stack manager event to un/schedule live snapshot shinesolutions/aem-aws-stack-builder#212
 
 ### 1.5.6
 * Fix SNS result message ID retrieval

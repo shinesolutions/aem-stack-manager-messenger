@@ -23,6 +23,15 @@ make check-readiness-consolidated \
   config_path="$CONFIG_PATH"
 
 ##################################################
+# Unschedule jobs for live-snapshot
+##################################################
+
+make unschedule-live-snapshot-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
 # Unschedule jobs for offline-snapshot
 ##################################################
 
@@ -244,6 +253,15 @@ make offline-compaction-snapshot-consolidated \
   config_path="$CONFIG_PATH"
 
 make check-readiness-consolidated \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH"
+
+##################################################
+# Schedule jobs for live-snapshot
+##################################################
+
+make schedule-live-snapshot-consolidated \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"

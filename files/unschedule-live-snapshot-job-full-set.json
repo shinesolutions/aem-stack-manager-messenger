@@ -1,0 +1,13 @@
+{
+  "externalId": externalId,
+  "task": "schedule-snapshot",
+  "stack_prefix": target_aem_stack_prefix,
+  "details": {
+    "component": [component],
+    "comment": "Remove scheduled live-snapshot job on AEM Full-Set architecture",
+    "parameters": {
+      "jobName": [schedule_job],
+      "State": ['disable']
+    }
+  }
+}

@@ -1,10 +1,10 @@
 {
   "externalId": externalId,
-  "task": "schedule-offline-snapshot",
+  "task": "schedule-snapshot",
   "stack_prefix": target_aem_stack_prefix,
   "details": {
     "component": ['author-publish-dispatcher'],
-    "comment": "Remove scheduled job on AEM Consolidated architecture",
+    "comment": "Remove scheduled offline-snapshot job on AEM Consolidated architecture",
     "parameters": {
       "jobName": [schedule_job],
       "State": ['disable']

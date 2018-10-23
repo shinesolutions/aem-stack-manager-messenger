@@ -23,6 +23,36 @@ make check-readiness-full-set \
   config_path="$CONFIG_PATH"
 
 ##################################################
+# Unschedule jobs for live-snapshot on author-primary
+##################################################
+
+make unschedule-live-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=author-primary
+
+##################################################
+# Unschedule jobs for live-snapshot on author-standby
+##################################################
+
+make unschedule-live-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=author-standby
+
+##################################################
+# Unschedule jobs for live-snapshot on publish
+##################################################
+
+make unschedule-live-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=publish
+
+##################################################
 # Unschedule jobs for offline-snapshot
 ##################################################
 
@@ -304,6 +334,36 @@ make check-readiness-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH"
+
+##################################################
+# Schedule jobs for live-snapshot on author-primary
+##################################################
+
+make schedule-live-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=author-primary
+
+##################################################
+# Schedule jobs for live-snapshot on author-standby
+##################################################
+
+make schedule-live-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=author-standby
+
+##################################################
+# Schedule jobs for live-snapshot on publish
+##################################################
+
+make schedule-live-snapshot-full-set \
+  stack_prefix="$STACK_PREFIX" \
+  target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
+  config_path="$CONFIG_PATH" \
+  component=publish
 
 ##################################################
 # Schedule jobs for offline-snapshot
