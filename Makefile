@@ -88,28 +88,40 @@ check-readiness-full-set:
 	./scripts/run-playbook.sh send-message test-readiness-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 
 schedule-offline-snapshot-full-set:
-	./scripts/run-playbook.sh send-message schedule-job-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot"
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-job-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot"
 
 unschedule-offline-snapshot-full-set:
-	./scripts/run-playbook.sh send-message unschedule-job-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot"
+	./scripts/run-playbook.sh send-message unschedule-offline-snapshot-job-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot"
 
 schedule-offline-compaction-snapshot-full-set:
-	./scripts/run-playbook.sh send-message schedule-job-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot"
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-job-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot"
 
 unschedule-offline-compaction-snapshot-full-set:
-	./scripts/run-playbook.sh send-message unschedule-job-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot"
+	./scripts/run-playbook.sh send-message unschedule-offline-snapshot-job-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot"
+
+schedule-live-snapshot-full-set:
+	./scripts/run-playbook.sh send-message schedule-live-snapshot-job-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) schedule_job=live_snapshot"
+
+unschedule-live-snapshot-full-set:
+	./scripts/run-playbook.sh send-message unschedule-live-snapshot-job-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) schedule_job=live_snapshot"
 
 schedule-offline-snapshot-consolidated:
-	./scripts/run-playbook.sh send-message schedule-job-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot"
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-job-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot"
 
 unschedule-offline-snapshot-consolidated:
-	./scripts/run-playbook.sh send-message unschedule-job-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot"
+	./scripts/run-playbook.sh send-message unschedule-offline-snapshot-job-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_snapshot"
 
 schedule-offline-compaction-snapshot-consolidated:
-	./scripts/run-playbook.sh send-message schedule-job-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot"
+	./scripts/run-playbook.sh send-message schedule-offline-snapshot-job-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot"
 
 unschedule-offline-compaction-snapshot-consolidated:
-	./scripts/run-playbook.sh send-message unschedule-job-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot"
+	./scripts/run-playbook.sh send-message unschedule-offline-snapshot-job-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=offline_compaction_snapshot"
+
+schedule-live-snapshot-consolidated:
+	./scripts/run-playbook.sh send-message schedule-live-snapshot-job-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=live_snapshot"
+
+unschedule-live-snapshot-consolidated:
+	./scripts/run-playbook.sh send-message unschedule-live-snapshot-job-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "schedule_job=live_snapshot"
 
 install-aem-profile:
 	./scripts/run-playbook.sh send-message install-aem-profile "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_profile=$(aem_profile) aem_artifacts_base=$(aem_artifacts_base) aem_base=$(aem_base) aem_healthcheck_version=$(aem_healthcheck_version) aem_id=$(aem_id) aem_port=$(aem_port) aem_ssl_port=$(aem_ssl_port)"

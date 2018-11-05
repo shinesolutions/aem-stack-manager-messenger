@@ -1,10 +1,10 @@
 {
   "externalId": externalId,
-  "task": "schedule-offline-snapshot",
+  "task": "schedule-snapshot",
   "stack_prefix": target_aem_stack_prefix,
   "details": {
     "component": ['author-publish-dispatcher'],
-    "comment": "Set scheduled job on AEM Consolidated architecture",
+    "comment": "Set scheduled offline-snapshot job on AEM Consolidated architecture",
     "parameters": {
       "jobName": [schedule_job],
       "State": ['enable']

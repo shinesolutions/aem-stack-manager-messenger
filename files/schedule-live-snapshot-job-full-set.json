@@ -1,10 +1,10 @@
 {
   "externalId": externalId,
-  "task": "schedule-offline-snapshot",
+  "task": "schedule-snapshot",
   "stack_prefix": target_aem_stack_prefix,
   "details": {
-    "component": ['orchestrator'],
-    "comment": "Set scheduled job on AEM Full-Set architecture",
+    "component": [component],
+    "comment": "Set scheduled live-snapshot job on AEM Full-Set architecture",
     "parameters": {
       "jobName": [schedule_job],
       "State": ['enable']
