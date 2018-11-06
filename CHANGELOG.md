@@ -1,3 +1,6 @@
+### 1.5.8
+*
+
 ### 1.5.7
 * Add new Stack manager event to un/schedule live snapshot shinesolutions/aem-aws-stack-builder#212
 
