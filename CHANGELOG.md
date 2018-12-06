@@ -1,5 +1,5 @@
 ### 1.5.8
-*
+* Set test-readiness-full-set to run on all Full-Set architecture components
 
 ### 1.5.7
 * Add new Stack manager event to un/schedule live snapshot shinesolutions/aem-aws-stack-builder#212
