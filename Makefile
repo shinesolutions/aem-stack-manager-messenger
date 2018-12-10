@@ -1,32 +1,63 @@
 version ?= 2.0.1
 
-# development targets
-
 ci: clean deps lint package
 
 clean:
 	rm -rf logs
-	rm -f ansible/playbooks/*.retry
+	rm -f provisioners/ansible/playbooks/*.retry
+
+package:
+	rm -rf stage
+	mkdir -p stage
+	tar \
+	    --exclude='.git*' \
+	    --exclude='.tmp*' \
+	    --exclude='stage*' \
+	    --exclude='.idea*' \
+	    --exclude='.DS_Store*' \
+	    --exclude='logs*' \
+	    --exclude='*.retry' \
+	    --exclude='*.iml' \
+	    -cvf \
+	    stage/aem-stack-manager-messenger-$(version).tar ./
+	gzip stage/aem-stack-manager-messenger-$(version).tar
+
+################################################################################
+# Dependencies resolution targets.
+################################################################################
 
 deps:
 	pip install -r requirements.txt
 
+################################################################################
+# Code styling check and validation targets:
+# - lint Ansible inventory files, tools configuration files
+# - lint custom Ansible modules
+# - check shell scripts
+################################################################################
+
 lint:
 	shellcheck scripts/*.sh test/integration/*.sh
-	ANSIBLE_LIBRARY=ansible/library/ \
+	ANSIBLE_LIBRARY=provisioners/ansible/library/ \
 	  ansible-playbook \
-    ansible/playbooks/*.yaml \
+    provisioners/ansible/playbooks/*.yaml \
 		-v \
 		--syntax-check
 
-# Stack Manager event targets
+################################################################################
+# AEM Stack Manager events targets.
+# Architecture specific targets have `-consolidated` or `-full-set` suffix.
+################################################################################
 
+# deploy a single AEM package artifact
 deploy-artifact:
 	./scripts/run-playbook.sh send-message deploy-artifact "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_id=$(aem_id) source=$(source) group=$(group) name=$(name) version=$(version) replicate=$(replicate) activate=$(activate) force=$(force)"
 
+# deploy multiple AEM package and Dispatcher config artifacts to an AEM Consolidated environment
 deploy-artifacts-consolidated:
 	./scripts/run-playbook.sh send-message deploy-artifacts-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "descriptor_file=$(descriptor_file)"
 
+# deploy multiple AEM package and Dispatcher config artifacts to an AEM Consolidated environment
 deploy-artifacts-full-set:
 	./scripts/run-playbook.sh send-message deploy-artifacts-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "descriptor_file=$(descriptor_file)"
 
@@ -57,10 +88,12 @@ list-packages:
 live-snapshot:
 	./scripts/run-playbook.sh send-message live-snapshot "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component)"
 
-# Retained for backward compatibility for 1.4.1 and older
+# an alias to offline-snapshot-full-set
+# this is retained for backward compatibility for AEM Stack Manager Messenger 1.4.1 and older
 offline-snapshot: offline-snapshot-full-set
 
-# Retained for backward compatibility for 1.4.1 and older
+# an alias to offline-compaction-snapshot-full-set
+# this is retained for backward compatibility for AEM Stack Manager Messenger 1.4.1 and older
 offline-compaction-snapshot: offline-compaction-snapshot-full-set
 
 offline-snapshot-full-set:
@@ -126,7 +159,10 @@ unschedule-live-snapshot-consolidated:
 install-aem-profile:
 	./scripts/run-playbook.sh send-message install-aem-profile "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_profile=$(aem_profile) aem_artifacts_base=$(aem_artifacts_base) aem_base=$(aem_base) aem_healthcheck_version=$(aem_healthcheck_version) aem_id=$(aem_id) aem_port=$(aem_port) aem_ssl_port=$(aem_ssl_port)"
 
-# Integration test targets
+################################################################################
+# Integration test targets.
+# The targets will execute all AEM Stack Manager events available for each AEM architecture.
+################################################################################
 
 test-consolidated:
 	test/integration/all-events-consolidated.sh "$(stack_prefix)" "$(target_aem_stack_prefix)"
@@ -134,25 +170,4 @@ test-consolidated:
 test-full-set:
 	test/integration/all-events-full-set.sh "$(stack_prefix)" "$(target_aem_stack_prefix)"
 
-package:
-	rm -rf stage
-	mkdir -p stage
-	tar \
-	    --exclude='.git*' \
-	    --exclude='.tmp*' \
-	    --exclude='stage*' \
-	    --exclude='.idea*' \
-	    --exclude='.DS_Store*' \
-	    --exclude='logs*' \
-	    --exclude='*.retry' \
-	    --exclude='*.iml' \
-	    -cvf \
-	    stage/aem-stack-manager-messenger-$(version).tar ./
-	gzip stage/aem-stack-manager-messenger-$(version).tar
-
-git-archive:
-	rm -rf stage
-	mkdir -p stage
-	git archive --format=tar.gz --prefix=aem-stack-manager-messenger-$(version)/ HEAD -o stage/aem-stack-manager-messenger-$(version).tar.gz
-
-.PHONY: promote-author offline-snapshot-full-set deploy-artifacts deploy-artifact ci clean deps lint export-package import-package package git-archive offline-compaction-snapshot-full-set
+.PHONY: ci clean package deps lint deploy-artifact deploy-artifacts-consolidated deploy-artifacts-full-set disable-crxde export-package export-packages-consolidated export-packages-full-set enable-crxde flush-dispatcher-cache import-package list-packages live-snapshot offline-snapshot offline-compaction-snapshot offline-snapshot-full-set offline-compaction-snapshot-full-set offline-snapshot-consolidated offline-compaction-snapshot-consolidated promote-author run-adhoc-puppet check-readiness-consolidated check-readiness-full-set schedule-offline-snapshot-full-set unschedule-offline-snapshot-full-set schedule-offline-compaction-snapshot-full-set unschedule-offline-compaction-snapshot-full-set schedule-live-snapshot-full-set unschedule-live-snapshot-full-set schedule-offline-snapshot-consolidated unschedule-offline-snapshot-consolidated schedule-offline-compaction-snapshot-consolidated unschedule-offline-compaction-snapshot-consolidated schedule-live-snapshot-consolidated unschedule-live-snapshot-consolidated install-aem-profile test-consolidated test-full-set
