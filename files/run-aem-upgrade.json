@@ -1,0 +1,12 @@
+{
+  "externalId": externalId,
+  "task": "run-aem-upgrade",
+  "stack_prefix": target_aem_stack_prefix,
+  "details": {
+    "component": [component],
+    "comment": "Run AEM Upgrade on target_aem_stack_prefix.",
+    "parameters": {
+      "aemUpgradeVersion": [aem_upgrade_version],
+    }
+  }
+}

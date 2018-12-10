@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/travis/shinesolutions/aem-stack-manager-messenger.svg)](http://travis-ci.org/shinesolutions/aem-stack-manager-messenger)
+environment[![Build Status](https://img.shields.io/travis/shinesolutions/aem-stack-manager-messenger.svg)](http://travis-ci.org/shinesolutions/aem-stack-manager-messenger)
 
 AEM Stack Manager Messenger
 ---------------------------
@@ -239,6 +239,36 @@ Schedule/unschedule jobs on an AEM environment:
       stack_prefix=<stack_manager_stack_prefix> \
       target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
       config_path=<path/to/config/dir>
+
+Upgrade AEM environment to a new version on AEM environment:
+    AEM Upgrade preparation step 1 download AEM e.g. AEM 6.4 jar file and unpack it
+
+    make upgrade-unpack-jar \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      component=author-publish-dispatcher \
+      aem_artifacts_base="s3://aem-opencloud/adobeaemcloud" \
+      aem_upgrade_version="6.4" \
+      enable_backup=false
+
+    AEM Upgrade preparation step 2 run repository migration
+
+    make upgrade-unpack-jar \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      component=author-publish-dispatcher \
+      source_crx2oak="https://repo.adobe.com/nexus/content/groups/public/com/adobe/granite/crx2oak/1.8.6/crx2oak-1.8.6-all-in-one.jar"
+
+    Trigger the AEM Upgrade to specified version:
+
+    make upgrade-unpack-jar \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      component=author-publish-dispatcher \
+       aem_upgrade_version="6.4"
 
 Testing
 -------
