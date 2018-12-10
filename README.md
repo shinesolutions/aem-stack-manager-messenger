@@ -5,22 +5,31 @@ AEM Stack Manager Messenger
 
 A set of [Ansible](https://www.ansible.com/) playbooks for triggering events on [AEM Stack Manager](https://github.com/shinesolutions/aem-stack-manager-cloud) environment which is built using [AEM AWS Stack Builder](https://github.com/shinesolutions/aem-aws-stack-builder).
 
+Learn more about AEM Stack Manager Messenger:
+
+* [Installation](https://github.com/shinesolutions/aem-stack-manager-messenger#installation)
+* [Configuration](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/docs/configuration.md)
+* [Usage](https://github.com/shinesolutions/aem-stack-manager-messenger#usage)
+* [Testing](https://github.com/shinesolutions/aem-stack-manager-messenger#testing)
+* [Frequently Asked Questions](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/docs/faq.md)
+
+AEM Stack Manager Messenger is part of [AEM OpenCloud](https://aemopencloud.io) platform.
+
 Installation
 ------------
 
 - Either clone AEM Stack Manager Messenger `git clone https://github.com/shinesolutions/aem-stack-manager-messenger.git` or download one of the [released versions](https://github.com/shinesolutions/aem-stack-manager-messenger/releases)
 - Install the following required tools:
   * [Python](https://www.python.org/downloads/) version 2.7.x
-- Resolve the [Python packages](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/requirements.txt) dependencies by running `make deps`
 
-Alternatively, you can use [AEM Platform BuildEnv](https://github.com/shinesolutions/aem-platform-buildenv) Docker container to run AEM Stack Manager Messenger build targets.
+  Alternatively, you can use [AEM Platform BuildEnv](https://github.com/shinesolutions/aem-platform-buildenv) Docker container to run AEM Stack Manager Messenger build targets.
+- Resolve the [Python packages](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/requirements.txt) dependencies by running `make deps`
 
 Usage
 -----
 
-Create [configuration file](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/docs/configuration.md)
-
-Execute the AEM Stack Manager events:
+- Create [configuration file](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/docs/configuration.md)
+- Execute the AEM Stack Manager events:
 
 Deploy a set of AEM Packages and Dispatcher artifacts into an AEM environment using a [deployment descriptor](https://github.com/shinesolutions/aem-aws-stack-builder/blob/master/docs/descriptor-deployment.md) file:
 
@@ -243,13 +252,15 @@ Schedule/unschedule jobs on an AEM environment:
 Testing
 -------
 
-Run integration tests of all Stack Manager events against an AEM Full-Set architecture:
+You can run integration test for running all AEM Stack Manager events for a given AEM architecture:
+
+Run integration tests for AEM Full-Set architecture:
 
     make test-full-set \
       stack_prefix=<stack_manager_stack_prefix> \
       target_aem_stack_prefix=<aem_full_set_stack_prefix>
 
-Run integration tests of all Stack Manager events against an AEM Consolidated architecture:
+Run integration tests for AEM Consolidated architecture:
 
     make test-consolidated \
       stack_prefix=<stack_manager_stack_prefix> \
