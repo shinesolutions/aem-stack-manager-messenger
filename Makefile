@@ -42,12 +42,13 @@ deps-test: stage
 	  -O stage/aem-helloworld-config.tar.gz
 	cd stage && tar -xvzf aem-helloworld-config.tar.gz && mv aem-helloworld-config-master aem-helloworld-config
 	cp -R stage/aem-helloworld-config/aem-stack-manager-messenger/* stage/user-config/
-	cp -R stage/aem-helloworld-config/descriptors/ stage/user-descriptors/
+	cp -R stage/aem-helloworld-config/descriptors/* stage/user-descriptors/
 
 # resolve test dependencies from local directories
 deps-test-local: stage
 	rm -rf stage/aem-helloworld-config/ stage/user-config/*
 	cp -R ../aem-helloworld-config/aem-stack-manager-messenger/* stage/user-config/
+	cp -R stage/aem-helloworld-config/descriptors/* stage/user-descriptors/
 
 ################################################################################
 # Code styling check and validation targets:
