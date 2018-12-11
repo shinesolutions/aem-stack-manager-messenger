@@ -51,13 +51,14 @@ deps-test-local: stage
 
 ################################################################################
 # Code styling check and validation targets:
-# - lint Ansible inventory files, tools configuration files
+# - lint Ansible inventory files, Ansible playbooks, tools configuration files
 # - lint custom Ansible modules
 # - check shell scripts
 ################################################################################
 
 lint:
 	yamllint conf/ansible/inventory/group_vars/*.yaml provisioners/ansible/playbooks/*.yaml .*.yml
+	# pylint provisioners/ansible/library/*.py
 	shellcheck scripts/*.sh test/integration/*.sh
 	ANSIBLE_LIBRARY=provisioners/ansible/library/ \
 	  ansible-playbook \
