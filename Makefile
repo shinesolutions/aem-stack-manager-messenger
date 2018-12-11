@@ -13,6 +13,7 @@ package:
 	tar \
 	    --exclude='.git*' \
 	    --exclude='.tmp*' \
+			--exclude='.yamllint' \
 	    --exclude='stage*' \
 	    --exclude='.idea*' \
 	    --exclude='.DS_Store*' \
@@ -56,6 +57,7 @@ deps-test-local: stage
 ################################################################################
 
 lint:
+	yamllint conf/ansible/inventory/group_vars/*.yaml .*.yml
 	shellcheck scripts/*.sh test/integration/*.sh
 	ANSIBLE_LIBRARY=provisioners/ansible/library/ \
 	  ansible-playbook \
