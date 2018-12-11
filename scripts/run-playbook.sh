@@ -26,7 +26,7 @@ ANSIBLE_CONFIG=provisioners/ansible/ansible.cfg \
   ANSIBLE_LOG_PATH=$log_path \
   ansible-playbook "provisioners/ansible/playbooks/$playbook_type.yaml" \
   -v \
-  -i provisioners/ansible/inventory/hosts \
+  -i conf/ansible/inventory/hosts \
   --module-path provisioners/ansible/library/ \
   "${extra_vars[@]}"
 echo "Finished Sending Message to SNS Topic"
