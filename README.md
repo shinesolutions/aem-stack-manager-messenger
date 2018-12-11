@@ -21,6 +21,7 @@ Installation
 - Either clone AEM Stack Manager Messenger `git clone https://github.com/shinesolutions/aem-stack-manager-messenger.git` or download one of the [released versions](https://github.com/shinesolutions/aem-stack-manager-messenger/releases)
 - Install the following required tools:
   * [Python](https://www.python.org/downloads/) version 2.7.x
+  * [GNU Make](https://www.gnu.org/software/make/)<br/>
 
   Alternatively, you can use [AEM Platform BuildEnv](https://github.com/shinesolutions/aem-platform-buildenv) Docker container to run AEM Stack Manager Messenger build targets.
 - Resolve the [Python packages](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/requirements.txt) dependencies by running `make deps`
@@ -252,7 +253,7 @@ Schedule/unschedule jobs on an AEM environment:
 Testing
 -------
 
-You can run integration test for running all AEM Stack Manager events for a given AEM architecture:
+You can run integration test for running all AEM Stack Manager events for a given AEM architecture, using the latest [AEM Hello World Config](https://github.com/shinesolutions/aem-helloworld-config) from GitHub.
 
 Run integration tests for AEM Full-Set architecture:
 
@@ -265,3 +266,13 @@ Run integration tests for AEM Consolidated architecture:
     make test-consolidated \
       stack_prefix=<stack_manager_stack_prefix> \
       target_aem_stack_prefix=<aem_consolidated_stack_prefix>
+
+Alternatively, you can also run the integration tests using a local AEM Hello World Config.
+
+  make test-full-set-local \
+    stack_prefix=<stack_manager_stack_prefix> \
+    target_aem_stack_prefix=<aem_full_set_stack_prefix>
+
+  make test-consolidated-local \
+    stack_prefix=<stack_manager_stack_prefix> \
+    target_aem_stack_prefix=<aem_consolidated_stack_prefix>

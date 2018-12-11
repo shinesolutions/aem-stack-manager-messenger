@@ -6,9 +6,10 @@ clean:
 	rm -rf logs
 	rm -f provisioners/ansible/playbooks/*.retry
 
+stage:
+	mkdir -p stage/user-config/ stage/user-descriptors/
+
 package:
-	rm -rf stage
-	mkdir -p stage
 	tar \
 	    --exclude='.git*' \
 	    --exclude='.tmp*' \
@@ -18,16 +19,34 @@ package:
 	    --exclude='logs*' \
 	    --exclude='*.retry' \
 	    --exclude='*.iml' \
-	    -cvf \
-	    stage/aem-stack-manager-messenger-$(version).tar ./
-	gzip stage/aem-stack-manager-messenger-$(version).tar
+	    -czf \
+	    stage/aem-stack-manager-messenger-$(version).tar.gz .
 
 ################################################################################
 # Dependencies resolution targets.
+# For deps-test-local targets, the local dependencies must be available on the
+# same directory level where aem-stack-manager-messenger is at. The idea is
+# that you can test AEM Stack Manager Messenger while also developing those
+# dependencies locally.
 ################################################################################
 
+# resolve dependencies from remote artifact registries
 deps:
 	pip install -r requirements.txt
+
+# resolve test dependencies from remote artifact registries
+deps-test: stage
+	rm -rf stage/aem-helloworld-config/ stage/user-config/* stage/*.tar.gz
+	wget "https://github.com/shinesolutions/aem-helloworld-config/archive/master.tar.gz" \
+	  -O stage/aem-helloworld-config.tar.gz
+	cd stage && tar -xvzf aem-helloworld-config.tar.gz && mv aem-helloworld-config-master aem-helloworld-config
+	cp -R stage/aem-helloworld-config/aem-stack-manager-messenger/* stage/user-config/
+	cp -R stage/aem-helloworld-config/descriptors/ stage/user-descriptors/
+
+# resolve test dependencies from local directories
+deps-test-local: stage
+	rm -rf stage/aem-helloworld-config/ stage/user-config/*
+	cp -R ../aem-helloworld-config/aem-stack-manager-messenger/* stage/user-config/
 
 ################################################################################
 # Code styling check and validation targets:
@@ -164,10 +183,16 @@ install-aem-profile:
 # The targets will execute all AEM Stack Manager events available for each AEM architecture.
 ################################################################################
 
-test-consolidated:
+test-consolidated: deps deps-test
 	test/integration/all-events-consolidated.sh "$(stack_prefix)" "$(target_aem_stack_prefix)"
 
-test-full-set:
+test-full-set: deps deps-test
 	test/integration/all-events-full-set.sh "$(stack_prefix)" "$(target_aem_stack_prefix)"
 
-.PHONY: ci clean package deps lint deploy-artifact deploy-artifacts-consolidated deploy-artifacts-full-set disable-crxde export-package export-packages-consolidated export-packages-full-set enable-crxde flush-dispatcher-cache import-package list-packages live-snapshot offline-snapshot offline-compaction-snapshot offline-snapshot-full-set offline-compaction-snapshot-full-set offline-snapshot-consolidated offline-compaction-snapshot-consolidated promote-author run-adhoc-puppet check-readiness-consolidated check-readiness-full-set schedule-offline-snapshot-full-set unschedule-offline-snapshot-full-set schedule-offline-compaction-snapshot-full-set unschedule-offline-compaction-snapshot-full-set schedule-live-snapshot-full-set unschedule-live-snapshot-full-set schedule-offline-snapshot-consolidated unschedule-offline-snapshot-consolidated schedule-offline-compaction-snapshot-consolidated unschedule-offline-compaction-snapshot-consolidated schedule-live-snapshot-consolidated unschedule-live-snapshot-consolidated install-aem-profile test-consolidated test-full-set
+test-consolidated-local: deps deps-test-local
+	test/integration/all-events-consolidated.sh "$(stack_prefix)" "$(target_aem_stack_prefix)"
+
+test-full-set-local: deps deps-test-local
+	test/integration/all-events-full-set.sh "$(stack_prefix)" "$(target_aem_stack_prefix)"
+
+.PHONY: ci clean stage package deps deps-test deps-test-local lint deploy-artifact deploy-artifacts-consolidated deploy-artifacts-full-set disable-crxde export-package export-packages-consolidated export-packages-full-set enable-crxde flush-dispatcher-cache import-package list-packages live-snapshot offline-snapshot offline-compaction-snapshot offline-snapshot-full-set offline-compaction-snapshot-full-set offline-snapshot-consolidated offline-compaction-snapshot-consolidated promote-author run-adhoc-puppet check-readiness-consolidated check-readiness-full-set schedule-offline-snapshot-full-set unschedule-offline-snapshot-full-set schedule-offline-compaction-snapshot-full-set unschedule-offline-compaction-snapshot-full-set schedule-live-snapshot-full-set unschedule-live-snapshot-full-set schedule-offline-snapshot-consolidated unschedule-offline-snapshot-consolidated schedule-offline-compaction-snapshot-consolidated unschedule-offline-compaction-snapshot-consolidated schedule-live-snapshot-consolidated unschedule-live-snapshot-consolidated install-aem-profile test-consolidated test-full-set test-consolidated-local test-full-set-local
