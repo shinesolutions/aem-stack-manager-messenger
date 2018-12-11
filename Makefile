@@ -57,7 +57,7 @@ deps-test-local: stage
 ################################################################################
 
 lint:
-	yamllint conf/ansible/inventory/group_vars/*.yaml .*.yml
+	yamllint conf/ansible/inventory/group_vars/*.yaml provisioners/ansible/playbooks/*.yaml .*.yml
 	shellcheck scripts/*.sh test/integration/*.sh
 	ANSIBLE_LIBRARY=provisioners/ansible/library/ \
 	  ansible-playbook \

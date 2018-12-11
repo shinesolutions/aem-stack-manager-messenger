@@ -6,8 +6,8 @@
 
   vars:
     subject: "{{target_aem_stack_prefix}} - {{ message_type }}"
-# files are in .txt as they need to replace the variables e.g. 'target_aem_stack_prefix' (un-quoted) which breaks the json validation.
-# if the variables were in double quotes, they would not be replaced with the value.
+    # files are in .txt as they need to replace the variables e.g. 'target_aem_stack_prefix' (un-quoted) which breaks the json validation.
+    # if the variables were in double quotes, they would not be replaced with the value.
     message: "{{ lookup('file', '../../files/offline-snapshot-full-set.json') }}"
 
   tasks:
@@ -100,7 +100,7 @@
         region: "{{ aws.region }}"
       register: cmd_stop_author_standby
       until: cmd_stop_author_standby.item != []
-      retries:  720
+      retries: 720
       delay: 5
 
     - set_fact:
@@ -143,7 +143,7 @@
         region: "{{ aws.region }}"
       register: cmd_stop_author_primary
       until: cmd_stop_author_primary.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -189,7 +189,7 @@
         region: "{{ aws.region }}"
       register: cmd_stop_publish
       until: cmd_stop_publish.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -235,7 +235,7 @@
         region: "{{ aws.region }}"
       register: cmd_offline_backup
       until: cmd_offline_backup.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -281,7 +281,7 @@
         region: "{{ aws.region }}"
       register: cmd_start_author_primary
       until: cmd_start_author_primary.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -327,7 +327,7 @@
         region: "{{ aws.region }}"
       register: cmd_start_author_standby
       until: cmd_start_author_standby.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -373,7 +373,7 @@
         region: "{{ aws.region }}"
       register: cmd_start_publish
       until: cmd_start_publish.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -420,7 +420,7 @@
       register: dbquery
       until: dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
       # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -565,7 +565,7 @@
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
       with_items:
-      - "{{ s3_files_offline_backup }}"
+        - "{{ s3_files_offline_backup }}"
       when: error_offline_snapshot is defined or general_error is defined
 
     - name: "Create Download directory of starting Author Primary Service"
@@ -573,7 +573,7 @@
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
       with_items:
-      - "{{ s3_files_start_author_primary }}"
+        - "{{ s3_files_start_author_primary }}"
       when: error_start_author_primary is defined or general_error is defined
 
     - name: "Create Download directory of starting Author Standby Service"
@@ -581,7 +581,7 @@
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
       with_items:
-      - "{{ s3_files_start_author_standby }}"
+        - "{{ s3_files_start_author_standby }}"
       when: error_start_author_standby is defined or general_error is defined
 
     - name: "Create Download directory of starting Publish Service"
@@ -589,7 +589,7 @@
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
       with_items:
-      - "{{ s3_files_start_publish }}"
+        - "{{ s3_files_start_publish }}"
       when: error_start_publish is defined or general_error is defined
 
     - name: "Save command output stopping Author Standby Service to {{log_path }}"
