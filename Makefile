@@ -7,13 +7,13 @@ clean:
 	rm -f provisioners/ansible/playbooks/*.retry
 
 stage:
-	mkdir -p stage/user-config/ stage/user-descriptors/
+	mkdir -p stage/ stage/user-config/ stage/user-descriptors/
 
-package:
+package: stage
 	tar \
 	    --exclude='.git*' \
 	    --exclude='.tmp*' \
-			--exclude='.yamllint' \
+	    --exclude='.yamllint' \
 	    --exclude='stage*' \
 	    --exclude='.idea*' \
 	    --exclude='.DS_Store*' \
