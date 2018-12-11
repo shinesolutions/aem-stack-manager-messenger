@@ -6,7 +6,6 @@ STACK_PREFIX="$1"
 TARGET_AEM_STACK_PREFIX="$2"
 
 CONFIG_PATH=stage/user-config/
-DESCRIPTORS_PATH=stage/user-descriptors/
 
 AEM_PACKAGE_GROUP=shinesolutions
 AEM_PACKAGE_NAME=aem-helloworld-content
@@ -151,7 +150,7 @@ make deploy-artifacts-full-set \
   stack_prefix="$STACK_PREFIX" \
   target_aem_stack_prefix="$TARGET_AEM_STACK_PREFIX" \
   config_path="$CONFIG_PATH" \
-  descriptor_file=$DESCRIPTORS_PATH/deploy-artifacts-descriptor.json
+  descriptor_file=deploy-artifacts-descriptor.json
 
 make check-readiness-full-set \
   stack_prefix="$STACK_PREFIX" \
