@@ -19,4 +19,4 @@ Frequently Asked Questions
   __A:__ You can find `stdout` and `stderr` log files at `/var/lib/amazon/ssm/<instance_id>/document/orchestration/<execution_id>/` .
 
 * __Q:__ Why is there no log file available after successfully executing the SSM command ?<br/>
-  __A:__ If there is no log file available for the EC2 instances on s3 or on the file system but the command still ran successfully than the command execution doesn't output any information to stdout & stderr e.g. the test-readiness-full-set might not produce log files for all ec2 instances as it doesn't produce any output for author-primary.
+  __A:__ If there is no log file available for an EC2 instance on S3 or on the file system, but the command still ran successfully, than the command execution doesn't produced any output for `stdout` & `stderr` e.g. the `check-readiness-full-set` might not produce log files for all EC2 instances as it doesn't produce any output for author-primary.
