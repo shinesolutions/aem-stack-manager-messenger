@@ -299,10 +299,10 @@ Run integration tests for AEM Consolidated architecture:
 
 Alternatively, you can also run the integration tests using a local AEM Hello World Config.
 
-  make test-full-set-local \
-    stack_prefix=<stack_manager_stack_prefix> \
-    target_aem_stack_prefix=<aem_full_set_stack_prefix>
+    make test-full-set-local \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_full_set_stack_prefix>
 
-  make test-consolidated-local \
-    stack_prefix=<stack_manager_stack_prefix> \
-    target_aem_stack_prefix=<aem_consolidated_stack_prefix>
+    make test-consolidated-local \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_consolidated_stack_prefix>
