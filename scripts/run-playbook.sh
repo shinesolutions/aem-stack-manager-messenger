@@ -22,11 +22,11 @@ fi
 
 mkdir -p logs
 echo "Sending Message SNS Topic..."
-ANSIBLE_CONFIG=ansible/ansible.cfg \
+ANSIBLE_CONFIG=provisioners/ansible/ansible.cfg \
   ANSIBLE_LOG_PATH=$log_path \
-  ansible-playbook "ansible/playbooks/$playbook_type.yaml" \
+  ansible-playbook "provisioners/ansible/playbooks/$playbook_type.yaml" \
   -v \
-  -i ansible/inventory/hosts \
-  --module-path ansible/library/ \
+  -i conf/ansible/inventory/hosts \
+  --module-path provisioners/ansible/library/ \
   "${extra_vars[@]}"
 echo "Finished Sending Message to SNS Topic"

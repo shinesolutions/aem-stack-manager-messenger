@@ -1,5 +1,6 @@
 ### 2.0.1
 * Add Stack Manager events for AEM Upgrade automation.
+* Add YAML checks to lint target
 
 ### 2.0.0
 * Set test-readiness-full-set to run on all Full-Set architecture components

@@ -6,9 +6,9 @@
 
   vars:
     subject: "{{target_aem_stack_prefix}} - {{ message_type }}"
-# files are in .txt as they need to replace the variables e.g. 'target_aem_stack_prefix' (un-quoted) which breaks the json validation.
-# if the variables were in double quotes, they would not be replaced with the value.
-    message: "{{ lookup('file', '../../files/offline-compaction-snapshot-full-set.json') }}"
+    # files are in .txt as they need to replace the variables e.g. 'target_aem_stack_prefix' (un-quoted) which breaks the json validation.
+    # if the variables were in double quotes, they would not be replaced with the value.
+    message: "{{ lookup('file', '../../../templates/sns/offline-snapshot-full-set.json') }}"
 
   tasks:
     - name: "Get facts for Target AEM Stack {{ target_aem_stack_prefix }}"
@@ -77,7 +77,7 @@
 
     - name: Fail when DB is locked
       fail:
-        msg: "Error: Another offline compaction backup is running"
+        msg: "Error: Another offline snapshot backup is running"
       when: db_backup_locked is defined
 
     - name: Send message to SNS Topic
@@ -88,7 +88,7 @@
         region: "{{ aws.region }}"
       register: publish_message
 
-    - name: Scan if Author Standby Service is stopped
+    - name: Scan if author standby instance is stopped
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: message_id
@@ -100,7 +100,7 @@
         region: "{{ aws.region }}"
       register: cmd_stop_author_standby
       until: cmd_stop_author_standby.item != []
-      retries:  720
+      retries: 720
       delay: 5
 
     - set_fact:
@@ -131,7 +131,7 @@
         module_error: 1
       when: dbquery_state_failed_stop_author_standby is defined and dbquery_state_failed_stop_author_standby == "Failed"
 
-    - name: Scan if Author Primary Service is stopped
+    - name: Scan if author primary instance is stopped
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: last_command
@@ -143,7 +143,7 @@
         region: "{{ aws.region }}"
       register: cmd_stop_author_primary
       until: cmd_stop_author_primary.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -177,7 +177,7 @@
         module_error: 1
       when: dbquery_state_failed_stop_author_primary is defined and dbquery_state_failed_stop_author_primary == "Failed" and module_error is undefined
 
-    - name: Scan if Publish Services are stopped
+    - name: Scan if publish instance is stopped
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: last_command
@@ -189,7 +189,7 @@
         region: "{{ aws.region }}"
       register: cmd_stop_publish
       until: cmd_stop_publish.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -223,7 +223,7 @@
         module_error: 1
       when: dbquery_state_failed_stop_publish is defined and dbquery_state_failed_stop_publish == "Failed" and module_error is undefined
 
-    - name: Scan if offline-compaction finished
+    - name: Scan if offline-backup is executed
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: last_command
@@ -233,55 +233,9 @@
         comparisonoperator: EQ
         state: scan
         region: "{{ aws.region }}"
-      register: cmd_offline_compaction
-      until: cmd_offline_compaction.item != []
-      retries:  720
-      delay: 5
-      when: module_error is undefined
-
-    - set_fact:
-        cmd_id_offline_compaction: "{{ item.command_id.S }}"
-      with_items:
-        "{{ cmd_offline_compaction.item }}"
-      when: module_error is undefined
-
-    - name: Query Offline-Compaction was successful
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: command_id
-        attribute_value: "{{ cmd_id_offline_compaction }}"
-        get_attribute: state
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: query
-        region: "{{ aws.region }}"
-      register: dbquery_state_offline_compaction
-      when: module_error is undefined
-
-    - name: Set fact for error check
-      set_fact:
-        dbquery_state_failed_offline_compaction: "{{dbquery_state_offline_compaction.item[0].state.S}}"
-      when: '"item" in dbquery_state_offline_compaction'
-
-    - name: Check for error when taking offline compaction
-      set_fact:
-        error_offline_compaction: 1
-        module_error: 1
-      when: dbquery_state_failed_offline_compaction is defined and dbquery_state_failed_offline_compaction == "Failed" and module_error is undefined
-
-    - name: Scan if offline-backup is executed
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: last_command
-        attribute_value: "{{ cmd_id_offline_compaction }}"
-        get_attribute: command_id
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: scan
-        region: "{{ aws.region }}"
       register: cmd_offline_backup
       until: cmd_offline_backup.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -315,7 +269,7 @@
         module_error: 1
       when: dbquery_state_failed_offline_snapshot is defined and dbquery_state_failed_offline_snapshot == "Failed" and module_error is undefined
 
-    - name: Scan if Author Primary Service is started
+    - name: Scan if author primary instance is started
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: last_command
@@ -327,7 +281,7 @@
         region: "{{ aws.region }}"
       register: cmd_start_author_primary
       until: cmd_start_author_primary.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -373,7 +327,7 @@
         region: "{{ aws.region }}"
       register: cmd_start_author_standby
       until: cmd_start_author_standby.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -419,7 +373,7 @@
         region: "{{ aws.region }}"
       register: cmd_start_publish
       until: cmd_start_publish.item != []
-      retries:  720
+      retries: 720
       delay: 5
       when: module_error is undefined
 
@@ -453,195 +407,11 @@
         module_error: 1
       when: dbquery_state_failed_start_publish is defined and dbquery_state_failed_start_publish == "Failed" and module_error is undefined
 
-    - name: Scan if job remaining compact jobs are finished
+    - name: Query if offline-snapshot-full-set was successful
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
-        attribute: last_command
+        attribute: command_id
         attribute_value: "{{ cmd_id_start_publish }}"
-        get_attribute: command_id
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: scan
-        region: "{{ aws.region }}"
-      register: cmd_remain_compact_jobs
-      until: cmd_remain_compact_jobs.item != []
-      retries:  720
-      delay: 5
-      when: module_error is undefined
-
-    - set_fact:
-        cmd_id_remain_compact_jobs: "{{ item.command_id.S }}"
-      with_items:
-        "{{ cmd_remain_compact_jobs.item }}"
-      when: module_error is undefined
-
-    - name: Query if remaining compact jobs are finished
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: command_id
-        attribute_value: "{{ cmd_id_remain_compact_jobs }}"
-        get_attribute: state
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: query
-        region: "{{ aws.region }}"
-      register: dbquery_remain_compact_jobs
-      when: module_error is undefined
-
-    - name: Set fact for error check
-      set_fact:
-        dbquery_state_failed_remain_compact_jobs: "{{dbquery_remain_compact_jobs.item[0].state.S}}"
-      when: '"item" in dbquery_remain_compact_jobs'
-
-    - name: Check for error when checking for remaining compact jobs
-      set_fact:
-        error_remain_compact_jobs: 1
-        module_error: 1
-      when: dbquery_state_failed_remain_compact_jobs is defined and dbquery_state_failed_remain_compact_jobs == "Failed" and module_error is undefined
-
-    - name: Scan if remaining publish instances are stopped
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: last_command
-        attribute_value: "{{ cmd_id_remain_compact_jobs }}"
-        get_attribute: command_id
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: scan
-        region: "{{ aws.region }}"
-      register: cmd_stop_remain_publish
-      until: cmd_stop_remain_publish.item != []
-      retries:  720
-      delay: 5
-      when: module_error is undefined
-
-    - set_fact:
-        cmd_id_stop_remain_publish: "{{ item.command_id.S }}"
-      with_items:
-        "{{ cmd_stop_remain_publish.item }}"
-      when: module_error is undefined
-
-    - name: Query if stopping remaining Publish Services was successful
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: command_id
-        attribute_value: "{{ cmd_id_stop_remain_publish }}"
-        get_attribute: state
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: query
-        region: "{{ aws.region }}"
-      register: dbquery_stop_remain_publish
-      when: module_error is undefined
-
-    - name: Set fact for error check
-      set_fact:
-        dbquery_state_failed_stop_remain_publish: "{{dbquery_stop_remain_publish.item[0].state.S}}"
-      when: '"item" in dbquery_stop_remain_publish'
-
-    - name: Check for error when checking for remaining compact jobs
-      set_fact:
-        error_stop_remain_publish: 1
-        module_error: 1
-      when: dbquery_state_failed_stop_remain_publish is defined and dbquery_state_failed_stop_remain_publish == "Failed" and module_error is undefined
-
-    - name: Scan if remaining publish instances are compacted
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: last_command
-        attribute_value: "{{ cmd_id_stop_remain_publish }}"
-        get_attribute: command_id
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: scan
-        region: "{{ aws.region }}"
-      register: cmd_compact_publish
-      until: cmd_compact_publish.item != []
-      retries:  720
-      delay: 5
-      when: module_error is undefined
-
-    - set_fact:
-        cmd_id_compact_publish: "{{ item.command_id.S }}"
-      with_items:
-        "{{ cmd_compact_publish.item }}"
-      when: module_error is undefined
-
-    - name: Query if remaining Publish Instances are compacted successful
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: command_id
-        attribute_value: "{{ cmd_id_compact_publish }}"
-        get_attribute: state
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: query
-        region: "{{ aws.region }}"
-      register: dbquery_compact_publish
-      when: module_error is undefined
-
-    - name: Set fact for error check
-      set_fact:
-        dbquery_state_failed_compact_publish: "{{dbquery_compact_publish.item[0].state.S}}"
-      when: '"item" in dbquery_compact_publish'
-
-    - name: Check for error when compact remaining Publisher
-      set_fact:
-        error_remain_compact_publish: 1
-        module_error: 1
-      when: dbquery_state_failed_compact_publish is defined and dbquery_state_failed_compact_publish == "Failed" and module_error is undefined
-
-    - name: Scan if remaining publish instances are started
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: last_command
-        attribute_value: "{{ cmd_id_compact_publish }}"
-        get_attribute: command_id
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: scan
-        region: "{{ aws.region }}"
-      register: cmd_start_remain_publish
-      until: cmd_start_remain_publish.item != []
-      retries:  720
-      delay: 5
-      when: module_error is undefined
-
-    - set_fact:
-        cmd_id_start_remain_publish: "{{ item.command_id.S }}"
-      with_items:
-        "{{ cmd_start_remain_publish.item }}"
-      when: module_error is undefined
-
-    - name: Query if start remaining remaining Publish Services were successful
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: command_id
-        attribute_value: "{{ cmd_id_start_remain_publish }}"
-        get_attribute: state
-        select: SPECIFIC_ATTRIBUTES
-        comparisonoperator: EQ
-        state: query
-        region: "{{ aws.region }}"
-      register: dbquery_start_remain_publish
-      when: module_error is undefined
-
-    - name: Set fact for error check
-      set_fact:
-        dbquery_state_failed_start_remain_publish: "{{dbquery_start_remain_publish.item[0].state.S}}"
-      when: '"item" in dbquery_start_remain_publish'
-
-    - name: Check for error when starting remaining Publisher
-      set_fact:
-        error_start_remain_publish: 1
-        module_error: 1
-      when: dbquery_state_failed_start_remain_publish is defined and dbquery_state_failed_start_remain_publish == "Failed" and module_error is undefined
-
-    - name: Query if offline-compaction-snapshot was successful
-      dynamodb_search:
-        table_name: "{{ dynamodb_tablename }}"
-        attribute: command_id
-        attribute_value: "{{ cmd_id_start_remain_publish }}"
         get_attribute: state
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
@@ -649,16 +419,17 @@
         region: "{{ aws.region }}"
       register: dbquery
       until: dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
-      retries:  720
+      # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
+      retries: 720
       delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
       set_fact:
         dbquery_failed: "{{dbquery.item[0].state.S}}"
-      when: '"item" in dbquery'
+      when: "'item' in dbquery"
 
-    - name: Check if offline-compaction-snapshot failed
+    - name: Check if offline-snapshot-full-set failed
       set_fact:
         general_error: 1
       when: dbquery_failed is defined and dbquery_failed == "Failed" and module_error is undefined
@@ -686,14 +457,6 @@
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
       register: output_files_stop_publish
       when: cmd_id_stop_publish is defined
-
-    - name: Get path to output files of taking offline compaction
-      aws_s3:
-        mode: list
-        bucket: "{{ s3_bucket }}"
-        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_compaction }}"
-      register: output_files_offline_compaction
-      when: cmd_id_offline_compaction is defined
 
     - name: Get path to output files of taking offline backup
       aws_s3:
@@ -727,113 +490,51 @@
       register: output_files_start_publish
       when: cmd_id_start_publish is defined
 
-    - name: Get path to output files of checking remaining compaction jobs
-      aws_s3:
-        mode: list
-        bucket: "{{ s3_bucket }}"
-        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_remain_compact_jobs }}"
-      register: output_files_remain_compact_jobs
-      when: cmd_id_remain_compact_jobs is defined
-
-    - name: Get path to output files of stopping remaining publisher
-      aws_s3:
-        mode: list
-        bucket: "{{ s3_bucket }}"
-        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_remain_publish }}"
-      register: output_files_stop_remain_publish
-      when: cmd_id_stop_remain_publish is defined
-
-    - name: Get path to output files of compact remaining publisher
-      aws_s3:
-        mode: list
-        bucket: "{{ s3_bucket }}"
-        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_compact_publish }}"
-      register: output_files_compact_publish
-      when: cmd_id_compact_publish is defined
-
-    - name: Get path to output files of starting remaining publisher
-      aws_s3:
-        mode: list
-        bucket: "{{ s3_bucket }}"
-        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_remain_publish }}"
-      register: output_files_start_remain_publish
-      when: cmd_id_start_remain_publish is defined
-
     - name: Set global facts for getting command output
       set_fact:
         log_path: "{{ playbook_dir }}/../../logs/"
 
-    - name: Set facts for getting command output stop Author Standby Service
+    - name: Set facts for getting command output of stopping Author Standby Service
       set_fact:
         dl_path_stop_author_standby: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_standby }}"
         s3_files_stop_author_standby: "{{ output_files_stop_author_standby.s3_keys }}"
       when: error_stop_author_standby is defined or general_error is defined
 
-    - name: Set facts for getting command output stop Author Primary Service
+    - name: Set facts for getting command output of stopping Author Primary Service
       set_fact:
         dl_path_stop_author_primary: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_author_primary }}"
         s3_files_stop_author_primary: "{{ output_files_stop_author_primary.s3_keys }}"
       when: error_stop_author_primary is defined or general_error is defined
 
-    - name: Set facts for getting command output stop Publish Services
+    - name: Set facts for getting command output of stopping Publish Services
       set_fact:
         dl_path_stop_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_publish }}"
         s3_files_stop_publish: "{{ output_files_stop_publish.s3_keys }}"
       when: error_stop_publish is defined or general_error is defined
 
-    - name: Set facts for getting command output Offline Compaction
-      set_fact:
-        dl_path_offline_compaction: "{{ stack_prefix }}/stack-manager/SSMOutput/{{cmd_id_offline_compaction}}"
-        s3_files_offline_compaction: "{{ output_files_offline_compaction.s3_keys }}"
-      when: error_offline_compaction is defined or general_error is defined
-
-    - name: Set facts for getting command output Offline Backup
+    - name: Set facts for getting command output of taking offline Backup
       set_fact:
         dl_path_offline_backup: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_offline_backup }}"
         s3_files_offline_backup: "{{ output_files_offline_backup.s3_keys }}"
       when: error_offline_snapshot is defined or general_error is defined
 
-    - name: Set facts for getting command output start Author Primary Service
+    - name: Set facts for getting command output of starting Author Primary Service
       set_fact:
         dl_path_start_author_primary: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_primary }}"
         s3_files_start_author_primary: "{{ output_files_start_author_primary.s3_keys }}"
       when: error_start_author_primary is defined or general_error is defined
 
-    - name: Set facts for getting command output start Author Standby Service
+    - name: Set facts for getting command output of starting Author Standby Service
       set_fact:
         dl_path_start_author_standby: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_author_standby }}"
         s3_files_start_author_standby: "{{ output_files_start_author_standby.s3_keys }}"
       when: error_start_author_standby is defined or general_error is defined
 
-    - name: Set facts for getting command output start Publish Services
+    - name: Set facts for getting command output of starting Publish Services
       set_fact:
         dl_path_start_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
         s3_files_start_publish: "{{ output_files_start_publish.s3_keys }}"
       when: error_start_publish is defined or general_error is defined
-
-    - name: Set facts for getting command output remaining compact jobs
-      set_fact:
-        dl_path_remain_compact_jobs: "{{ stack_prefix }}/stack-manager/SSMOutput/{{cmd_id_remain_compact_jobs}}"
-        s3_files_remain_compact_jobs: "{{ output_files_remain_compact_jobs.s3_keys }}"
-      when: error_remain_compact_jobs is defined or general_error is defined
-
-    - name: Set facts for getting command output stop remaining Publish Services
-      set_fact:
-        dl_path_stop_remain_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{cmd_id_stop_remain_publish}}"
-        s3_files_stop_remain_publish: "{{ output_files_stop_remain_publish.s3_keys }}"
-      when: error_stop_remain_publish is defined or general_error is defined
-
-    - name: Set facts for getting command output compact remaining publisher
-      set_fact:
-        dl_path_compact_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{cmd_id_compact_publish}}"
-        s3_files_compact_publish: "{{ output_files_compact_publish.s3_keys }}"
-      when: error_remain_compact_publish is defined or general_error is defined
-
-    - name: Set facts for getting command output start remaining Publish Servvice
-      set_fact:
-        dl_path_start_remain_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{cmd_id_start_remain_publish}}"
-        s3_files_start_remain_publish: "{{ output_files_start_remain_publish.s3_keys }}"
-      when: error_start_remain_publish is defined or general_error is defined
 
     - name: "Create Download directory of stopping Author Standby Service"
       file:
@@ -859,20 +560,12 @@
         - "{{ s3_files_stop_publish }}"
       when: error_stop_publish is defined or general_error is defined
 
-    - name: "Create Download directory of taking offline compaction"
-      file:
-        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
-        state: directory
-      with_items:
-      - "{{ s3_files_offline_compaction }}"
-      when: error_offline_compaction is defined or general_error is defined
-
     - name: "Create Download directory of taking offline backup Service"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
       with_items:
-      - "{{ s3_files_offline_backup }}"
+        - "{{ s3_files_offline_backup }}"
       when: error_offline_snapshot is defined or general_error is defined
 
     - name: "Create Download directory of starting Author Primary Service"
@@ -880,7 +573,7 @@
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
       with_items:
-      - "{{ s3_files_start_author_primary }}"
+        - "{{ s3_files_start_author_primary }}"
       when: error_start_author_primary is defined or general_error is defined
 
     - name: "Create Download directory of starting Author Standby Service"
@@ -888,7 +581,7 @@
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
       with_items:
-      - "{{ s3_files_start_author_standby }}"
+        - "{{ s3_files_start_author_standby }}"
       when: error_start_author_standby is defined or general_error is defined
 
     - name: "Create Download directory of starting Publish Service"
@@ -896,40 +589,8 @@
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
         state: directory
       with_items:
-      - "{{ s3_files_start_publish }}"
+        - "{{ s3_files_start_publish }}"
       when: error_start_publish is defined or general_error is defined
-
-    - name: "Create Download directory of remaining compaction job"
-      file:
-        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
-        state: directory
-      with_items:
-      - "{{ s3_files_remain_compact_jobs }}"
-      when: error_remain_compact_jobs is defined or general_error is defined
-
-    - name: "Create Download directory of stopping remaining Publisher"
-      file:
-        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
-        state: directory
-      with_items:
-      - "{{ s3_files_stop_remain_publish }}"
-      when: error_stop_remain_publish is defined or general_error is defined
-
-    - name: "Create Download directory of compact remaining Publisher"
-      file:
-        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
-        state: directory
-      with_items:
-      - "{{ s3_files_compact_publish }}"
-      when: error_remain_compact_publish is defined or general_error is defined
-
-    - name: "Create Download directory of starting remaining Publisher"
-      file:
-        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
-        state: directory
-      with_items:
-      - "{{ s3_files_start_remain_publish }}"
-      when: error_start_remain_publish is defined or general_error is defined
 
     - name: "Save command output stopping Author Standby Service to {{log_path }}"
       aws_s3:
@@ -960,16 +621,6 @@
       with_items:
         - "{{ s3_files_stop_publish }}"
       when: error_stop_publish is defined or general_error is defined
-
-    - name: "Save command output taking opffline compaction to {{log_path }}"
-      aws_s3:
-        mode: get
-        bucket: "{{ s3_bucket }}"
-        object: "{{ item }}"
-        dest: "{{ log_path }}{{ item }}"
-      with_items:
-        - "{{ s3_files_offline_compaction }}"
-      when: error_offline_compaction is defined or general_error is defined
 
     - name: "Save command output taking offline backup to {{log_path }}"
       aws_s3:
@@ -1011,46 +662,6 @@
         - "{{ s3_files_start_publish }}"
       when: error_start_publish is defined or general_error is defined
 
-    - name: "Save command output check for remaining compaction jobs to {{log_path }}"
-      aws_s3:
-        mode: get
-        bucket: "{{ s3_bucket }}"
-        object: "{{ item }}"
-        dest: "{{ log_path }}{{ item }}"
-      with_items:
-        - "{{ s3_files_remain_compact_jobs }}"
-      when: error_remain_compact_jobs is defined or general_error is defined
-
-    - name: "Save command output stopping remaining Publisher to {{log_path }}"
-      aws_s3:
-        mode: get
-        bucket: "{{ s3_bucket }}"
-        object: "{{ item }}"
-        dest: "{{ log_path }}{{ item }}"
-      with_items:
-        - "{{ s3_files_stop_remain_publish }}"
-      when: error_stop_remain_publish is defined or general_error is defined
-
-    - name: "Save command output taking remaining compaction to {{log_path }}"
-      aws_s3:
-        mode: get
-        bucket: "{{ s3_bucket }}"
-        object: "{{ item }}"
-        dest: "{{ log_path }}{{ item }}"
-      with_items:
-        - "{{ s3_files_compact_publish }}"
-      when: error_remain_compact_publish is defined or general_error is defined
-
-    - name: "Save command output starting remaining Publisher to {{log_path }}"
-      aws_s3:
-        mode: get
-        bucket: "{{ s3_bucket }}"
-        object: "{{ item }}"
-        dest: "{{ log_path }}{{ item }}"
-      with_items:
-        - "{{ s3_files_start_remain_publish }}"
-      when: error_start_remain_publish is defined or general_error is defined
-
     - name: "Find error log files of stopping Author Standby Service"
       find:
         paths: "{{log_path }}{{ dl_path_stop_author_standby }}"
@@ -1077,15 +688,6 @@
         recurse: yes
       register: stderr_stop_publish
       when: error_stop_publish is defined or general_error is defined
-
-    - name: "Find error log files of taking offline compaction"
-      find:
-        paths: "{{log_path }}{{ dl_path_offline_compaction }}"
-        file_type: file
-        patterns: stderr
-        recurse: yes
-      register: stderr_offline_compaction
-      when: error_offline_compaction is defined or general_error is defined
 
     - name: "Find error log files of taking offline backup"
       find:
@@ -1123,42 +725,6 @@
       register: stderr_path_start_publish
       when: error_start_publish is defined or general_error is defined
 
-    - name: "Find error log files of checking for remaining compaction jobs"
-      find:
-        paths: "{{log_path }}{{ dl_path_remain_compact_jobs }}"
-        file_type: file
-        patterns: stderr
-        recurse: yes
-      register: stderr_path_remain_compact_jobs
-      when: error_remain_compact_jobs is defined or general_error is defined
-
-    - name: "Find error log files of stopping remaining Publisher"
-      find:
-        paths: "{{log_path }}{{ dl_path_stop_remain_publish }}"
-        file_type: file
-        patterns: stderr
-        recurse: yes
-      register: stderr_path_stop_remain_publish
-      when: error_stop_remain_publish is defined or general_error is defined
-
-    - name: "Find error log files of taking remaining offline compaction"
-      find:
-        paths: "{{log_path }}{{ dl_path_compact_publish }}"
-        file_type: file
-        patterns: stderr
-        recurse: yes
-      register: stderr_path_compact_publish
-      when: error_remain_compact_publish is defined or general_error is defined
-
-    - name: "Find error log files of starting remaining Publisher"
-      find:
-        paths: "{{log_path }}{{ dl_path_start_remain_publish }}"
-        file_type: file
-        patterns: stderr
-        recurse: yes
-      register: stderr_path_start_remain_publish
-      when: error_start_remain_publish is defined or general_error is defined
-
     - name: "Show Error Log of stopping Author Standby Service"
       log_output:
         type: file
@@ -1182,14 +748,6 @@
       with_items:
         - "{{stderr_stop_publish}}"
       when: error_stop_publish is defined or general_error is defined
-
-    - name: "Show Error Log of taking offline compaction"
-      log_output:
-        type: file
-        log_files: "{{ item.files | map(attribute='path')|list }}"
-      with_items:
-        - "{{stderr_offline_compaction}}"
-      when: error_offline_compaction is defined or general_error is defined
 
     - name: "Show Error Log of taking offline backup"
       log_output:
@@ -1222,38 +780,6 @@
       with_items:
         - "{{stderr_path_start_publish}}"
       when: error_start_publish is defined or general_error is defined
-
-    - name: "Show Error Log of checking remaining compaction jobs"
-      log_output:
-        type: file
-        log_files: "{{ item.files | map(attribute='path')|list }}"
-      with_items:
-        - "{{stderr_path_remain_compact_jobs}}"
-      when: error_remain_compact_jobs is defined or general_error is defined
-
-    - name: "Show Error Log of stopping remaining Publisher"
-      log_output:
-        type: file
-        log_files: "{{ item.files | map(attribute='path')|list }}"
-      with_items:
-        - "{{stderr_path_stop_remain_publish}}"
-      when: error_stop_remain_publish is defined or general_error is defined
-
-    - name: "Show Error Log of taking remaining offline compaction"
-      log_output:
-        type: file
-        log_files: "{{ item.files | map(attribute='path')|list }}"
-      with_items:
-        - "{{stderr_path_compact_publish}}"
-      when: error_remain_compact_publish is defined or general_error is defined
-
-    - name: "Show Error Log of starting remaining Publisher"
-      log_output:
-        type: file
-        log_files: "{{ item.files | map(attribute='path')|list }}"
-      with_items:
-        - "{{stderr_path_start_remain_publish}}"
-      when: error_start_remain_publish is defined or general_error is defined
 
     - fail:
         msg: "Error: Failed executing event {{ message_type }}"

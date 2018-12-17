@@ -5,7 +5,7 @@ set -o errexit
 STACK_PREFIX="$1"
 TARGET_AEM_STACK_PREFIX="$2"
 
-CONFIG_PATH=examples/user-config/
+CONFIG_PATH=stage/user-config/
 
 AEM_PACKAGE_GROUP=shinesolutions
 AEM_PACKAGE_NAME=aem-helloworld-content

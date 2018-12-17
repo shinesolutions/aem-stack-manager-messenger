@@ -3,7 +3,7 @@ Configuration
 
 The following configurations are available for users to customise Stack Manager event processing.
 
-Check out the [example configuration files](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/examples/user-config/) as reference.
+Check out the [example configuration files](https://github.com/shinesolutions/aem-helloworld-config/blob/master/aem-stack-manager-messenger/) as reference.
 
 | Name | Description | Required? | Default |
 |------|-------------|-----------|---------|
