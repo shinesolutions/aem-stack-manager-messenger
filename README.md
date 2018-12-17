@@ -32,7 +32,7 @@ Usage
 - Create [configuration file](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/docs/configuration.md)
 - Execute the AEM Stack Manager events:
 
-Deploy a set of AEM Packages and Dispatcher artifacts into an AEM environment using a [deployment descriptor](https://github.com/shinesolutions/aem-aws-stack-builder/blob/master/docs/descriptor-deployment.md) file:
+Deploy a set of AEM Packages and Dispatcher artifacts into an AEM environment using a [Deployment Descriptor](https://github.com/shinesolutions/aem-aws-stack-builder/blob/master/docs/descriptors.md#deployment-descriptor) file:
 
     make deploy-artifacts-full-set \
       stack_prefix=<stack_manager_stack_prefix> \
@@ -78,19 +78,19 @@ Disable CRXDE on an AEM instance:
       config_path=<path/to/config/dir> \
       component=author-primary
 
-Export a set of packages from an AEM instance using an [export descriptor](https://github.com/shinesolutions/aem-aws-stack-builder/blob/master/docs/descriptor-export.md) file:
+Export a set of backup packages from an AEM instance using a [Package Backup Descriptor](https://github.com/shinesolutions/aem-aws-stack-builder/blob/master/docs/descriptors.md#package-backup-descriptor) file:
 
     make export-packages-full-set \
       stack_prefix=<stack_manager_stack_prefix> \
       target_aem_stack_prefix=<aem_full_set_stack_prefix> \
       config_path=<path/to/config/dir> \
-      descriptor_file=<export_backup_descriptor_file>
+      descriptor_file=<package_backup_descriptor_file>
 
     make export-packages-consolidated \
       stack_prefix=<stack_manager_stack_prefix> \
       target_aem_stack_prefix=<aem_consolidated_stack_prefix> \
       config_path=<path/to/config/dir> \
-      descriptor_file=<export_backup_descriptor_file>
+      descriptor_file=<package_backup_descriptor_file>
 
 Export a single AEM package from an AEM instance:
 
