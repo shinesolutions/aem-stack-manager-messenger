@@ -11,9 +11,12 @@ Frequently Asked Questions
 
 * __Q:__ Where can I find the Run Command status for the Stack Manager event?<br/>
   __A:__ On AWS console, go to EC2 service, Run Command section, and use the filter to find the status.
-  
+
 * __Q:__ Where can I find the CloudWatch logs for the Stack Manager event?<br/>
   __A:__ On AWS console, go to CloudWatch service, Logs section, and find the log group `/aws/lambda/<stack_prefix>-stack-manager-<ssm_command>`.
 
 * __Q:__ Where can I find the log files for the SSM commands execution on the EC2 instance?<br/>
   __A:__ You can find `stdout` and `stderr` log files at `/var/lib/amazon/ssm/<instance_id>/document/orchestration/<execution_id>/` .
+
+* __Q:__ Why is there no log file available after successfully executing the SSM command ?<br/>
+  __A:__ If there is no log file available for an EC2 instance on S3 or on the file system, but the command still ran successfully, than the command execution doesn't produced any output for `stdout` & `stderr` e.g. the `check-readiness-full-set` might not produce log files for all EC2 instances as it doesn't produce any output for author-primary.
