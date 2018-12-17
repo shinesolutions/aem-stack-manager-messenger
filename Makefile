@@ -182,6 +182,15 @@ unschedule-live-snapshot-consolidated:
 install-aem-profile:
 	./scripts/run-playbook.sh send-message install-aem-profile "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_profile=$(aem_profile) aem_artifacts_base=$(aem_artifacts_base) aem_base=$(aem_base) aem_healthcheck_version=$(aem_healthcheck_version) aem_id=$(aem_id) aem_port=$(aem_port) aem_ssl_port=$(aem_ssl_port)"
 
+run-aem-upgrade:
+	./scripts/run-playbook.sh send-message run-aem-upgrade "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_upgrade_version=$(aem_upgrade_version)"
+
+upgrade-unpack-jar:
+	./scripts/run-playbook.sh send-message upgrade-unpack-jar "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_artifacts_base=$(aem_artifacts_base) aem_upgrade_version=$(aem_upgrade_version) enable_backup=$(enable_backup)"
+
+upgrade-repository-migration:
+	./scripts/run-playbook.sh send-message upgrade-repository-migration "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) source_crx2oak=$(source_crx2oak)"
+
 ################################################################################
 # Integration test targets.
 # The targets will execute all AEM Stack Manager events available for each AEM architecture.

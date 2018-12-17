@@ -1,0 +1,14 @@
+{
+  "externalId": externalId,
+  "task": "upgrade-unpack-jar",
+  "stack_prefix": target_aem_stack_prefix,
+  "details": {
+    "component": [component],
+    "comment": "Download and Unpack AEM Jar file as part of AEM Upgrade preperation.",
+    "parameters": {
+      "aemArtifactsBase": [aem_artifacts_base],
+      "aemUpgradeVersion": [aem_upgrade_version],
+      "enableBackup": [enable_backup]
+    }
+  }
+}

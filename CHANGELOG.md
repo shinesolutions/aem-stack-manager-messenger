@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+* Add Stack Manager events for AEM Upgrade automation.
 - Add YAML checks to lint target
 
 ## [2.0.0] - 2018-12-07
