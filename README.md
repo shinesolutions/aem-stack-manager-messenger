@@ -111,14 +111,6 @@ Flush dispatcher cache:
       config_path=<path/to/config/dir> \
       component=publish-dispatcher
 
-Trigger live snapshot of an AEM repository:
-
-    make live-snapshot \
-      stack_prefix=<stack_manager_stack_prefix> \
-      target_aem_stack_prefix=<aem_stack_prefix> \
-      config_path=<path/to/config/dir> \
-      component=author-primary
-
 Import a single AEM package into an AEM instance:
 
     make import-package \
