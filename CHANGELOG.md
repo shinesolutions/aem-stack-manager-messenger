@@ -1,3 +1,4 @@
+pr
 # Changelog
 All notable changes to this project will be documented in this file.
 
@@ -6,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix integration test config path since the introduction of profiles in aem-helloworld-config
+
 ## [2.1.0] - 2019-01-31
 
 ### Added
-* Add Stack Manager events for AEM Upgrade automation.
+- Add Stack Manager events for AEM Upgrade automation.
 - Add YAML checks to lint target
 
 ## [2.0.0] - 2018-12-07
