@@ -22,7 +22,7 @@ fi
 
 mkdir -p logs
 echo "Sending Message SNS Topic..."
-ANSIBLE_CONFIG=provisioners/ansible/ansible.cfg \
+ANSIBLE_CONFIG=conf/ansible/ansible.cfg \
   ANSIBLE_LOG_PATH=$log_path \
   ansible-playbook "provisioners/ansible/playbooks/$playbook_type.yaml" \
   -v \
