@@ -1,4 +1,4 @@
-environment[![Build Status](https://img.shields.io/travis/shinesolutions/aem-stack-manager-messenger.svg)](http://travis-ci.org/shinesolutions/aem-stack-manager-messenger)
+[![Build Status](https://img.shields.io/travis/shinesolutions/aem-stack-manager-messenger.svg)](http://travis-ci.org/shinesolutions/aem-stack-manager-messenger)
 
 AEM Stack Manager Messenger
 ---------------------------
