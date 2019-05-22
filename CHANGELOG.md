@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+- Fix stack_prefix, target_aem_stack_prefix, and config_path variables assignment
+
 ## 2.3.0 - 2019-05-22
 ### Fixed
 - Fix config_path variable assignment in run-playbook.sh script

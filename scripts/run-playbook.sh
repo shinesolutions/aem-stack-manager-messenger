@@ -4,7 +4,9 @@ set -o errexit
 
 playbook_type=$1
 message_type=$2
-config_path=$3
+stack_prefix=$3
+target_aem_stack_prefix=$4
+config_path=$5
 run_id=${RUN_ID:-$(date +%Y-%m-%d:%H:%M:%S)}
 log_path=logs/$run_id-$playbook_type.log
 
