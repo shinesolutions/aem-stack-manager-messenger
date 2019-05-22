@@ -4,6 +4,7 @@ set -o errexit
 
 playbook_type=$1
 message_type=$2
+config_path=$3
 run_id=${RUN_ID:-$(date +%Y-%m-%d:%H:%M:%S)}
 log_path=logs/$run_id-$playbook_type.log
 
