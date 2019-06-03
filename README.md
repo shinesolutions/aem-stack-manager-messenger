@@ -1,4 +1,5 @@
 [![Build Status](https://img.shields.io/travis/shinesolutions/aem-stack-manager-messenger.svg)](http://travis-ci.org/shinesolutions/aem-stack-manager-messenger)
+[![Known Vulnerabilities](https://snyk.io/test/github/shinesolutions/aem-stack-manager-messenger/badge.svg)](https://snyk.io/test/github/shinesolutions/aem-stack-manager-messenger)
 
 AEM Stack Manager Messenger
 ---------------------------
