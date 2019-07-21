@@ -1,0 +1,16 @@
+{
+  "externalId": externalId,
+  "task": "test-readiness-full-set",
+  "stack_prefix": target_aem_stack_prefix,
+  "details": {
+    "component": [
+      'orchestrator',
+      'author-dispatcher',
+      'author-primary',
+      'author-standby',
+      'publish',
+      'publish-dispatcher'
+    ],
+    "comment": "test the AEM Fullset stack to see if it is ready to be used",
+    }
+}
