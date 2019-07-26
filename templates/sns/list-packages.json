@@ -1,9 +1,9 @@
 {
-  "externalId": externalId,
+  "externalId": "{{ externalId }}",
   "task": "list-packages",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
-    "component": [component],
+    "component": ["{{ component }}"],
     "comment": "list deployed packages on selected AEM instances by component",
   }
 }

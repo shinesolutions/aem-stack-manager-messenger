@@ -1,19 +1,19 @@
 {
-  "externalId": externalId,
+  "externalId": "{{ externalId }}",
   "task": "deploy-artifact",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
-    "component": [component],
+    "component": ["{{ component }}"],
     "comment": "deploying artifacts based on a descriptor file",
     "parameters": {
-      "source": [source],
-      "group": [group],
-      "name": [name],
-      "version": [version],
-      "replicate": [replicate],
-      "activate": [activate],
-      "force": [force],
-      "aemId": [aem_id]
+      "source": ["{{ source }}"],
+      "group": ["{{ group }}"],
+      "name": ["{{ name }}"],
+      "version": ["{{ version }}"],
+      "replicate": ["{{ replicate }}"],
+      "activate": ["{{ activate }}"],
+      "force": ["{{ force }}"],
+      "aemId": ["{{ aem_id }}"]
     }
   }
 }

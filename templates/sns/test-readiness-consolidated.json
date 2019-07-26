@@ -1,10 +1,10 @@
 {
-  "externalId": externalId,
+  "externalId": "{{ externalId }}",
   "task": "test-readiness-consolidated",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
     "component": [
-      'author-publish-dispatcher'
+      "author-publish-dispatcher"
     ],
     "comment": "test the AEM Consolidated stack to see if it is ready to be used",
     }

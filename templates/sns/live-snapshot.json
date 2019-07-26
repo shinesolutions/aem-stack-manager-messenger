@@ -1,9 +1,9 @@
 {
-  "externalId": externalId,
+  "externalId": "{{ externalId }}",
   "task": "live-snapshot",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
-    "component": [component],
+    "component": ["{{ component }}"],
     "comment": "take live snapshot on selected AEM instances by component",
     }
 }

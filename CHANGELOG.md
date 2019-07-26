@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+- Fixed bug with resolving JSON template variables following upgrade to Ansible 2.8.x #70
+
 ## 2.4.0 - 2019-07-21
 ### Added
 - Add new make target to check stack readiness for stacks with disabled ChaosMonkey instance
