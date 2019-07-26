@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Fixed
-- Fixed bug with resolving JSON template variables #70
+- Fixed bug with resolving JSON template variables following upgrade to Ansible 2.8.x #70
 
 ## 2.4.0 - 2019-07-21
 ### Added
