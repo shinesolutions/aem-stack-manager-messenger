@@ -8,7 +8,6 @@
     subject: "{{target_aem_stack_prefix}} - {{ message_type }}"
     # files are in .txt as they need to replace the variables e.g. 'target_aem_stack_prefix' (un-quoted) which breaks the json validation.
     # if the variables were in double quotes, they would not be replaced with the value.
-    message: "{{ lookup('file', '../../../templates/sns/{{ message_type }}.json') }}"
 
   tasks:
     - name: "Get facts for Target AEM Stack {{ target_aem_stack_prefix }}"
@@ -55,6 +54,16 @@
         dynamodb_tablename: "{{ stack_manager_stack_outputs.AemStackManagerTableName }}"
         sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
         externalId: "{{ 9999999999999999999999 | random | to_uuid }}"
+
+    - name: "Generating message file"
+      template:
+        src: "../../../templates/sns/{{ message_type }}.json"
+        dest: "../../../stage/{{ message_type }}.json"
+        force: true
+
+    - name: "Load generated message payload file"
+      set_fact:
+        message: "{{ lookup('file', '../../../stage/{{ message_type }}.json') }}"
 
     - debug:
         msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"
@@ -179,3 +188,8 @@
     - fail:
         msg: "Error: Failed executing event {{ message_type }}"
       when: general_error is defined
+
+    - name: Remove generated message payload file
+      file:
+        path: "../../../stage/{{ message_type }}.json"
+        state: absent

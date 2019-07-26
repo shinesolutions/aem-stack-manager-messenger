@@ -1,12 +1,12 @@
 {
-  "externalId": externalId,
+  "externalId": "{{ externalId }}",
   "task": "upgrade-repository-migration",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
-    "component": [component],
+    "component": ["{{ component }}"],
     "comment": "Trigger the repository migration as part of AEM Upgrade preperation.",
     "parameters": {
-      "sourceCrx2oak": [source_crx2oak],
+      "sourceCrx2oak": ["{{ source_crx2oak }}"],
     }
   }
 }

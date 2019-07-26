@@ -1,11 +1,11 @@
 {
     "task": "run-adhoc-puppet",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
-    "component": [component],
+    "component": ["{{ component }}"],
     "comment": "Run adhoc puppet code on selected instances",
     "parameters": {
-      "adhocPuppetFile": [puppet_tar_file]
+      "adhocPuppetFile": ["{{ puppet_tar_file }}"]
     }
   }
 }

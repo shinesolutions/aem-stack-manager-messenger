@@ -1,14 +1,14 @@
 {
-  "externalId": externalId,
+  "externalId": "{{ externalId }}",
   "task": "deploy-artifacts",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
     "component": [
-      'author-publish-dispatcher'
+      "author-publish-dispatcher"
     ],
     "comment": "deploying artifacts based on a descriptor file for consolidated",
     "parameters": {
-      "descriptorFile": [descriptor_file]
+      "descriptorFile": ["{{ descriptor_file }}"]
     }
   }
 }

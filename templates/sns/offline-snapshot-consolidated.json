@@ -1,10 +1,10 @@
 {
-  "externalId": externalId,
+  "externalId": "{{ externalId }}",
   "task": "offline-snapshot-consolidated",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
     "component": [
-      'author-publish-dispatcher'
+      "author-publish-dispatcher"
     ],
     "comment": "offline snapshot for AEM Consolidated"
   }
