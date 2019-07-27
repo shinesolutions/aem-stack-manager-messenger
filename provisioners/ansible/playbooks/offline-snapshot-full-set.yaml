@@ -52,9 +52,6 @@
         dynamodb_tablename: "{{ stack_manager_stack_outputs.AemStackManagerTableName }}"
         sns_topic: "{{ stack_manager_stack_outputs.BackupTopicArn }}"
 
-    - debug:
-        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"
-
     - name: Query if Backup lock exist
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
@@ -86,6 +83,9 @@
     - name: "Load generated message payload file"
       set_fact:
         message: "{{ lookup('file', '../../../stage/offline-snapshot-full-set.json') }}"
+
+    - debug:
+        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"
 
     - name: Send message to SNS Topic
       sns:
