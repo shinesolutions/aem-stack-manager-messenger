@@ -74,6 +74,11 @@
         msg: "Error: Another offline compaction backup is running"
       when: db_backup_locked is defined
 
+    - name: "Generate stage dir for message file"
+      file:
+        path: "../../../stage"
+        state: directory
+
     - name: "Generating message file"
       template:
         src: "../../../templates/sns/offline-compaction-snapshot-full-set.json"

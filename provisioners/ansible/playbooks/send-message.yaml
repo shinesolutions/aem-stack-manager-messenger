@@ -53,6 +53,11 @@
         sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
         externalId: "{{ 9999999999999999999999 | random | to_uuid }}"
 
+    - name: "Generate stage dir for message file"
+      file:
+        path: "../../../stage"
+        state: directory
+
     - name: "Generating message file"
       template:
         src: "../../../templates/sns/{{ message_type }}.json"
