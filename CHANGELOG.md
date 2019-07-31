@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+- Fixed issue with missing stage dir for sns message template file generation [#70]
+
 ## 2.5.0 - 2019-07-27
 ### Fixed
 - Fixed offline-snapshot message sending sequence [#70]
