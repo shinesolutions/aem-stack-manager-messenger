@@ -7,9 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## 2.4.0 - 2019-07-21
 ### Added
-- Add new make target to check stack readiness for stacks with disabled ChaosMonkey instance
+- Add feature to run Toughday2 performance test
 
 ## 2.3.1 - 2019-05-22
 ### Fixed

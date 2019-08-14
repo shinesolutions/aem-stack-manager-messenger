@@ -140,6 +140,9 @@ promote-author:
 run-adhoc-puppet:
 	./scripts/run-playbook.sh send-message run-adhoc-puppet "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) puppet_tar_file=$(puppet_tar_file)"
 
+run-toughday2-performance-test:
+	./scripts/run-playbook.sh send-message run-toughday2-performance-test "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "duration$(duration) timeout=$(timeout) configfile=$(configfile) suite=$(suite) runmode=$(runmode) publishmode=$(publishmode)"
+
 check-readiness-consolidated:
 	./scripts/run-playbook.sh send-message test-readiness-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)"
 
