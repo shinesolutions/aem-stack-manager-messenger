@@ -1,0 +1,12 @@
+{
+  "externalId": "{{ externalId }}",
+  "task": "disable-saml",
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
+  "details": {
+    "component": ["{{ component }}"],
+    "comment": "Disable SAML on target AEM Stack",
+    "parameters": {
+      "aemId": ["{{ aem_id }}"],
+    }
+  }
+}

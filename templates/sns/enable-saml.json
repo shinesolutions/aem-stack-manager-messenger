@@ -1,0 +1,38 @@
+{
+  "externalId": "{{ externalId }}",
+  "task": "enable-saml",
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
+  "details": {
+    "component": ["{{ component }}"],
+    "comment": "Enable SAML on target AEM Stack",
+    "parameters": {
+      "aemId": ["{{ aem_id }}"],
+      "path": ["{{ path }}"],
+      "serviceProviderEntityId": ["{{ service_provider_entity_id }}"],
+      "idpUrl": ["{{ idp_url }}"],
+      "idpCertAlias": ["{{ idp_cert_alias }}"],
+      "serial": ["{{ serial }}"],
+      "file": ["{{ file }}"],
+      "addGroupMemberships": ["{{ add_group_memberships }}"],
+      "assertionConsumerServiceUrl": ["{{ assertion_consumer_service_url }}"],
+      "clockTolerance": ["{{ clock_tolerance }}"],
+      "createUser": ["{{ create_user }}"],
+      "defaultGroups": ["{{ default_groups }}"],
+      "defaultRedirectUrl": ["{{ default_redirect_url }}"],
+      "digestMethod": ["{{ digest_method }}"],
+      "groupMembershipAttribute": ["{{ group_membership_attribute }}"],
+      "handleLogout": ["{{ handle_logout }}"],
+      "idpHttpRedirect": ["{{ idp_http_redirect }}"],
+      "keyStorePassword": ["{{ key_store_password }}"],
+      "logoutUrl": ["{{ logout_url }}"],
+      "nameIdFormat": ["{{ name_id_format }}"],
+      "serviceRanking": ["{{ service_ranking }}"],
+      "signatureMethod": ["{{ signature_method }}"],
+      "spPrivateKeyAlias": ["{{ sp_private_key_alias }}"],
+      "synchronizeAttributes": ["{{ synchronize_attributes }}"],
+      "useEncryption": ["{{ use_encryption }}"],
+      "userIdAttribute": ["{{ user_id_attribute }}"],
+      "userIntermediatePath": ["{{ user_intermediate_path }}"]
+    }
+  }
+}

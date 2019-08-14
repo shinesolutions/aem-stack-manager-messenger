@@ -90,6 +90,9 @@ deploy-artifacts-full-set:
 disable-crxde:
 	./scripts/run-playbook.sh send-message disable-crxde "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component)"
 
+disable-saml:
+	./scripts/run-playbook.sh send-message disable-saml "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_id=$(aem_id) "
+
 export-package:
 	./scripts/run-playbook.sh send-message export-package "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_id=$(aem_id) package_group=$(package_group) package_name=$(package_name) package_filter=$(package_filter)"
 
@@ -101,6 +104,9 @@ export-packages-full-set:
 
 enable-crxde:
 	./scripts/run-playbook.sh send-message enable-crxde "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component)"
+
+enable-saml:
+	./scripts/run-playbook.sh send-message enable-saml "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component) aem_id=$(aem_id) path=$(path) service_provider_entity_id=$(service_provider_entity_id) idp_url=$(idp_url) idp_cert_alias=$(idp_cert_alias) serial=$(serial) file=$(file) add_group_memberships=$(add_group_memberships) assertion_consumer_service_url=$(assertion_consumer_service_url) clock_tolerance=$(clock_tolerance) create_user=$(create_user) default_groups=$(default_groups) default_redirect_url=$(default_redirect_url) digest_method=$(digest_method) group_membership_attribute=$(group_membership_attribute) handle_logout=$(handle_logout) idp_http_redirect=$(idp_http_redirect) key_store_password=$(key_store_password) logout_url=$(logout_url) name_id_format=$(name_id_format) service_ranking=$(service_ranking) signature_method=$(signature_method) sp_private_key_alias=$(sp_private_key_alias) synchronize_attributes=$(synchronize_attributes) use_encryption=$(use_encryption) user_id_attribute=$(user_id_attribute) user_intermediate_path=$(user_intermediate_path)"
 
 flush-dispatcher-cache:
 	./scripts/run-playbook.sh send-message flush-dispatcher-cache "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component)"
