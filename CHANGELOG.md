@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+- Changed test-readiness-full-set template to send it only component orchestrator #75
+
+### Removed
+- Removed Make target for check-readiness-full-set-with-disabled-chaosmonkey #75
+- Removed sns template check-readiness-full-set-with-disabled-chaosmonkey.json #75
+
 ## 2.6.0 - 2019-07-31
 ### Fixed
 - Fixed issue with missing stage dir for sns message template file generation [#70]
