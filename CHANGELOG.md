@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+- Add enable-saml and disable-saml 
+
 ## 2.7.0 - 2019-08-14
 ### Changed
 - Changed test-readiness-full-set template to send it only component orchestrator [#75]
