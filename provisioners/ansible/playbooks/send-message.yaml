@@ -115,8 +115,8 @@
         region: "{{ aws.region }}"
       register: dbscan
       until: dbscan is defined and dbscan.item is defined and dbscan.item != [] and dbscan.item[0].command_id is defined and dbscan.item[0].command_id.S is defined
-      retries: 720
-      delay: 5
+      retries: "{{ poll_timeout.check_command_execution.retries }}"
+      delay: "{{ poll_timeout.check_command_execution.delay }}"
 
     - set_fact:
         cmd_id: "{{ item.command_id.S }}"

@@ -699,7 +699,7 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery
-      until: dbquery is defined and dbquery.item is defined and dbquery.item != [] and dbquery.item[0].state is defined and dbquery.item[0].state.S is defined and dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
+      until: dbquery is defined and dbquery.item is defined and dbquery.item != [] and dbquery.item[0].state is defined and dbquery.item[0].state.S is defined and dbquery.item[0].state.S in ["Success", "Failed"]
       retries: 720
       delay: 5
       when: module_error is undefined
