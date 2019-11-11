@@ -63,7 +63,7 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_backup_lock
-      until: dbquery_backup_lock is defined and dbquery_backup_lock.item is defined and dbquery_backup_lock.item != [] and dbquery_backup_lock.item[0].command_id is defined and dbquery_backup_lock.item[0].command_id.S is defined
+      until: dbquery_backup_lock is defined and dbquery_backup_lock.item is defined
       retries: 720
       delay: 5
 
