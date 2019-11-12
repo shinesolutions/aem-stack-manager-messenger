@@ -1,4 +1,4 @@
 {
   "task": "offline-compaction-snapshot-full-set",
-  "stack_prefix": target_aem_stack_prefix
+  "stack_prefix": "{{ target_aem_stack_prefix }}"
 }

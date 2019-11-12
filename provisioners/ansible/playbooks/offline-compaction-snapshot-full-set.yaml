@@ -5,10 +5,7 @@
   connection: local
 
   vars:
-    subject: "{{target_aem_stack_prefix}} - {{ message_type }}"
-    # files are in .txt as they need to replace the variables e.g. 'target_aem_stack_prefix' (un-quoted) which breaks the json validation.
-    # if the variables were in double quotes, they would not be replaced with the value.
-    message: "{{ lookup('file', '../../../templates/sns/offline-compaction-snapshot-full-set.json') }}"
+    subject: "{{target_aem_stack_prefix}} - offline-compaction-snapshot-full-set"
 
   tasks:
     - name: "Get facts for Target AEM Stack {{ target_aem_stack_prefix }}"
@@ -55,9 +52,6 @@
         dynamodb_tablename: "{{ stack_manager_stack_outputs.AemStackManagerTableName }}"
         sns_topic: "{{ stack_manager_stack_outputs.BackupTopicArn }}"
 
-    - debug:
-        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"
-
     - name: Query if Backup lock exist
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
@@ -69,6 +63,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_backup_lock
+      until: dbquery_backup_lock is defined and dbquery_backup_lock.item is defined
+      retries: 720
+      delay: 5
 
     - name: Check if DB is locked
       set_fact:
@@ -79,6 +76,24 @@
       fail:
         msg: "Error: Another offline compaction backup is running"
       when: db_backup_locked is defined
+
+    - name: "Generate stage dir for message file"
+      file:
+        path: "../../../stage"
+        state: directory
+
+    - name: "Generating message file"
+      template:
+        src: "../../../templates/sns/offline-compaction-snapshot-full-set.json"
+        dest: "../../../stage/offline-compaction-snapshot-full-set.json"
+        force: true
+
+    - name: "Load generated message payload file"
+      set_fact:
+        message: "{{ lookup('file', '../../../stage/offline-compaction-snapshot-full-set.json') }}"
+
+    - debug:
+        msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"
 
     - name: Send message to SNS Topic
       sns:
@@ -99,7 +114,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_stop_author_standby
-      until: cmd_stop_author_standby.item != []
+      until: cmd_stop_author_standby is defined and cmd_stop_author_standby.item is defined and cmd_stop_author_standby.item != [] and cmd_stop_author_standby.item[0].command_id is defined and cmd_stop_author_standby.item[0].command_id.S is defined
       retries: 720
       delay: 5
 
@@ -119,6 +134,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_stop_author_standby
+      until: dbquery_state_stop_author_standby is defined and dbquery_state_stop_author_standby.item is defined and dbquery_state_stop_author_standby.item != [] and dbquery_state_stop_author_standby.item[0].state is defined and dbquery_state_stop_author_standby.item[0].state.S is defined
+      retries: 720
+      delay: 5
 
     - name: Set fact for error check
       set_fact:
@@ -142,7 +160,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_stop_author_primary
-      until: cmd_stop_author_primary.item != []
+      until: cmd_stop_author_primary is defined and cmd_stop_author_primary.item is defined and cmd_stop_author_primary.item != [] and cmd_stop_author_primary.item[0].command_id is defined and cmd_stop_author_primary.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -164,6 +182,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_stop_author_primary
+      until: dbquery_state_stop_author_primary is defined and dbquery_state_stop_author_primary.item is defined and dbquery_state_stop_author_primary.item != [] and dbquery_state_stop_author_primary.item[0].state is defined and dbquery_state_stop_author_primary.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -188,7 +209,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_stop_publish
-      until: cmd_stop_publish.item != []
+      until: cmd_stop_publish is defined and cmd_stop_publish.item is defined and cmd_stop_publish.item != [] and cmd_stop_publish.item[0].command_id is defined and cmd_stop_publish.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -210,6 +231,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_stop_publish
+      until: dbquery_state_stop_publish is defined and dbquery_state_stop_publish.item is defined and dbquery_state_stop_publish.item != [] and dbquery_state_stop_publish.item[0].state is defined and dbquery_state_stop_publish.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -234,7 +258,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_offline_compaction
-      until: cmd_offline_compaction.item != []
+      until: cmd_offline_compaction is defined and cmd_offline_compaction.item is defined and cmd_offline_compaction.item != [] and cmd_offline_compaction.item[0].command_id is defined and cmd_offline_compaction.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -256,6 +280,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_offline_compaction
+      until: dbquery_state_offline_compaction is defined and dbquery_state_offline_compaction.item is defined and dbquery_state_offline_compaction.item != [] and dbquery_state_offline_compaction.item[0].state is defined and dbquery_state_offline_compaction.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -280,7 +307,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_offline_backup
-      until: cmd_offline_backup.item != []
+      until: cmd_offline_backup is defined and cmd_offline_backup.item is defined and cmd_offline_backup.item != [] and cmd_offline_backup.item[0].command_id is defined and cmd_offline_backup.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -302,6 +329,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_offline_snapshot
+      until: dbquery_state_offline_snapshot is defined and dbquery_state_offline_snapshot.item is defined and dbquery_state_offline_snapshot.item != [] and dbquery_state_offline_snapshot.item[0].state is defined and dbquery_state_offline_snapshot.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -326,7 +356,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_start_author_primary
-      until: cmd_start_author_primary.item != []
+      until: cmd_start_author_primary is defined and cmd_start_author_primary.item is defined and cmd_start_author_primary.item != [] and cmd_start_author_primary.item[0].command_id is defined and cmd_start_author_primary.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -348,6 +378,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_start_author_primary
+      until: dbquery_state_start_author_primary is defined and dbquery_state_start_author_primary.item is defined and dbquery_state_start_author_primary.item != [] and dbquery_state_start_author_primary.item[0].state is defined and dbquery_state_start_author_primary.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -372,7 +405,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_start_author_standby
-      until: cmd_start_author_standby.item != []
+      until: cmd_start_author_standby is defined and cmd_start_author_standby.item is defined and cmd_start_author_standby.item != [] and cmd_start_author_standby.item[0].command_id is defined and cmd_start_author_standby.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -394,6 +427,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_start_author_standby
+      until: dbquery_state_start_author_standby is defined and dbquery_state_start_author_standby.item is defined and dbquery_state_start_author_standby.item != [] and dbquery_state_start_author_standby.item[0].state is defined and dbquery_state_start_author_standby.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -418,7 +454,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_start_publish
-      until: cmd_start_publish.item != []
+      until: cmd_start_publish is defined and cmd_start_publish.item is defined and cmd_start_publish.item != [] and cmd_start_publish.item[0].command_id is defined and cmd_start_publish.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -440,6 +476,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_start_publish
+      until: dbquery_state_start_publish is defined and dbquery_state_start_publish.item is defined and dbquery_state_start_publish.item != [] and dbquery_state_start_publish.item[0].state is defined and dbquery_state_start_publish.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -464,7 +503,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_remain_compact_jobs
-      until: cmd_remain_compact_jobs.item != []
+      until: cmd_remain_compact_jobs is defined and cmd_remain_compact_jobs.item is defined and cmd_remain_compact_jobs.item != [] and cmd_remain_compact_jobs.item[0].command_id is defined and cmd_remain_compact_jobs.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -486,6 +525,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_remain_compact_jobs
+      until: dbquery_remain_compact_jobs is defined and dbquery_remain_compact_jobs.item is defined and dbquery_remain_compact_jobs.item != [] and dbquery_remain_compact_jobs.item[0].state is defined and dbquery_remain_compact_jobs.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -510,7 +552,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_stop_remain_publish
-      until: cmd_stop_remain_publish.item != []
+      until: cmd_stop_remain_publish is defined and cmd_stop_remain_publish.item is defined and cmd_stop_remain_publish.item != [] and cmd_stop_remain_publish.item[0].command_id is defined and cmd_stop_remain_publish.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -532,6 +574,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_stop_remain_publish
+      until: dbquery_stop_remain_publish is defined and dbquery_stop_remain_publish.item is defined and dbquery_stop_remain_publish.item != [] and dbquery_stop_remain_publish.item[0].state is defined and dbquery_stop_remain_publish.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -556,7 +601,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_compact_publish
-      until: cmd_compact_publish.item != []
+      until: cmd_compact_publish is defined and cmd_compact_publish.item is defined and cmd_compact_publish.item != [] and cmd_compact_publish.item[0].command_id is defined and cmd_compact_publish.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -578,6 +623,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_compact_publish
+      until: dbquery_compact_publish is defined and dbquery_compact_publish.item is defined and dbquery_compact_publish.item != [] and dbquery_compact_publish.item[0].state is defined and dbquery_compact_publish.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -602,7 +650,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_start_remain_publish
-      until: cmd_start_remain_publish.item != []
+      until: cmd_start_remain_publish is defined and cmd_start_remain_publish.item is defined and cmd_start_remain_publish.item != [] and cmd_start_remain_publish.item[0].command_id is defined and cmd_start_remain_publish.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -624,6 +672,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_start_remain_publish
+      until: dbquery_start_remain_publish is defined and dbquery_start_remain_publish.item is defined and dbquery_start_remain_publish.item != [] and dbquery_start_remain_publish.item[0].state is defined and dbquery_start_remain_publish.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -648,7 +699,7 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery
-      until: dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
+      until: dbquery is defined and dbquery.item is defined and dbquery.item != [] and dbquery.item[0].state is defined and dbquery.item[0].state.S is defined and dbquery.item[0].state.S in ["Success", "Failed"]
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -1256,5 +1307,10 @@
       when: error_start_remain_publish is defined or general_error is defined
 
     - fail:
-        msg: "Error: Failed executing event {{ message_type }}"
+        msg: "Error: Failed executing event offline-compaction-snapshot-full-set"
       when: general_error is defined or module_error is defined
+
+    - name: Remove generated message payload file
+      file:
+        path: "../../../stage/offline-snapshot-full-set.json"
+        state: absent

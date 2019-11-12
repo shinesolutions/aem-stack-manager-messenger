@@ -1,16 +1,16 @@
 {
-  "externalId": externalId,
+  "externalId": "{{ externalId }}",
   "task": "import-package",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
-    "component": [component],
+    "component": ["{{ component }}"],
     "comment": "import AEM backed up pacakges for a stack based on group, name and timestamp",
     "parameters": {
-      "sourceStackPrefix": [source_stack_prefix],
-      "packageGroup": [package_group],
-      "packageName": [package_name],
-      "packageDatestamp": [package_datestamp],
-      "aemId": [aem_id]
+      "sourceStackPrefix": ["{{ source_stack_prefix }}"],
+      "packageGroup": ["{{ package_group }}"],
+      "packageName": ["{{ package_name }}"],
+      "packageDatestamp": ["{{ package_datestamp }}"],
+      "aemId": ["{{ aem_id }}"]
     }
 
   }

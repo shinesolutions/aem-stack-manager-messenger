@@ -6,9 +6,6 @@
 
   vars:
     subject: "{{target_aem_stack_prefix}} - {{ message_type }}"
-    # files are in .txt as they need to replace the variables e.g. 'target_aem_stack_prefix' (un-quoted) which breaks the json validation.
-    # if the variables were in double quotes, they would not be replaced with the value.
-    message: "{{ lookup('file', '../../../templates/sns/{{ message_type }}.json') }}"
 
   tasks:
     - name: "Get facts for Target AEM Stack {{ target_aem_stack_prefix }}"
@@ -56,6 +53,21 @@
         sns_topic: "{{ stack_manager_stack_outputs.StackManagerTopicArn }}"
         externalId: "{{ 9999999999999999999999 | random | to_uuid }}"
 
+    - name: "Generate stage dir for message file"
+      file:
+        path: "../../../stage"
+        state: directory
+
+    - name: "Generating message file"
+      template:
+        src: "../../../templates/sns/{{ message_type }}.json"
+        dest: "../../../stage/{{ message_type }}.json"
+        force: true
+
+    - name: "Load generated message payload file"
+      set_fact:
+        message: "{{ lookup('file', '../../../stage/{{ message_type }}.json') }}"
+
     - debug:
         msg: "Send message: {{ message }}, with subject: {{ subject }}, to topic: {{ sns_topic }}, in region: {{ aws.region }}"
 
@@ -77,7 +89,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: dbscan
-      until: dbscan.item != [] and dbscan.item[0].state.S in ["Success", "Failed"]
+      until: dbscan is defined and dbscan.item is defined and dbscan.item != [] and dbscan.item[0].state is defined and dbscan.item[0].state.S is defined and dbscan.item[0].state.S in ["Success", "Failed"]
       retries: "{{ poll_timeout.check_command_execution.retries }}"
       delay: "{{ poll_timeout.check_command_execution.delay }}"
 
@@ -102,6 +114,9 @@
         state: scan
         region: "{{ aws.region }}"
       register: dbscan
+      until: dbscan is defined and dbscan.item is defined and dbscan.item != [] and dbscan.item[0].command_id is defined and dbscan.item[0].command_id.S is defined
+      retries: "{{ poll_timeout.check_command_execution.retries }}"
+      delay: "{{ poll_timeout.check_command_execution.delay }}"
 
     - set_fact:
         cmd_id: "{{ item.command_id.S }}"
@@ -179,3 +194,8 @@
     - fail:
         msg: "Error: Failed executing event {{ message_type }}"
       when: general_error is defined
+
+    - name: Remove generated message payload file
+      file:
+        path: "../../../stage/{{ message_type }}.json"
+        state: absent

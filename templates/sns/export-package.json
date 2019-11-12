@@ -1,15 +1,15 @@
 {
-  "externalId": externalId,
+  "externalId": "{{ externalId }}",
   "task": "export-package",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
-    "component": [component],
+    "component": ["{{ component }}"],
     "comment": "exporting AEM pacakges as backup based on package group, name and filter",
     "parameters": {
-      "packageGroup": [package_group],
-      "packageName": [package_name],
-      "packageFilter": [package_filter],
-      "aemId": [aem_id]
+      "packageGroup": ["{{ package_group }}"],
+      "packageName": ["{{ package_name }}"],
+      "packageFilter": ["{{ package_filter }}"],
+      "aemId": ["{{ aem_id }}"]
     }
   }
 }

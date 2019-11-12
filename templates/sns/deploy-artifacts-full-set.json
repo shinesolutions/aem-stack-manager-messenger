@@ -1,18 +1,18 @@
 {
-  "externalId": externalId,
+  "externalId": "{{ externalId }}",
   "task": "deploy-artifacts",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
     "component": [
-      'author-primary',
-      'author-standby',
-      'publish',
-      'author-dispatcher',
-      'publish-dispatcher'
+      "author-primary",
+      "author-standby",
+      "publish",
+      "author-dispatcher",
+      "publish-dispatcher"
     ],
     "comment": "deploying artifacts based on a descriptor file",
     "parameters": {
-      "descriptorFile": [descriptor_file]
+      "descriptorFile": ["{{ descriptor_file }}"]
     }
   }
 }

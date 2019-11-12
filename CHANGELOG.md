@@ -10,6 +10,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add feature to trigger Toughday2 performance test
 
+### Changed
+- Improved conditional checks when querying/scanning the DynamoDB #77
+
+## 2.8.0 - 2019-08-20
+### Added
+- Add enable-saml and disable-saml
+
+## 2.7.0 - 2019-08-14
+### Changed
+- Changed test-readiness-full-set template to send it only component orchestrator [#75]
+
+### Removed
+- Removed Make target for check-readiness-full-set-with-disabled-chaosmonkey [#75]
+- Removed sns template check-readiness-full-set-with-disabled-chaosmonkey.json [#75]
+
+## 2.6.0 - 2019-07-31
+### Fixed
+- Fixed issue with missing stage dir for sns message template file generation [#70]
+
+## 2.5.0 - 2019-07-27
+### Fixed
+- Fixed offline-snapshot message sending sequence [#70]
+
+## 2.4.2 - 2019-07-26
+### Fixed
+- Fixed offline-snapshot bug with resolving JSON template variables following upgrade to Ansible 2.8.x [#70]
+
+## 2.4.1 - 2019-07-26
+### Fixed
+- Fixed bug with resolving JSON template variables following upgrade to Ansible 2.8.x [#70]
+
+## 2.4.0 - 2019-07-21
+### Added
+Add new make target to check stack readiness for stacks with disabled ChaosMonkey instance
+
 ## 2.3.1 - 2019-05-22
 ### Fixed
 - Fix stack_prefix, target_aem_stack_prefix, and config_path variables assignment

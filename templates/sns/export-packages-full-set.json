@@ -1,15 +1,15 @@
 {
-  "externalId": externalId,
+  "externalId": "{{ externalId }}",
   "task": "export-packages",
-  "stack_prefix": target_aem_stack_prefix,
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
     "component": [
-      'author-primary',
-      'publish'
+      "author-primary",
+      "publish"
     ],
     "comment": "exporting AEM pacakges as backup based on descriptor file",
     "parameters": {
-      "descriptorFile": [descriptor_file]
+      "descriptorFile": ["{{ descriptor_file }}"]
     }
   }
 }
