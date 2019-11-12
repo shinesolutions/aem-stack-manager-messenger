@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+- Add feature to trigger Toughday2 performance test
+
 ### Changed
 - Improved conditional checks when querying/scanning the DynamoDB #77
 
@@ -40,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.4.0 - 2019-07-21
 ### Added
-- Add new make target to check stack readiness for stacks with disabled ChaosMonkey instance
+Add new make target to check stack readiness for stacks with disabled ChaosMonkey instance
 
 ## 2.3.1 - 2019-05-22
 ### Fixed

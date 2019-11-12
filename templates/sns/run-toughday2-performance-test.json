@@ -1,0 +1,17 @@
+{
+  "externalId": "{{ externalId }}",
+  "task": "run-toughday2-performance-test",
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
+  "details": {
+    "component": ["author-primary"],
+    "comment": "Run Toughday 2 performance test on Target AEM Stack.",
+    "parameters": {
+      "duration": ["{{ duration }}"],
+      "timeout": ["{{ timeout }}"],
+      "configfile": ["{{ configfile }}"],
+      "suite": ["{{ suite }}"],
+      "runmode": ["{{ runmode }}"],
+      "publishmode": ["{{ publishmode }}"]
+    }
+  }
+}
