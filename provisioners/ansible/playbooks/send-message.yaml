@@ -89,7 +89,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: dbscan
-      until: dbscan.item != [] and dbscan.item[0].state.S in ["Success", "Failed"]
+      until: dbscan is defined and dbscan.item is defined and dbscan.item != [] and dbscan.item[0].state is defined and dbscan.item[0].state.S is defined and dbscan.item[0].state.S in ["Success", "Failed"]
       retries: "{{ poll_timeout.check_command_execution.retries }}"
       delay: "{{ poll_timeout.check_command_execution.delay }}"
 
@@ -114,6 +114,9 @@
         state: scan
         region: "{{ aws.region }}"
       register: dbscan
+      until: dbscan is defined and dbscan.item is defined and dbscan.item != [] and dbscan.item[0].command_id is defined and dbscan.item[0].command_id.S is defined
+      retries: "{{ poll_timeout.check_command_execution.retries }}"
+      delay: "{{ poll_timeout.check_command_execution.delay }}"
 
     - set_fact:
         cmd_id: "{{ item.command_id.S }}"

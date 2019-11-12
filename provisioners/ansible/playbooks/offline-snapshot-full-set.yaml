@@ -63,6 +63,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_backup_lock
+      until: dbquery_backup_lock is defined and dbquery_backup_lock.item is defined
+      retries: 720
+      delay: 5
 
     - name: Check if DB is locked
       set_fact:
@@ -111,7 +114,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_stop_author_standby
-      until: cmd_stop_author_standby.item != []
+      until: cmd_stop_author_standby is defined and cmd_stop_author_standby.item is defined and cmd_stop_author_standby.item != [] and cmd_stop_author_standby.item[0].command_id is defined and cmd_stop_author_standby.item[0].command_id.S is defined
       retries: 720
       delay: 5
 
@@ -131,6 +134,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_stop_author_standby
+      until: dbquery_state_stop_author_standby is defined and dbquery_state_stop_author_standby.item is defined and dbquery_state_stop_author_standby.item != [] and dbquery_state_stop_author_standby.item[0].state is defined and dbquery_state_stop_author_standby.item[0].state.S is defined
+      retries: 720
+      delay: 5
 
     - name: Set fact for error check
       set_fact:
@@ -154,7 +160,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_stop_author_primary
-      until: cmd_stop_author_primary.item != []
+      until: cmd_stop_author_primary is defined and cmd_stop_author_primary.item is defined and cmd_stop_author_primary.item != [] and cmd_stop_author_primary.item[0].command_id is defined and cmd_stop_author_primary.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -176,6 +182,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_stop_author_primary
+      until: dbquery_state_stop_author_primary is defined and dbquery_state_stop_author_primary.item is defined and dbquery_state_stop_author_primary.item != [] and dbquery_state_stop_author_primary.item[0].state is defined and dbquery_state_stop_author_primary.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -200,7 +209,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_stop_publish
-      until: cmd_stop_publish.item != []
+      until: cmd_stop_publish is defined and cmd_stop_publish.item is defined and cmd_stop_publish.item != [] and cmd_stop_publish.item[0].command_id is defined and cmd_stop_publish.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -222,6 +231,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_stop_publish
+      until: dbquery_state_stop_publish is defined and dbquery_state_stop_publish.item is defined and dbquery_state_stop_publish.item != [] and dbquery_state_stop_publish.item[0].state is defined and dbquery_state_stop_publish.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -246,7 +258,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_offline_backup
-      until: cmd_offline_backup.item != []
+      until: cmd_offline_backup is defined and cmd_offline_backup.item is defined and cmd_offline_backup.item != [] and cmd_offline_backup.item[0].command_id is defined and  cmd_offline_backup.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -268,6 +280,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_offline_snapshot
+      until: dbquery_state_offline_snapshot is defined and dbquery_state_offline_snapshot.item is defined and dbquery_state_offline_snapshot.item != [] and dbquery_state_offline_snapshot.item[0].state is defined and  dbquery_state_offline_snapshot.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -281,7 +296,7 @@
         module_error: 1
       when: dbquery_state_failed_offline_snapshot is defined and dbquery_state_failed_offline_snapshot == "Failed" and module_error is undefined
 
-    - name: Scan if author primary instance is started
+    - name: Scan if Author Primary Service is started
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: last_command
@@ -292,7 +307,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_start_author_primary
-      until: cmd_start_author_primary.item != []
+      until: cmd_start_author_primary is defined and cmd_start_author_primary.item is defined and cmd_start_author_primary.item != [] and cmd_start_author_primary.item[0].command_id is defined and  cmd_start_author_primary.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -314,6 +329,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_start_author_primary
+      until: dbquery_state_start_author_primary is defined and dbquery_state_start_author_primary.item is defined and dbquery_state_start_author_primary.item != [] and dbquery_state_start_author_primary.item[0].state is defined and  dbquery_state_start_author_primary.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -338,7 +356,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_start_author_standby
-      until: cmd_start_author_standby.item != []
+      until: cmd_start_author_standby is defined and cmd_start_author_standby.item is defined and cmd_start_author_standby.item != [] and cmd_start_author_standby.item[0].command_id is defined and cmd_start_author_standby.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -360,6 +378,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_start_author_standby
+      until: dbquery_state_start_author_standby is defined and dbquery_state_start_author_standby.item is defined and dbquery_state_start_author_standby.item != [] and dbquery_state_start_author_standby.item[0].state is defined and  dbquery_state_start_author_standby.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -384,7 +405,7 @@
         state: scan
         region: "{{ aws.region }}"
       register: cmd_start_publish
-      until: cmd_start_publish.item != []
+      until: cmd_start_publish is defined and cmd_start_publish.item is defined and cmd_start_publish.item != [] and cmd_start_publish.item[0].command_id is defined and cmd_start_publish.item[0].command_id.S is defined
       retries: 720
       delay: 5
       when: module_error is undefined
@@ -406,6 +427,9 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery_state_start_publish
+      until: dbquery_state_start_publish is defined and dbquery_state_start_publish.item is defined and dbquery_state_start_publish.item != [] and dbquery_state_start_publish.item[0].state is defined and  dbquery_state_start_publish.item[0].state.S is defined
+      retries: 720
+      delay: 5
       when: module_error is undefined
 
     - name: Set fact for error check
@@ -430,7 +454,7 @@
         state: query
         region: "{{ aws.region }}"
       register: dbquery
-      until: dbquery.item[0].state.S == "Success" or dbquery.item[0].state.S == "Failed"
+      until: dbquery is defined and dbquery.item is defined and dbquery.item != [] and dbquery.item[0].state is defined and dbquery.item[0].state.S is defined and dbquery.item[0].state.S in ["Success", "Failed"]
       # The retry values should mirror the TTL of the ssm.send_command of the Lambda function.
       retries: 720
       delay: 5
