@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Added
-- Add feature to run Toughday2 performance test
+- Add feature to trigger Toughday2 performance test
 
 ## 2.3.1 - 2019-05-22
 ### Fixed
