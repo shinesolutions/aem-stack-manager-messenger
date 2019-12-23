@@ -65,84 +65,84 @@ Deploy a single AEM Package into an AEM instance:
 
 Disable SAML on an AEM instance:
 
-  make disable-saml \
-    stack_prefix=<stack_manager_stack_prefix> \
-    target_aem_stack_prefix=<aem_stack_prefix> \
-    config_path=<path/to/config/dir> \
-    component=author-primary \
-    aem_id=author path='/'
+    make disable-saml \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      component=author-primary \
+      aem_id=author path='/'
 
 Enable SAML with filepath to SAML certificate on an AEM instance:
 
-  make enable-saml \
-    stack_prefix=<stack_manager_stack_prefix> \
-    target_aem_stack_prefix=<aem_stack_prefix> \
-    config_path=<path/to/config/dir> \
-    component=author-primary \
-    aem_id=author path='/' \
-    file="s3://aem-opencloud/adobeaemcloud/certs/saml_cert.pem" \
-    assertion_consumer_service_url="https://author.aemopencloud.net:443/saml_login" \
-    service_provider_entity_id=AEMSSO \
-    idp_url="https://federation.server.com" \
-    create_user=true \
-    default_groups=content-authors \
-    group_membership_attribute=groupMembership \
-    handle_logout=true \
-    idp_http_redirect=false \
-    logout_url="https://accounts.google.com/logout" \
-    name_id_format='urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress' \
-    signature_method="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" \
-    synchronize_attributes="givenName=profile/givenName,familyName=profile/familyName,mail=profile/email" \
-    use_encryption=false \
-    user_id_attribute=NameID
+    make enable-saml \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      component=author-primary \
+      aem_id=author path='/' \
+      file="s3://aem-opencloud/adobeaemcloud/certs/saml_cert.pem" \
+      assertion_consumer_service_url="https://author.aemopencloud.net:443/saml_login" \
+      service_provider_entity_id=AEMSSO \
+      idp_url="https://federation.server.com" \
+      create_user=true \
+      default_groups=content-authors \
+      group_membership_attribute=groupMembership \
+      handle_logout=true \
+      idp_http_redirect=false \
+      logout_url="https://accounts.google.com/logout" \
+      name_id_format='urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress' \
+      signature_method="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" \
+      synchronize_attributes="givenName=profile/givenName,familyName=profile/familyName,mail=profile/email" \
+      use_encryption=false \
+      user_id_attribute=NameID
 
 Enable SAML with IDP Certalias of the SAML certificate as in the AEM Truststore on an AEM instance:
 
-  make enable-saml \
-    stack_prefix=<stack_manager_stack_prefix> \
-    target_aem_stack_prefix=<aem_stack_prefix> \
-    config_path=<path/to/config/dir> \
-    component=author-primary \
-    aem_id=author path='/' \
-    idp_cert_alias='certalias_1234' \
-    assertion_consumer_service_url="https://author.aemopencloud.net:443/saml_login" \
-    service_provider_entity_id=AEMSSO \
-    idp_url="https://federation.server.com" \
-    create_user=true \
-    default_groups=content-authors \
-    group_membership_attribute=groupMembership \
-    handle_logout=true \
-    idp_http_redirect=false \
-    logout_url="https://accounts.google.com/logout" \
-    name_id_format='urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress' \
-    signature_method="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" \
-    synchronize_attributes="givenName=profile/givenName,familyName=profile/familyName,mail=profile/email" \
-    use_encryption=false \
-    user_id_attribute=NameID
+    make enable-saml \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      component=author-primary \
+      aem_id=author path='/' \
+      idp_cert_alias='certalias_1234' \
+      assertion_consumer_service_url="https://author.aemopencloud.net:443/saml_login" \
+      service_provider_entity_id=AEMSSO \
+      idp_url="https://federation.server.com" \
+      create_user=true \
+      default_groups=content-authors \
+      group_membership_attribute=groupMembership \
+      handle_logout=true \
+      idp_http_redirect=false \
+      logout_url="https://accounts.google.com/logout" \
+      name_id_format='urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress' \
+      signature_method="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" \
+      synchronize_attributes="givenName=profile/givenName,familyName=profile/familyName,mail=profile/email" \
+      use_encryption=false \
+      user_id_attribute=NameID
 
 Enable SAML with defined SERIAL number of the SAML certificate on an AEM instance:
 
-  make enable-saml \
-    stack_prefix=<stack_manager_stack_prefix> \
-    target_aem_stack_prefix=<aem_stack_prefix> \
-    config_path=<path/to/config/dir> \
-    component=author-primary \
-    aem_id=author path='/' \
-    serial='1234567890' \
-    assertion_consumer_service_url="https://author.aemopencloud.net:443/saml_login" \
-    service_provider_entity_id=AEMSSO \
-    idp_url="https://federation.server.com" \
-    create_user=true \
-    default_groups=content-authors \
-    group_membership_attribute=groupMembership \
-    handle_logout=true \
-    idp_http_redirect=false \
-    logout_url="https://accounts.google.com/logout" \
-    name_id_format='urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress' \
-    signature_method="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" \
-    synchronize_attributes="givenName=profile/givenName,familyName=profile/familyName,mail=profile/email" \
-    use_encryption=false \
-    user_id_attribute=NameID
+    make enable-saml \
+      stack_prefix=<stack_manager_stack_prefix> \
+      target_aem_stack_prefix=<aem_stack_prefix> \
+      config_path=<path/to/config/dir> \
+      component=author-primary \
+      aem_id=author path='/' \
+      serial='1234567890' \
+      assertion_consumer_service_url="https://author.aemopencloud.net:443/saml_login" \
+      service_provider_entity_id=AEMSSO \
+      idp_url="https://federation.server.com" \
+      create_user=true \
+      default_groups=content-authors \
+      group_membership_attribute=groupMembership \
+      handle_logout=true \
+      idp_http_redirect=false \
+      logout_url="https://accounts.google.com/logout" \
+      name_id_format='urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress' \
+      signature_method="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" \
+      synchronize_attributes="givenName=profile/givenName,familyName=profile/familyName,mail=profile/email" \
+      use_encryption=false \
+      user_id_attribute=NameID
 
 Enable CRXDE on an AEM instance:
 
