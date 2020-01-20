@@ -10,7 +10,7 @@ CONFIG_PATH=stage/user-config/sandpit/
 AEM_PACKAGE_GROUP=shinesolutions
 AEM_PACKAGE_NAME=aem-helloworld-content
 AEM_PACKAGE_VERSION=0.0.1
-AEM_PACKAGE_URL="http://central.maven.org/maven2/com/$AEM_PACKAGE_GROUP/$AEM_PACKAGE_NAME/$AEM_PACKAGE_VERSION/$AEM_PACKAGE_NAME-$AEM_PACKAGE_VERSION.zip"
+AEM_PACKAGE_URL="https://repo.maven.apache.org/maven2/com/$AEM_PACKAGE_GROUP/$AEM_PACKAGE_NAME/$AEM_PACKAGE_VERSION/$AEM_PACKAGE_NAME-$AEM_PACKAGE_VERSION.zip"
 AEM_EXPORT_PACKAGE_DATE=$(date "+%Y%m%d")
 
 ##################################################

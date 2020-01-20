@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+- Change integration test helloworld content package to use https://repo.maven.apache.org
+
 ## 2.9.0 - 2019-11-12
 ### Added
 - Add feature to trigger Toughday2 performance test
