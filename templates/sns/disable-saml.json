@@ -7,6 +7,7 @@
     "comment": "Disable SAML on target AEM Stack",
     "parameters": {
       "aemId": ["{{ aem_id }}"],
+      "executionTimeout": ["3600"]
     }
   }
 }

@@ -13,6 +13,7 @@
       "aemPort": ["{{ aem_port }}"],
       "aemProfile": ["{{ aem_profile }}"],
       "aemSslPort": ["{{ aem_ssl_port }}"],
+      "executionTimeout": ["7200"]
     }
 
   }

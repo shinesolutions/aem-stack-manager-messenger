@@ -7,6 +7,7 @@
     "comment": "Enable SAML on target AEM Stack",
     "parameters": {
       "aemId": ["{{ aem_id }}"],
+      "executionTimeout": ["3600"],
       "path": ["{{ path }}"],
       "serviceProviderEntityId": ["{{ service_provider_entity_id }}"],
       "idpUrl": ["{{ idp_url }}"],

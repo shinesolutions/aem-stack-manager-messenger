@@ -4,6 +4,9 @@
   "stack_prefix": "{{ target_aem_stack_prefix }}",
   "details": {
     "component": ["{{ component }}"],
-    "comment": "enable crxde on selected AEM instances by component"
+    "comment": "enable crxde on selected AEM instances by component",
+    "parameters": {
+      "executionTimeout": ["3600"],
+    }
   }
 }

@@ -6,6 +6,7 @@
     "component": ["{{ component }}"],
     "comment": "deploying artifacts based on a descriptor file",
     "parameters": {
+      "executionTimeout": ["7200"],
       "source": ["{{ source }}"],
       "group": ["{{ group }}"],
       "name": ["{{ name }}"],

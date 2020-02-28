@@ -10,8 +10,8 @@
       "packageGroup": ["{{ package_group }}"],
       "packageName": ["{{ package_name }}"],
       "packageDatestamp": ["{{ package_datestamp }}"],
-      "aemId": ["{{ aem_id }}"]
+      "aemId": ["{{ aem_id }}"],
+      "executionTimeout": ["7200"]
     }
-
   }
 }

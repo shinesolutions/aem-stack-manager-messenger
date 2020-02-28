@@ -9,6 +9,7 @@
     ],
     "comment": "exporting AEM pacakges as backup based on descriptor file",
     "parameters": {
+      "executionTimeout": ["7200"],
       "descriptorFile": ["{{ descriptor_file }}"]
     }
   }

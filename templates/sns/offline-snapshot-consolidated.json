@@ -6,6 +6,9 @@
     "component": [
       "author-publish-dispatcher"
     ],
-    "comment": "offline snapshot for AEM Consolidated"
+    "comment": "offline snapshot for AEM Consolidated",
+    "parameters": {
+      "executionTimeout": ["14400"]
+    }
   }
 }

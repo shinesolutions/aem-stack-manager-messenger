@@ -5,5 +5,8 @@
   "details": {
     "component": ["{{ component }}"],
     "comment": "flush dispatcher cache on selected AEM Dispatcher instances by component",
+    "parameters": {
+      "executionTimeout": ["3600"]
     }
+  }
 }
