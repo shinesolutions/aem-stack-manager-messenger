@@ -5,5 +5,8 @@
   "details": {
     "component": ["{{ component }}"],
     "comment": "list deployed packages on selected AEM instances by component",
+    "parameters": {
+      "executionTimeout": ["3600"]
+    }
   }
 }

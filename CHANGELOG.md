@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+- Add new ssm parameter 'executionTimeout'
+
+### Changed
+- Changed offline-snapshot & offline-compatcion-snapshot default retries. It will now use the retries configured in the configuration profile
+
 ## 2.10.0 - 2020-01-20
 ### Changed
 - Change integration test helloworld content package to use https://repo.maven.apache.org

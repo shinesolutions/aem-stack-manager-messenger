@@ -5,5 +5,8 @@
   "details": {
     "component": ["orchestrator"],
     "comment": "test the AEM Fullset stack to see if it is ready to be used",
+    "parameters": {
+      "executionTimeout": ["14400"]
     }
+  }
 }

@@ -8,7 +8,8 @@
     "parameters": {
       "aemArtifactsBase": ["{{ aem_artifacts_base }}"],
       "aemUpgradeVersion": ["{{ aem_upgrade_version }}"],
-      "enableBackup": ["{{ enable_backup }}"]
+      "enableBackup": ["{{ enable_backup }}"],
+      "executionTimeout": ["3600"]
     }
   }
 }

@@ -8,6 +8,7 @@
     ],
     "comment": "deploying artifacts based on a descriptor file for consolidated",
     "parameters": {
+      "executionTimeout": ["7200"],
       "descriptorFile": ["{{ descriptor_file }}"]
     }
   }

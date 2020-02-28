@@ -6,6 +6,7 @@
     "component": ["{{ component }}"],
     "comment": "exporting AEM pacakges as backup based on package group, name and filter",
     "parameters": {
+      "executionTimeout": ["7200"],
       "packageGroup": ["{{ package_group }}"],
       "packageName": ["{{ package_name }}"],
       "packageFilter": ["{{ package_filter }}"],

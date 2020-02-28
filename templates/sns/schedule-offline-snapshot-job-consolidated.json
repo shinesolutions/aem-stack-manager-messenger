@@ -7,7 +7,8 @@
     "comment": "Set scheduled offline-snapshot job on AEM Consolidated architecture",
     "parameters": {
       "jobName": ["{{ schedule_job }}"],
-      "State": ["enable"]
+      "State": ["enable"],
+      "executionTimeout": ["3600"]
     }
   }
 }
