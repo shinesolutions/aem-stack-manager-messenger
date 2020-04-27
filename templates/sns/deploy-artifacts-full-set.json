@@ -12,7 +12,7 @@
     ],
     "comment": "deploying artifacts based on a descriptor file",
     "parameters": {
-      "executionTimeout": ["7200"],
+      "executionTimeout": ["14400"],
       "descriptorFile": ["{{ descriptor_file }}"]
     }
   }

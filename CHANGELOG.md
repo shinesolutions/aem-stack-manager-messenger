@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+- Update default executionTimeout for package deployment, export & import commands [shinesolutions/aem-aws-stack-builder#401]
+
 ## 2.11.0 - 2020-02-28
 
 ### Added

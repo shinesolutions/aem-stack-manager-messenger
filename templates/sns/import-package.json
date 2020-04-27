@@ -11,7 +11,7 @@
       "packageName": ["{{ package_name }}"],
       "packageDatestamp": ["{{ package_datestamp }}"],
       "aemId": ["{{ aem_id }}"],
-      "executionTimeout": ["7200"]
+      "executionTimeout": ["14400"]
     }
   }
 }
