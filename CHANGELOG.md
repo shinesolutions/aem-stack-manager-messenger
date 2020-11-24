@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+- Convert python scripts to be executed using Python 3
+
 ## 2.12.0 - 2020-04-27
 ### Changed
 - Update default executionTimeout for package deployment, export & import commands [shinesolutions/aem-aws-stack-builder#401]

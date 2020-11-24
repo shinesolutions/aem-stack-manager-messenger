@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 # THIS FILE SHOULD BE REMOVED WHEN github.com/ansible/ansible/pull/45634 IS MERGED AND RELEASED
@@ -6,7 +6,7 @@
 # (c) 2014, Michael J. Schultz <mjschultz@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 
