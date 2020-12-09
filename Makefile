@@ -36,7 +36,7 @@ release:
 
 # resolve dependencies from remote artifact registries
 deps:
-	pip install -r requirements.txt
+	pip3 install -r requirements.txt
 
 # resolve test dependencies from remote artifact registries
 deps-test: stage
