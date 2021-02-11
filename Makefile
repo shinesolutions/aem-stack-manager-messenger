@@ -26,6 +26,9 @@ package: stage
 release:
 	rtk release
 
+publish:
+	gh release upload $(version) stage/aem-stack-manager-messenger-$(version).tar.gz
+
 ################################################################################
 # Dependencies resolution targets.
 # For deps-test-local targets, the local dependencies must be available on the
@@ -220,4 +223,4 @@ test-consolidated-local: deps deps-test-local
 test-full-set-local: deps deps-test-local
 	test/integration/all-events-full-set.sh "$(stack_prefix)" "$(target_aem_stack_prefix)"
 
-.PHONY: ci clean stage package deps deps-test deps-test-local lint deploy-artifact deploy-artifacts-consolidated deploy-artifacts-full-set disable-crxde export-package export-packages-consolidated export-packages-full-set enable-crxde flush-dispatcher-cache import-package list-packages live-snapshot offline-snapshot offline-compaction-snapshot offline-snapshot-full-set offline-compaction-snapshot-full-set offline-snapshot-consolidated offline-compaction-snapshot-consolidated promote-author run-adhoc-puppet check-readiness-consolidated check-readiness-full-set schedule-offline-snapshot-full-set unschedule-offline-snapshot-full-set schedule-offline-compaction-snapshot-full-set unschedule-offline-compaction-snapshot-full-set schedule-live-snapshot-full-set unschedule-live-snapshot-full-set schedule-offline-snapshot-consolidated unschedule-offline-snapshot-consolidated schedule-offline-compaction-snapshot-consolidated unschedule-offline-compaction-snapshot-consolidated schedule-live-snapshot-consolidated unschedule-live-snapshot-consolidated install-aem-profile test-consolidated test-full-set test-consolidated-local test-full-set-local release
+.PHONY: ci clean stage package deps deps-test deps-test-local lint publish deploy-artifact deploy-artifacts-consolidated deploy-artifacts-full-set disable-crxde export-package export-packages-consolidated export-packages-full-set enable-crxde flush-dispatcher-cache import-package list-packages live-snapshot offline-snapshot offline-compaction-snapshot offline-snapshot-full-set offline-compaction-snapshot-full-set offline-snapshot-consolidated offline-compaction-snapshot-consolidated promote-author run-adhoc-puppet check-readiness-consolidated check-readiness-full-set schedule-offline-snapshot-full-set unschedule-offline-snapshot-full-set schedule-offline-compaction-snapshot-full-set unschedule-offline-compaction-snapshot-full-set schedule-live-snapshot-full-set unschedule-live-snapshot-full-set schedule-offline-snapshot-consolidated unschedule-offline-snapshot-consolidated schedule-offline-compaction-snapshot-consolidated unschedule-offline-compaction-snapshot-consolidated schedule-live-snapshot-consolidated unschedule-live-snapshot-consolidated install-aem-profile test-consolidated test-full-set test-consolidated-local test-full-set-local release
