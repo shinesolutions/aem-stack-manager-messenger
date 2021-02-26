@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Changed AWSCLI and Boto3 version to make them consistent with PIP 21.0.1
 
+### Fixed
+- Fixed hosts to use python3 instead of python
+
 ## 2.13.0 - 2021-02-11
 ### Changed
 - Lock down pylint to 2.6.0
