@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+- Update awscli to 1.22.1
+- Update boto3 to 1.20.0
+- Update Ansible to 4.8.0
+
 ## 2.14.2 - 2021-10-06
 ### Added
 - Add release-major, release-minor, release-patch, and publish Makefile targets and GitHub Actions
