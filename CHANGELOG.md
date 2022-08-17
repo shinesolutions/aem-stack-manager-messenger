@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+- Fix cloudformation_facts no longer returning any result #89
+
 ## 2.15.0 - 2021-11-10
 ### Changed
 - Update awscli to 1.22.1

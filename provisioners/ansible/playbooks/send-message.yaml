@@ -27,7 +27,7 @@
         main_stack_name: "{{ stack_prefix }}-{{ main.stack_name }}"
 
     - name: "{{ subject }}: Retrieve Main Stack CloudFormation resources facts"
-      cloudformation_facts:
+      cloudformation_info:
         stack_name: "{{ main_stack_name }}"
         region: "{{ aws.region }}"
       register: main_stack_facts
@@ -39,7 +39,7 @@
         stack_manager_stack_name: "{{ stack_manager_stack_arn.split('/')[1] }}"
 
     - name: "{{ subject }}: Retrieve Stack Manager CloudFormation resources facts"
-      cloudformation_facts:
+      cloudformation_info:
         stack_name: "{{ stack_manager_stack_name }}"
         region: "{{ aws.region }}"
       register: stack_manager_stack_facts
