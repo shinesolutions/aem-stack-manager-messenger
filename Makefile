@@ -1,4 +1,4 @@
-version ?= 2.15.1-pre.0
+version ?= 2.15.1
 
 ci: clean deps lint package
 
