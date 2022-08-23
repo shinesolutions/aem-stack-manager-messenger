@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+- Revert the fix cloudformation_facts no longer returning any result [#89]
+
 ## 2.15.1 - 2022-08-17
 ### Fixed
 - Fix cloudformation_facts no longer returning any result [#89]
