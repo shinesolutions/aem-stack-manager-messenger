@@ -1,5 +1,5 @@
-[![Build Status](https://github.com/shinesolutions/aem-stack-manager-messenger/workflows/CI/badge.svg)](https://github.com/shinesolutions/aem-stack-manager-messenger/actions?query=workflow%3ACI)
-[![Known Vulnerabilities](https://snyk.io/test/github/shinesolutions/aem-stack-manager-messenger/badge.svg)](https://snyk.io/test/github/shinesolutions/aem-stack-manager-messenger)
+[![Build Status](https://github.com/shinesolutions/aem-stack-manager-messenger-internal/workflows/CI/badge.svg)](https://github.com/shinesolutions/aem-stack-manager-messenger-internal/actions?query=workflow%3ACI)
+[![Known Vulnerabilities](https://snyk.io/test/github/shinesolutions/aem-stack-manager-messenger-internal/badge.svg)](https://snyk.io/test/github/shinesolutions/aem-stack-manager-messenger-internal)
 
 AEM Stack Manager Messenger
 ---------------------------
@@ -8,29 +8,29 @@ A set of [Ansible](https://www.ansible.com/) playbooks for triggering events on 
 
 Learn more about AEM Stack Manager Messenger:
 
-* [Installation](https://github.com/shinesolutions/aem-stack-manager-messenger#installation)
-* [Configuration](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/docs/configuration.md)
-* [Usage](https://github.com/shinesolutions/aem-stack-manager-messenger#usage)
-* [Testing](https://github.com/shinesolutions/aem-stack-manager-messenger#testing)
-* [Frequently Asked Questions](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/docs/faq.md)
+* [Installation](https://github.com/shinesolutions/aem-stack-manager-messenger-internal#installation)
+* [Configuration](https://github.com/shinesolutions/aem-stack-manager-messenger-internal/blob/master/docs/configuration.md)
+* [Usage](https://github.com/shinesolutions/aem-stack-manager-messenger-internal#usage)
+* [Testing](https://github.com/shinesolutions/aem-stack-manager-messenger-internal#testing)
+* [Frequently Asked Questions](https://github.com/shinesolutions/aem-stack-manager-messenger-internal/blob/master/docs/faq.md)
 
 AEM Stack Manager Messenger is part of [AEM OpenCloud](https://aemopencloud.io) platform.
 
 Installation
 ------------
 
-- Either clone AEM Stack Manager Messenger `git clone https://github.com/shinesolutions/aem-stack-manager-messenger.git` or download one of the [released versions](https://github.com/shinesolutions/aem-stack-manager-messenger/releases)
+- Either clone AEM Stack Manager Messenger `git clone https://github.com/shinesolutions/aem-stack-manager-messenger-internal.git` or download one of the [released versions](https://github.com/shinesolutions/aem-stack-manager-messenger-internal/releases)
 - Install the following required tools:
   * [Python](https://www.python.org/downloads/) version 2.7.x
   * [GNU Make](https://www.gnu.org/software/make/)<br/>
 
   Alternatively, you can use [AEM Platform BuildEnv](https://github.com/shinesolutions/aem-platform-buildenv) Docker container to run AEM Stack Manager Messenger build targets.
-- Resolve the [Python packages](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/requirements.txt) dependencies by running `make deps`
+- Resolve the [Python packages](https://github.com/shinesolutions/aem-stack-manager-messenger-internal/blob/master/requirements.txt) dependencies by running `make deps`
 
 Usage
 -----
 
-- Create [configuration file](https://github.com/shinesolutions/aem-stack-manager-messenger/blob/master/docs/configuration.md)
+- Create [configuration file](https://github.com/shinesolutions/aem-stack-manager-messenger-internal/blob/master/docs/configuration.md)
 - Execute the AEM Stack Manager events:
 
 Deploy a set of AEM Packages and Dispatcher artifacts into an AEM environment using a [Deployment Descriptor](https://github.com/shinesolutions/aem-aws-stack-builder/blob/master/docs/descriptors.md#deployment-descriptor) file:
