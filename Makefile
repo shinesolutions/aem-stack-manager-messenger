@@ -1,5 +1,5 @@
 version ?= 2.15.3-pre.0
-
+package_name ?= aem-stack-manager-messenger-internal
 ci: clean deps lint package
 
 clean:
@@ -21,11 +21,11 @@ package: stage
 	    --exclude='*.retry' \
 	    --exclude='*.iml' \
 	    -czf \
-	    stage/aem-stack-manager-messenger-$(version).tar.gz .
+	    stage/$(package_name)-$(version).tar.gz .
 
 publish:
 	gh release create $(version) --title $(version) --notes "" || echo "Release $(version) has been created on GitHub"
-	gh release upload $(version) stage/aem-stack-manager-messenger-$(version).tar.gz
+	gh release upload $(version) stage/$(package_name)-$(version).tar.gz
 
 release-major:
 	rtk release --release-increment-type major
