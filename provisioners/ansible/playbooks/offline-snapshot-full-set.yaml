@@ -303,7 +303,7 @@
     - name: Set fact for error check
       set_fact:
         dbquery_state_failed_stop_preview_publish: "{{dbquery_state_stop_preview_publish.item[0].state.S}}"
-      when: dbquery_state_stop_preview_publishis defined and '"item" in dbquery_state_stop_preview_publish'
+      when: '"item" in dbquery_state_stop_preview_publish'
 
     - name: Check for error when stopping preview-publish Service
       set_fact:
