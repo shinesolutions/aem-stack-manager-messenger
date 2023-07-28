@@ -6,8 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Added
+- Added preview components to `deploy-artifacts-full-set` & `export-package-full-set` operational tasks #RS-160
+- Added preview components to offline-snapshot & offline-compaction-snapshot playbook #RS-160
+
 ### Changed
-- Update aem-stack-manager-messenger Release artifact name to aem-stack-manager-messenger-internal
+- Updated aem-stack-manager-messenger Release artifact name to aem-stack-manager-messenger-internal
 
 ## 2.15.2 - 2022-08-23
 ### Changed
