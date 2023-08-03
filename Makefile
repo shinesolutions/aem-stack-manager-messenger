@@ -1,4 +1,4 @@
-version ?= 2.15.3-pre.0
+version ?= 3.0.0
 package_name ?= aem-stack-manager-messenger-internal
 ci: clean deps lint package
 
