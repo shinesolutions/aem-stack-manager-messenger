@@ -1,0 +1,21 @@
+{
+  "externalId": "{{ externalId }}",
+  "task": "content-sync",
+  "source_stack_prefix": "{{ source_aem_stack_prefix }}",
+  "target_stack_prefix": "{{ target_aem_stack_prefix }}",
+  "details": {
+    "component": [
+      "author-publish-dispatcher"
+    ],
+    "comment": "synchronize content between two consolidated environments",
+    "parameters": {
+      "executionTimeout": ["14400"],
+      "content_sync_enable_recursive": ["{{ content_sync_enable_recursive }}"],
+      "content_sync_bathcsize": ["{{ content_sync_bathcsize }}"],
+      "content_sync_enable_update": ["{{ content_sync_enable_update }}"],
+      "content_sync_enable_newer_only": ["{{ content_sync_enable_newer_only }}"],
+      "content_sync_exclude_path": ["{{ content_sync_exclude_path }}"],
+      "content_sync_path": ["{{ content_sync_path }}"]
+    }
+  }
+}

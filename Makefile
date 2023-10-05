@@ -99,6 +99,12 @@ deploy-artifacts-consolidated:
 deploy-artifacts-full-set:
 	./scripts/run-playbook.sh send-message deploy-artifacts-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "descriptor_file=$(descriptor_file)"
 
+content-sync-consolidated:
+	./scripts/run-playbook.sh send-message content-sync-consolidated "$(stack_prefix)" "$(source_aem_stack_prefix)" "$(target_aem_stack_prefix)" "$(content_sync_enable_recursive)" "$(content_sync_batchsize)" "$(content_sync_enable_update)" "$(content_sync_enable_newer_only)" "$(content_sync_exclude_path)" "$(content_sync_path)" "$(config_path)"
+
+content-sync-full-set:
+	./scripts/run-playbook.sh send-message content-sync-full-set "$(stack_prefix)" "$(source_aem_stack_prefix)" "$(target_aem_stack_prefix)" "$(content_sync_enable_recursive)" "$(content_sync_batchsize)" "$(content_sync_enable_update)" "$(content_sync_enable_newer_only)" "$(content_sync_exclude_path)" "$(content_sync_path)" "$(config_path)"
+
 disable-crxde:
 	./scripts/run-playbook.sh send-message disable-crxde "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component)"
 
