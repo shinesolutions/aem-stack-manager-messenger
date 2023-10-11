@@ -5,7 +5,6 @@
   "details": {
     "component": [
       "author-primary",
-      "author-standby",
       "publish",
       "preview-publish"
     ],
