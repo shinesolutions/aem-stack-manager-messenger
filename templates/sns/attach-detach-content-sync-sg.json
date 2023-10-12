@@ -1,0 +1,17 @@
+{
+  "externalId": "{{ externalId }}",
+  "task": "attach-detach-content-sync-sg",
+  "stack_prefix": "{{ target_aem_stack_prefix }}",
+  "details": {
+    "component": [
+      "author-primary",
+      "publish",
+      "preview-publish"
+    ],
+    "comment": "Attach or detach security group allowing/disallowing access between stacks for content sync.",
+    "parameters": {
+      "executionTimeout": ["3600"],
+      "action": ["{{ action }}"]
+    }
+  }
+}

@@ -23,6 +23,9 @@ if [ ! -z "$6" ]; then
     extra_vars+=(--extra-vars "$6")
 fi
 
+
+echo "${extra_vars[@]}"
+
 mkdir -p logs
 echo "Sending Message SNS Topic..."
 ANSIBLE_CONFIG=conf/ansible/ansible.cfg \
