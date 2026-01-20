@@ -19,9 +19,12 @@ for config_file in $( find -L "${config_path}" -maxdepth 1 -type f -a \( -name '
   extra_vars+=( --extra-vars "@${config_file}")
 done
 
-if [ ! -z "$6" ]; then
+if [ -n "$6" ]; then
     extra_vars+=(--extra-vars "$6")
 fi
+
+
+echo "${extra_vars[@]}"
 
 mkdir -p logs
 echo "Sending Message SNS Topic..."

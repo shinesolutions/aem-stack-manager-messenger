@@ -52,6 +52,18 @@
         dynamodb_tablename: "{{ stack_manager_stack_outputs.AemStackManagerTableName }}"
         sns_topic: "{{ stack_manager_stack_outputs.BackupTopicArn }}"
 
+    - name: Check if Author Standby was promoted to primary
+      set_fact:
+        promoted_standby: true
+      with_items: "{{ target_aem_stack_exists.instances }}"
+      when: item.tags.Name == "AEM Author - Primary - Promoted from Standby"
+
+    - name: Check if Preview components exist
+      set_fact:
+        preview_architecture: true
+      with_items: "{{ target_aem_stack_exists.instances }}"
+      when: item.tags.Component == "preview-publish" or item.tags.Component == "preview-publish-dispatcher"
+
     - name: Query if Backup lock exist
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
@@ -117,11 +129,13 @@
       until: cmd_stop_author_standby is defined and cmd_stop_author_standby.item is defined and cmd_stop_author_standby.item != [] and cmd_stop_author_standby.item[0].command_id is defined and cmd_stop_author_standby.item[0].command_id.S is defined
       retries: "{{ poll_timeout.check_command_execution.retries }}"
       delay: "{{ poll_timeout.check_command_execution.delay }}"
+      when: promoted_standby is undefined
 
     - set_fact:
         cmd_id_stop_author_standby: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_stop_author_standby.item }}"
+      when: promoted_standby is undefined
 
     - name: Query if Author Standby Service successfully stopped
       dynamodb_search:
@@ -137,11 +151,12 @@
       until: dbquery_state_stop_author_standby is defined and dbquery_state_stop_author_standby.item is defined and dbquery_state_stop_author_standby.item != [] and dbquery_state_stop_author_standby.item[0].state is defined and dbquery_state_stop_author_standby.item[0].state.S is defined
       retries: "{{ poll_timeout.check_command_execution.retries }}"
       delay: "{{ poll_timeout.check_command_execution.delay }}"
+      when: promoted_standby is undefined
 
     - name: Set fact for error check
       set_fact:
         dbquery_state_failed_stop_author_standby: "{{dbquery_state_stop_author_standby.item[0].state.S}}"
-      when: '"item" in dbquery_state_stop_author_standby'
+      when: 'promoted_standby is undefined and dbquery_state_stop_author_standby is defined and "item" in dbquery_state_stop_author_standby'
 
     - name: Check for error when stopping Author Standby Service
       set_fact:
@@ -247,7 +262,7 @@
         module_error: 1
       when: dbquery_state_failed_stop_publish is defined and dbquery_state_failed_stop_publish == "Failed" and module_error is undefined
 
-    - name: Scan if offline-compaction finished
+    - name: Scan if preview-publish instance is stopped
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: last_command
@@ -257,11 +272,68 @@
         comparisonoperator: EQ
         state: scan
         region: "{{ aws.region }}"
+      register: cmd_stop_preview_publish
+      until: cmd_stop_preview_publish is defined and cmd_stop_preview_publish.item is defined and cmd_stop_preview_publish.item != [] and cmd_stop_preview_publish.item[0].command_id is defined and cmd_stop_preview_publish.item[0].command_id.S is defined
+      retries: "{{ poll_timeout.check_command_execution.retries }}"
+      delay: "{{ poll_timeout.check_command_execution.delay }}"
+      when: preview_architecture is true and module_error is undefined
+
+    - set_fact:
+        cmd_id_stop_preview_publish: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_stop_preview_publish.item }}"
+      when: preview_architecture is true and cmd_stop_preview_publish is defined and module_error is undefined
+
+    - name: Query if preview-publish Services are successfully stopped
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id_stop_preview_publish }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+        region: "{{ aws.region }}"
+      register: dbquery_state_stop_preview_publish
+      until: dbquery_state_stop_preview_publish is defined and dbquery_state_stop_preview_publish.item is defined and dbquery_state_stop_preview_publish.item != [] and dbquery_state_stop_preview_publish.item[0].state is defined and dbquery_state_stop_preview_publish.item[0].state.S is defined
+      retries: "{{ poll_timeout.check_command_execution.retries }}"
+      delay: "{{ poll_timeout.check_command_execution.delay }}"
+      when: preview_architecture is true and cmd_id_stop_preview_publish is defined and module_error is undefined
+
+    - name: Set fact for error check
+      set_fact:
+        dbquery_state_failed_stop_preview_publish: "{{dbquery_state_stop_preview_publish.item[0].state.S}}"
+      when: preview_architecture is true and dbquery_state_stop_preview_publish is defined and '"item" in dbquery_state_stop_preview_publish'
+
+    - name: Check for error when stopping preview-publish Service
+      set_fact:
+        error_stop_preview_publish: 1
+        module_error: 1
+      when: preview_architecture is true and dbquery_state_failed_stop_preview_publish is defined and dbquery_state_failed_stop_preview_publish == "Failed" and module_error is undefined
+
+    - set_fact:
+        cmd_id_start_compaction: "{{ cmd_id_stop_publish }}"
+      when: preview_architecture is undefined and module_error is undefined
+
+    - set_fact:
+        cmd_id_start_compaction: "{{ cmd_id_stop_preview_publish }}"
+      when: preview_architecture is true and module_error is undefined
+
+    - name: Scan if offline-compaction finished
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_start_compaction }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+        region: "{{ aws.region }}"
       register: cmd_offline_compaction
       until: cmd_offline_compaction is defined and cmd_offline_compaction.item is defined and cmd_offline_compaction.item != [] and cmd_offline_compaction.item[0].command_id is defined and cmd_offline_compaction.item[0].command_id.S is defined
       retries: "{{ poll_timeout.check_command_execution.retries }}"
       delay: "{{ poll_timeout.check_command_execution.delay }}"
-      when: module_error is undefined
+      when: cmd_id_stop_publish is defined and module_error is undefined
 
     - set_fact:
         cmd_id_offline_compaction: "{{ item.command_id.S }}"
@@ -408,13 +480,13 @@
       until: cmd_start_author_standby is defined and cmd_start_author_standby.item is defined and cmd_start_author_standby.item != [] and cmd_start_author_standby.item[0].command_id is defined and cmd_start_author_standby.item[0].command_id.S is defined
       retries: "{{ poll_timeout.check_command_execution.retries }}"
       delay: "{{ poll_timeout.check_command_execution.delay }}"
-      when: module_error is undefined
+      when: promoted_standby is undefined and module_error is undefined
 
     - set_fact:
         cmd_id_start_author_standby: "{{ item.command_id.S }}"
       with_items:
         "{{ cmd_start_author_standby.item }}"
-      when: module_error is undefined
+      when: promoted_standby is undefined and module_error is undefined
 
     - name: Query if starting Author Standby Service was successful
       dynamodb_search:
@@ -430,18 +502,18 @@
       until: dbquery_state_start_author_standby is defined and dbquery_state_start_author_standby.item is defined and dbquery_state_start_author_standby.item != [] and dbquery_state_start_author_standby.item[0].state is defined and dbquery_state_start_author_standby.item[0].state.S is defined
       retries: "{{ poll_timeout.check_command_execution.retries }}"
       delay: "{{ poll_timeout.check_command_execution.delay }}"
-      when: module_error is undefined
+      when: promoted_standby is undefined and module_error is undefined
 
     - name: Set fact for error check
       set_fact:
         dbquery_state_failed_start_author_standby: "{{dbquery_state_start_author_standby.item[0].state.S}}"
-      when: '"item" in dbquery_state_start_author_standby'
+      when: 'promoted_standby is undefined and "item" in dbquery_state_start_author_standby'
 
-    - name: Check for error when starting Author Primary Service
+    - name: Check for error when starting Author Standby Service
       set_fact:
         error_start_author_standby: 1
         module_error: 1
-      when: dbquery_state_failed_start_author_standby is defined and dbquery_state_failed_start_author_standby == "Failed" and module_error is undefined
+      when: promoted_standby is undefined and dbquery_state_failed_start_author_standby is defined and dbquery_state_failed_start_author_standby == "Failed" and module_error is undefined
 
     - name: Scan if publish instance is started
       dynamodb_search:
@@ -486,17 +558,74 @@
         dbquery_state_failed_start_publish: "{{dbquery_state_start_publish.item[0].state.S}}"
       when: '"item" in dbquery_state_start_publish'
 
-    - name: Check for error when starting Author Primary Service
+    - name: Check for error when starting Publish Service
       set_fact:
         error_start_publish: 1
         module_error: 1
       when: dbquery_state_failed_start_publish is defined and dbquery_state_failed_start_publish == "Failed" and module_error is undefined
 
-    - name: Scan if job remaining compact jobs are finished
+    - name: Scan if preview publish instance is started
       dynamodb_search:
         table_name: "{{ dynamodb_tablename }}"
         attribute: last_command
         attribute_value: "{{ cmd_id_start_publish }}"
+        get_attribute: command_id
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: scan
+        region: "{{ aws.region }}"
+      register: cmd_start_preview_publish
+      until: cmd_start_preview_publish is defined and cmd_start_preview_publish.item is defined and cmd_start_preview_publish.item != [] and cmd_start_preview_publish.item[0].command_id is defined and cmd_start_preview_publish.item[0].command_id.S is defined
+      retries: "{{ poll_timeout.check_command_execution.retries }}"
+      delay: "{{ poll_timeout.check_command_execution.delay }}"
+      when: preview_architecture is true and cmd_id_start_publish is defined and module_error is undefined
+
+    - set_fact:
+        cmd_id_start_preview_publish: "{{ item.command_id.S }}"
+      with_items:
+        "{{ cmd_start_preview_publish.item }}"
+      when: preview_architecture is true and module_error is undefined
+
+    - name: Query if starting preview publish Services were successful
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: command_id
+        attribute_value: "{{ cmd_id_start_preview_publish }}"
+        get_attribute: state
+        select: SPECIFIC_ATTRIBUTES
+        comparisonoperator: EQ
+        state: query
+        region: "{{ aws.region }}"
+      register: dbquery_state_start_preview_publish
+      until: dbquery_state_start_preview_publish is defined and dbquery_state_start_preview_publish.item is defined and dbquery_state_start_preview_publish.item != [] and dbquery_state_start_preview_publish.item[0].state is defined and  dbquery_state_start_preview_publish.item[0].state.S is defined
+      retries: "{{ poll_timeout.check_command_execution.retries }}"
+      delay: "{{ poll_timeout.check_command_execution.delay }}"
+      when: preview_architecture is true and module_error is undefined
+
+    - name: Set fact for error check
+      set_fact:
+        dbquery_state_failed_start_preview_publish: "{{dbquery_state_start_preview_publish.item[0].state.S}}"
+      when: 'preview_architecture is true and dbquery_state_start_preview_publish is defined and "item" in dbquery_state_start_preview_publish'
+
+    - name: Check for error when starting preview publish Service
+      set_fact:
+        error_start_preview_publish: 1
+        module_error: 1
+      when: preview_architecture is true and dbquery_state_failed_start_preview_publish is defined and dbquery_state_failed_start_preview_publish == "Failed" and module_error is undefined
+
+    - set_fact:
+        cmd_id_start_remaining_compaction: "{{ cmd_id_start_publish }}"
+      when: preview_architecture is undefined and module_error is undefined
+
+    - set_fact:
+        cmd_id_start_remaining_compaction: "{{ cmd_id_start_preview_publish }}"
+      when: preview_architecture is true and module_error is undefined
+
+    - name: Scan if job remaining compact jobs are finished
+      dynamodb_search:
+        table_name: "{{ dynamodb_tablename }}"
+        attribute: last_command
+        attribute_value: "{{ cmd_id_start_remaining_compaction }}"
         get_attribute: command_id
         select: SPECIFIC_ATTRIBUTES
         comparisonoperator: EQ
@@ -738,6 +867,14 @@
       register: output_files_stop_publish
       when: cmd_id_stop_publish is defined
 
+    - name: Get path to output files of stopping Preview Publish Service
+      aws_s3:
+        mode: list
+        bucket: "{{ s3_bucket }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_preview_publish }}"
+      register: output_files_stop_preview_publish
+      when: cmd_id_stop_preview_publish is defined
+
     - name: Get path to output files of taking offline compaction
       aws_s3:
         mode: list
@@ -777,6 +914,14 @@
         prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
       register: output_files_start_publish
       when: cmd_id_start_publish is defined
+
+    - name: Get path to output files of starting Preview Publish Service
+      aws_s3:
+        mode: list
+        bucket: "{{ s3_bucket }}"
+        prefix: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_preview_publish }}"
+      register: output_files_start_preview_publish
+      when: cmd_id_start_preview_publish is defined
 
     - name: Get path to output files of checking remaining compaction jobs
       aws_s3:
@@ -832,6 +977,12 @@
         s3_files_stop_publish: "{{ output_files_stop_publish.s3_keys }}"
       when: error_stop_publish is defined or general_error is defined
 
+    - name: Set facts for getting command output stop Preview Publish Services
+      set_fact:
+        dl_path_stop_preview_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_stop_preview_publish }}"
+        s3_files_stop_preview_publish: "{{ output_files_stop_preview_publish.s3_keys }}"
+      when: error_stop_preview_publish is defined or general_error is defined
+
     - name: Set facts for getting command output Offline Compaction
       set_fact:
         dl_path_offline_compaction: "{{ stack_prefix }}/stack-manager/SSMOutput/{{cmd_id_offline_compaction}}"
@@ -861,6 +1012,12 @@
         dl_path_start_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_publish }}"
         s3_files_start_publish: "{{ output_files_start_publish.s3_keys }}"
       when: error_start_publish is defined or general_error is defined
+
+    - name: Set facts for getting command output start Preview Publish Services
+      set_fact:
+        dl_path_start_preview_publish: "{{ stack_prefix }}/stack-manager/SSMOutput/{{ cmd_id_start_preview_publish }}"
+        s3_files_start_preview_publish: "{{ output_files_start_preview_publish.s3_keys }}"
+      when: error_start_preview_publish is defined or general_error is defined
 
     - name: Set facts for getting command output remaining compact jobs
       set_fact:
@@ -910,6 +1067,14 @@
         - "{{ s3_files_stop_publish }}"
       when: error_stop_publish is defined or general_error is defined
 
+    - name: "Create Download directory of stopping Preview Publish Service"
+      file:
+        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
+        state: directory
+      with_items:
+        - "{{ s3_files_stop_preview_publish }}"
+      when: error_stop_preview_publish is defined or general_error is defined
+
     - name: "Create Download directory of taking offline compaction"
       file:
         path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
@@ -949,6 +1114,14 @@
       with_items:
         - "{{ s3_files_start_publish }}"
       when: error_start_publish is defined or general_error is defined
+
+    - name: "Create Download directory of starting Preview Publish Service"
+      file:
+        path: "{{ log_path }}{{ item|regex_replace('(stdout|stderr)$', '') }}"
+        state: directory
+      with_items:
+        - "{{ s3_files_start_preview_publish }}"
+      when: error_start_preview_publish is defined or general_error is defined
 
     - name: "Create Download directory of remaining compaction job"
       file:
@@ -1012,6 +1185,16 @@
         - "{{ s3_files_stop_publish }}"
       when: error_stop_publish is defined or general_error is defined
 
+    - name: "Save command output stopping Preview Publish Service to {{log_path }}"
+      aws_s3:
+        mode: get
+        bucket: "{{ s3_bucket }}"
+        object: "{{ item }}"
+        dest: "{{ log_path }}{{ item }}"
+      with_items:
+        - "{{ s3_files_stop_preview_publish }}"
+      when: error_stop_preview_publish is defined or general_error is defined
+
     - name: "Save command output taking opffline compaction to {{log_path }}"
       aws_s3:
         mode: get
@@ -1061,6 +1244,16 @@
       with_items:
         - "{{ s3_files_start_publish }}"
       when: error_start_publish is defined or general_error is defined
+
+    - name: "Save command output starting Preview Publish Service to {{log_path }}"
+      aws_s3:
+        mode: get
+        bucket: "{{ s3_bucket }}"
+        object: "{{ item }}"
+        dest: "{{ log_path }}{{ item }}"
+      with_items:
+        - "{{ s3_files_start_preiew_publish }}"
+      when: error_start_preiew_publish is defined or general_error is defined
 
     - name: "Save command output check for remaining compaction jobs to {{log_path }}"
       aws_s3:
@@ -1129,6 +1322,15 @@
       register: stderr_stop_publish
       when: error_stop_publish is defined or general_error is defined
 
+    - name: "Find error log files of stopping Preview Publish Service"
+      find:
+        paths: "{{log_path }}{{ dl_path_stop_publish }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_stop_preview_publish
+      when: error_stop_preview_publish is defined or general_error is defined
+
     - name: "Find error log files of taking offline compaction"
       find:
         paths: "{{log_path }}{{ dl_path_offline_compaction }}"
@@ -1173,6 +1375,15 @@
         recurse: yes
       register: stderr_path_start_publish
       when: error_start_publish is defined or general_error is defined
+
+    - name: "Find error log files of starting Preview Publish Service"
+      find:
+        paths: "{{log_path }}{{ dl_path_start_publish }}"
+        file_type: file
+        patterns: stderr
+        recurse: yes
+      register: stderr_path_start_preview_publish
+      when: error_start_preview_publish is defined or general_error is defined
 
     - name: "Find error log files of checking for remaining compaction jobs"
       find:
@@ -1234,6 +1445,14 @@
         - "{{stderr_stop_publish}}"
       when: error_stop_publish is defined or general_error is defined
 
+    - name: "Show Error Log of stopping Preview Publish Service"
+      log_output:
+        type: file
+        log_files: "{{ item.files | map(attribute='path')|list }}"
+      with_items:
+        - "{{stderr_stop_preview_publish}}"
+      when: error_stop_preview_publish is defined or general_error is defined
+
     - name: "Show Error Log of taking offline compaction"
       log_output:
         type: file
@@ -1273,6 +1492,14 @@
       with_items:
         - "{{stderr_path_start_publish}}"
       when: error_start_publish is defined or general_error is defined
+
+    - name: "Show Error Log of starting Preview Publish Service"
+      log_output:
+        type: file
+        log_files: "{{ item.files | map(attribute='path')|list }}"
+      with_items:
+        - "{{stderr_path_start_preview_publish}}"
+      when: error_start_preview_publish is defined or general_error is defined
 
     - name: "Show Error Log of checking remaining compaction jobs"
       log_output:

@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.0.0 - 2024-08-28
+### Changed
+- Upgraded aem-platform-buildenv Docker image to 4.0.1 #RS-195
+- Upgraded the-works-buildenv Docker image to 2.0.1 #RS-195
+
+## 3.1.0 - 2023-10-12
+### Added
+- Added content-sync-consolidated, content-sync-full-set, attach-detach-content-sync-sg make targets for content sync and attach detach security group
+- Added SNS template json for content-sync-consolidated, content-sync-full-set, attach-detach-content-sync-sg
+
+## 3.0.0 - 2023-08-03
+### Added
+- Added preview components to `deploy-artifacts-full-set` & `export-package-full-set` operational tasks #RS-160
+- Added preview components to offline-snapshot & offline-compaction-snapshot playbook #RS-160
+
+### Changed
+- Updated aem-stack-manager-messenger Release artifact name to aem-stack-manager-messenger-internal
+
 ## 2.15.2 - 2022-08-23
 ### Changed
 - Revert the fix cloudformation_facts no longer returning any result [#89]

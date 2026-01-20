@@ -8,7 +8,9 @@
       "author-standby",
       "publish",
       "author-dispatcher",
-      "publish-dispatcher"
+      "publish-dispatcher",
+      "preview-publish",
+      "preview-publish-dispatcher"
     ],
     "comment": "deploying artifacts based on a descriptor file",
     "parameters": {

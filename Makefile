@@ -1,5 +1,5 @@
-version ?= 2.15.3-pre.0
-
+version ?= 4.0.1-pre.0
+package_name ?= aem-stack-manager-messenger-internal
 ci: clean deps lint package
 
 clean:
@@ -21,11 +21,11 @@ package: stage
 	    --exclude='*.retry' \
 	    --exclude='*.iml' \
 	    -czf \
-	    stage/aem-stack-manager-messenger-$(version).tar.gz .
+	    stage/$(package_name)-$(version).tar.gz .
 
 publish:
 	gh release create $(version) --title $(version) --notes "" || echo "Release $(version) has been created on GitHub"
-	gh release upload $(version) stage/aem-stack-manager-messenger-$(version).tar.gz
+	gh release upload $(version) stage/$(package_name)-$(version).tar.gz
 
 release-major:
 	rtk release --release-increment-type major
@@ -98,6 +98,15 @@ deploy-artifacts-consolidated:
 # deploy multiple AEM package and Dispatcher config artifacts to an AEM Consolidated environment
 deploy-artifacts-full-set:
 	./scripts/run-playbook.sh send-message deploy-artifacts-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "descriptor_file=$(descriptor_file)"
+
+content-sync-consolidated:
+	./scripts/run-playbook.sh send-message content-sync-consolidated "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "source_aem_stack_prefix=$(source_aem_stack_prefix) content_sync_enable_recursive=$(content_sync_enable_recursive) content_sync_batchsize=$(content_sync_batchsize) content_sync_enable_update=$(content_sync_enable_update) content_sync_enable_newer_only=$(content_sync_enable_newer_only) content_sync_exclude_path=$(content_sync_exclude_path) content_sync_path=$(content_sync_path)"
+
+content-sync-full-set:
+	./scripts/run-playbook.sh send-message content-sync-full-set "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "source_aem_stack_prefix=$(source_aem_stack_prefix) content_sync_enable_recursive=$(content_sync_enable_recursive) content_sync_batchsize=$(content_sync_batchsize) content_sync_enable_update=$(content_sync_enable_update) content_sync_enable_newer_only=$(content_sync_enable_newer_only) content_sync_exclude_path=$(content_sync_exclude_path) content_sync_path=$(content_sync_path)"
+
+attach-detach-content-sync-sg:
+	./scripts/run-playbook.sh send-message attach-detach-content-sync-sg "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "action=$(action)"
 
 disable-crxde:
 	./scripts/run-playbook.sh send-message disable-crxde "$(stack_prefix)" "$(target_aem_stack_prefix)" "$(config_path)" "component=$(component)"
